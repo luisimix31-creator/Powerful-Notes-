@@ -48,6 +48,7 @@
     </form>
 
     <div class="hint">You'll be taken to Stripe's secure checkout to enter your card.</div>
+    <div class="hint">By subscribing, you agree to the <a href="{{ url_for('terms') }}" target="_blank">Terms of Service</a>.</div>
     <div class="hint">
       <form method="POST" action="{{ url_for('logout') }}" style="display:inline">
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">

@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Terms of Service - Powerful Notes</title>
+<link rel="manifest" href="{{ url_for('static', filename='manifest.json') }}">
+<link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}">
+<link rel="apple-touch-icon" href="{{ url_for('static', filename='icons/apple-touch-icon.png') }}">
+<meta name="theme-color" content="#6c5ce7">
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<div class="landing-nav">
+  <span class="logo"><span class="piece">🧩</span> Powerful Notes</span>
+  <div class="row">
+    <a href="{{ url_for('landing') }}" class="btn secondary small">Home</a>
+  </div>
+</div>
+
+<div class="legal-page">
+  <h1>Terms of Service</h1>
+  <p class="legal-updated">Last updated: August 2026</p>
+
+  <p>These Terms of Service ("Terms") govern your use of Powerful Notes (the "Service"). By creating an account or subscribing, you agree to these Terms.</p>
+
+  <h2>1. The Service</h2>
+  <p>Powerful Notes generates draft clinical documentation (session notes, caregiver training notes, and assessments) based on the information you enter. The Service is a documentation aid only. You, as the credentialed clinician using the Service, remain fully responsible for reviewing, editing, and finalizing every note before it is used or filed, and for the accuracy and clinical appropriateness of its content.</p>
+
+  <h2>2. Accounts</h2>
+  <p>You must provide accurate information when creating an account and are responsible for maintaining the confidentiality of your login credentials and for all activity under your account.</p>
+
+  <h2>3. Subscription and Billing</h2>
+  <p>The Service is billed at $5.99 per month, charged automatically to your payment method on file until you cancel. There is no free trial. Charges are processed securely by Stripe; Powerful Notes does not store your card details.</p>
+
+  <h2>4. Cancellation and Refunds</h2>
+  <p>You may cancel your subscription at any time from Account Settings. Cancellation stops future billing; you'll retain access through the end of the billing period you already paid for. Charges already made are non-refundable, except where required by law.</p>
+
+  <h2>5. Client Data</h2>
+  <p>Client information you enter is stored under your account only and is not visible to other Powerful Notes accounts. You are responsible for ensuring you have appropriate authorization to enter any client information into the Service and for complying with applicable privacy and recordkeeping laws in your jurisdiction.</p>
+
+  <h2>6. Acceptable Use</h2>
+  <p>You agree not to misuse the Service, attempt to access other accounts' data, or use the Service for any unlawful purpose.</p>
+
+  <h2>7. Disclaimer</h2>
+  <p>The Service is provided "as is," without warranties of any kind. Powerful Notes is not a substitute for clinical judgment or applicable professional and regulatory standards.</p>
+
+  <h2>8. Limitation of Liability</h2>
+  <p>To the fullest extent permitted by law, Powerful Notes is not liable for any indirect, incidental, or consequential damages arising from your use of the Service.</p>
+
+  <h2>9. Changes</h2>
+  <p>These Terms may be updated from time to time. Continued use of the Service after changes are posted constitutes acceptance of the updated Terms.</p>
+
+  <h2>10. Contact</h2>
+  <p>Questions about these Terms can be sent to {% if support_email %}<a href="mailto:{{ support_email }}">{{ support_email }}</a>{% else %}the support contact listed in the app{% endif %}.</p>
+</div>
+
+<div class="landing-footer">
+  &copy; 2026 Powerful Notes. All rights reserved. &middot; <a href="{{ url_for('terms') }}">Terms of Service</a>
+</div>
+
+</body>
+</html>
