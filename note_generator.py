@@ -450,6 +450,28 @@ def _program_scenario(program, data=None):
     return random.choice(variants)
 
 
+def _behavior_topography(behavior, data=None):
+    """Return the topography description for this maladaptive behavior: a user-typed
+    custom description (data["behavior_topographies"][behavior_id] as a string) takes
+    priority, then an explicit 0-based index choice, then the first "blurbs" variant
+    by default (deterministic, not randomized); falls back to a legacy single "blurb"
+    string for behaviors that predate the "blurbs" list."""
+    variants = behavior.get("blurbs")
+    if not variants:
+        return behavior.get("blurb", "")
+    if data:
+        raw_choice = (data.get("behavior_topographies") or {}).get(behavior["id"])
+        if isinstance(raw_choice, str) and raw_choice.strip():
+            return raw_choice.strip()
+        try:
+            index = int(raw_choice)
+            if 0 <= index < len(variants):
+                return variants[index]
+        except (TypeError, ValueError):
+            pass
+    return variants[0]
+
+
 def _join_natural(items):
     if not items:
         return ""
@@ -584,6 +606,7 @@ def _session_body_paragraphs(
         sentences = []
         any_paired_intervention = False
         for i, b in enumerate(behaviors):
+            topography = _behavior_topography(b, data)
             antecedent_ids = (data.get("behavior_antecedents") or {}).get(b["id"]) or []
             antecedent_labels = _label_list(options["antecedents"], antecedent_ids)
             paired_ids = (data.get("behavior_interventions") or {}).get(b["id"]) or []
@@ -593,15 +616,15 @@ def _session_body_paragraphs(
 
             if antecedent_labels and paired_labels:
                 text = (
-                    f"{b['blurb']} most often preceded by {_join_natural(antecedent_labels)}, "
+                    f"{topography} most often preceded by {_join_natural(antecedent_labels)}, "
                     f"was observed and addressed using {_join_natural(paired_labels)}"
                 )
             elif antecedent_labels:
-                text = f"{b['blurb']} most often preceded by {_join_natural(antecedent_labels)}, was observed and addressed"
+                text = f"{topography} most often preceded by {_join_natural(antecedent_labels)}, was observed and addressed"
             elif paired_labels:
-                text = f"{b['blurb']} was observed and addressed using {_join_natural(paired_labels)}"
+                text = f"{topography} was observed and addressed using {_join_natural(paired_labels)}"
             else:
-                text = f"{b['blurb']} was observed and addressed"
+                text = f"{topography} was observed and addressed"
             sentences.append(_sentence(_connector(i == 0), text))
         parts = [lead] + sentences
         if any_paired_intervention and effectiveness:
@@ -975,7 +998,7 @@ def generate_initial_assessment(data, options):
         for i, b in enumerate(behaviors):
             sentences.append(_sentence(
                 _connector(i == 0, ASSESSMENT_CONNECTORS),
-                f"{b['blurb']} was identified as a primary area of concern based on caregiver report and direct observation"
+                f"{_behavior_topography(b, data)} was identified as a primary area of concern based on caregiver report and direct observation"
             ))
         behaviors_para = " ".join([lead] + sentences)
 
@@ -1065,7 +1088,7 @@ def generate_reassessment(data, options):
         for i, b in enumerate(behaviors):
             sentences.append(_sentence(
                 _connector(i == 0, ASSESSMENT_CONNECTORS),
-                f"{b['blurb']} continues to be addressed under the current behavior intervention plan"
+                f"{_behavior_topography(b, data)} continues to be addressed under the current behavior intervention plan"
             ))
         behaviors_para = " ".join([lead] + sentences)
 

@@ -16,6 +16,7 @@ let participants = [];
 let programScenarios = {};
 let behaviorInterventions = {};
 let behaviorAntecedents = {};
+let behaviorTopographies = {};
 
 const selections = {
   replacement_programs: new Set(),
@@ -477,6 +478,74 @@ function renderClientSpecificChips(client) {
   renderBehaviorPairingPickers();
 }
 
+// Shared by program scenario pickers and behavior topography pickers: a select of
+// a default option / each pre-written variant / "Write my own..." plus a text input
+// that only shows for the custom option, backed by `store[itemId]` (undefined = the
+// default option's behavior, a number = that variant's index, a string = custom text).
+function appendScenarioPicker(row, itemId, blurbs, store, labelText, placeholderText, defaultOptionLabel) {
+  const label = document.createElement("label");
+  label.textContent = labelText;
+  row.appendChild(label);
+
+  const select = document.createElement("select");
+  const randomOpt = document.createElement("option");
+  randomOpt.value = "";
+  randomOpt.textContent = defaultOptionLabel || "Random (varies each time)";
+  select.appendChild(randomOpt);
+
+  blurbs.forEach((blurb, idx) => {
+    const opt = document.createElement("option");
+    opt.value = idx;
+    const preview = blurb.length > 90 ? `${blurb.slice(0, 90)}...` : blurb;
+    opt.textContent = `Option ${idx + 1}: ${preview}`;
+    select.appendChild(opt);
+  });
+
+  const customOpt = document.createElement("option");
+  customOpt.value = "custom";
+  customOpt.textContent = "Write my own...";
+  select.appendChild(customOpt);
+
+  const current = store[itemId];
+  const isCustom = typeof current === "string";
+  select.value = current !== undefined ? (isCustom ? "custom" : String(current)) : "";
+
+  const customInput = document.createElement("input");
+  customInput.type = "text";
+  customInput.className = "scenario-custom-input";
+  customInput.placeholder = placeholderText;
+  customInput.hidden = !isCustom;
+  customInput.value = isCustom ? current : "";
+  customInput.addEventListener("input", () => {
+    if (customInput.value.trim()) {
+      store[itemId] = customInput.value.trim();
+    } else {
+      delete store[itemId];
+    }
+  });
+
+  select.addEventListener("change", () => {
+    if (select.value === "") {
+      delete store[itemId];
+      customInput.hidden = true;
+    } else if (select.value === "custom") {
+      customInput.hidden = false;
+      customInput.focus();
+      if (customInput.value.trim()) {
+        store[itemId] = customInput.value.trim();
+      } else {
+        delete store[itemId];
+      }
+    } else {
+      customInput.hidden = true;
+      store[itemId] = Number(select.value);
+    }
+  });
+
+  row.appendChild(select);
+  row.appendChild(customInput);
+}
+
 function renderProgramScenarioPickers() {
   const container = el("programScenarioPickers");
   const selectedIds = [...selections.replacement_programs];
@@ -495,68 +564,11 @@ function renderProgramScenarioPickers() {
   programs.forEach((p) => {
     const row = document.createElement("div");
     row.className = "scenario-picker-row";
-
-    const label = document.createElement("label");
-    label.textContent = `Scenario for "${p.label}"`;
-    row.appendChild(label);
-
-    const select = document.createElement("select");
-    const randomOpt = document.createElement("option");
-    randomOpt.value = "";
-    randomOpt.textContent = "Random (varies each time)";
-    select.appendChild(randomOpt);
-
-    p.blurbs.forEach((blurb, idx) => {
-      const opt = document.createElement("option");
-      opt.value = idx;
-      const preview = blurb.length > 90 ? `${blurb.slice(0, 90)}...` : blurb;
-      opt.textContent = `Scenario ${idx + 1}: ${preview}`;
-      select.appendChild(opt);
-    });
-
-    const customOpt = document.createElement("option");
-    customOpt.value = "custom";
-    customOpt.textContent = "Write my own...";
-    select.appendChild(customOpt);
-
-    const current = programScenarios[p.id];
-    const isCustom = typeof current === "string";
-    select.value = current !== undefined ? (isCustom ? "custom" : String(current)) : "";
-
-    const customInput = document.createElement("input");
-    customInput.type = "text";
-    customInput.className = "scenario-custom-input";
-    customInput.placeholder = "Describe what the RBT did for this program during this session...";
-    customInput.hidden = !isCustom;
-    customInput.value = isCustom ? current : "";
-    customInput.addEventListener("input", () => {
-      if (customInput.value.trim()) {
-        programScenarios[p.id] = customInput.value.trim();
-      } else {
-        delete programScenarios[p.id];
-      }
-    });
-
-    select.addEventListener("change", () => {
-      if (select.value === "") {
-        delete programScenarios[p.id];
-        customInput.hidden = true;
-      } else if (select.value === "custom") {
-        customInput.hidden = false;
-        customInput.focus();
-        if (customInput.value.trim()) {
-          programScenarios[p.id] = customInput.value.trim();
-        } else {
-          delete programScenarios[p.id];
-        }
-      } else {
-        customInput.hidden = true;
-        programScenarios[p.id] = Number(select.value);
-      }
-    });
-
-    row.appendChild(select);
-    row.appendChild(customInput);
+    appendScenarioPicker(
+      row, p.id, p.blurbs, programScenarios,
+      `Scenario for "${p.label}"`,
+      "Describe what the RBT did for this program during this session..."
+    );
     container.appendChild(row);
   });
 }
@@ -569,6 +581,9 @@ function renderBehaviorPairingPickers() {
   });
   Object.keys(behaviorAntecedents).forEach((id) => {
     if (!selectedIds.includes(id)) delete behaviorAntecedents[id];
+  });
+  Object.keys(behaviorTopographies).forEach((id) => {
+    if (!selectedIds.includes(id)) delete behaviorTopographies[id];
   });
 
   const behaviors = OPTIONS.maladaptive_behaviors.filter((b) => selectedIds.includes(b.id));
@@ -584,6 +599,15 @@ function renderBehaviorPairingPickers() {
   behaviors.forEach((b) => {
     const row = document.createElement("div");
     row.className = "scenario-picker-row";
+
+    if (b.blurbs && b.blurbs.length > 1) {
+      appendScenarioPicker(
+        row, b.id, b.blurbs, behaviorTopographies,
+        `Topography for "${b.label}"`,
+        "Describe what this behavior looked like during this session...",
+        "Option 1 (default)"
+      );
+    }
 
     const antecedentLabel = document.createElement("label");
     antecedentLabel.textContent = `Antecedents/triggers for "${b.label}"`;
@@ -837,6 +861,7 @@ function buildPayload() {
     payload.behavior_antecedents = Object.fromEntries(
       Object.entries(behaviorAntecedents).map(([behaviorId, ids]) => [behaviorId, [...ids]])
     );
+    payload.behavior_topographies = { ...behaviorTopographies };
     payload.intervention_effectiveness = selections.intervention_effectiveness;
     payload.data_collection_methods = [...selections.data_collection_methods];
     payload.environmental_changes = [...selections.environmental_changes];
@@ -870,6 +895,7 @@ function buildPayload() {
     payload.behavior_antecedents = Object.fromEntries(
       Object.entries(behaviorAntecedents).map(([behaviorId, ids]) => [behaviorId, [...ids]])
     );
+    payload.behavior_topographies = { ...behaviorTopographies };
     payload.intervention_effectiveness = selections.intervention_effectiveness;
     payload.data_collection_methods = [...selections.data_collection_methods];
     payload.environmental_changes = [...selections.environmental_changes];
@@ -898,6 +924,7 @@ function buildPayload() {
     payload.behavior_antecedents = Object.fromEntries(
       Object.entries(behaviorAntecedents).map(([behaviorId, ids]) => [behaviorId, [...ids]])
     );
+    payload.behavior_topographies = { ...behaviorTopographies };
     payload.intervention_effectiveness = selections.intervention_effectiveness;
     payload.data_collection_methods = [...selections.data_collection_methods];
     payload.environmental_changes = [...selections.environmental_changes];

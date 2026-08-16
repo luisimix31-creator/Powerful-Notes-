@@ -551,6 +551,8 @@ def api_add_custom_option():
     item = {"id": new_id, "label": label}
     if category == "replacement_programs":
         item["blurbs"] = [f"the RBT ran {label[0].lower() + label[1:]}, with prompting and reinforcement provided as needed"]
+    elif category == "maladaptive_behaviors":
+        item["blurbs"] = [f"{label[0].lower() + label[1:]}," if label else label]
     elif category in BLURB_CATEGORIES:
         item["blurb"] = label[0].lower() + label[1:] if label else label
 

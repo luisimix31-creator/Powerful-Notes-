@@ -861,132 +861,236 @@
     {
       "id": "tantrums",
       "label": "Tantrum Behavior",
-      "blurb": "tantrum behavior, characterized by crying, whining, and dropping to the floor,"
+      "blurbs": [
+        "tantrum behavior, characterized by crying, whining, and dropping to the floor,",
+        "tantrum behavior, including crying, whining, and falling to the floor,",
+        "tantrum behavior, marked by loud crying, stomping, and refusal to move,"
+      ]
     },
     {
       "id": "aggression",
       "label": "Aggression (e.g., hitting, kicking, biting)",
-      "blurb": "aggressive behavior, including hitting, kicking, and/or biting directed toward others,"
+      "blurbs": [
+        "aggressive behavior, including hitting, kicking, and/or biting directed toward others,",
+        "aggressive behavior, including hitting, pushing, or grabbing directed at others,",
+        "aggressive behavior, including kicking, scratching, or biting directed toward peers or staff,"
+      ]
     },
     {
       "id": "self_injury",
       "label": "Self-Injurious Behavior (SIB)",
-      "blurb": "self-injurious behavior, including head-banging, hand-biting, or self-hitting,"
+      "blurbs": [
+        "self-injurious behavior, including head-banging, hand-biting, or self-hitting,",
+        "self-injurious behavior, including scratching, pinching, or striking oneself,",
+        "self-injurious behavior, including head-banging against surfaces or biting one's own hand,"
+      ]
     },
     {
       "id": "elopement",
       "label": "Elopement / Running Away",
-      "blurb": "elopement behavior, in which the client left the immediate area without permission,"
+      "blurbs": [
+        "elopement behavior, in which the client left the immediate area without permission,",
+        "elopement behavior, in which the client exited the designated area without staff accompaniment,",
+        "elopement behavior, in which the client moved beyond the session boundary without permission,"
+      ]
     },
     {
       "id": "property_destruction",
       "label": "Property Destruction",
-      "blurb": "property destruction, including throwing or breaking materials,"
+      "blurbs": [
+        "property destruction, including throwing or breaking materials,",
+        "property destruction, including tearing, breaking, or damaging session materials,",
+        "property destruction, including knocking over furniture or damaging nearby objects,"
+      ]
     },
     {
       "id": "non_compliance",
       "label": "Non-Compliance / Task Refusal",
-      "blurb": "non-compliance and task refusal, observed as ignoring, verbal refusal, or delayed responding to instructions,"
+      "blurbs": [
+        "non-compliance and task refusal, observed as ignoring, verbal refusal, or delayed responding to instructions,",
+        "non-compliance and task refusal, observed as turning away, saying \"no,\" or not responding to instructions,",
+        "non-compliance and task refusal, observed as walking away from the task or refusing materials presented,"
+      ]
     },
     {
       "id": "vocal_stereotypy",
       "label": "Vocal Stereotypy",
-      "blurb": "vocal stereotypy, including repetitive vocalizations unrelated to the ongoing activity,"
+      "blurbs": [
+        "vocal stereotypy, including repetitive vocalizations unrelated to the ongoing activity,",
+        "vocal stereotypy, including repetitive sounds or phrases unrelated to the current task,",
+        "vocal stereotypy, including humming or repeated word sounds not tied to the activity at hand,"
+      ]
     },
     {
       "id": "motor_stereotypy",
       "label": "Motor Stereotypy / Repetitive Movements",
-      "blurb": "motor stereotypy, including repetitive hand-flapping or body-rocking movements,"
+      "blurbs": [
+        "motor stereotypy, including repetitive hand-flapping or body-rocking movements,",
+        "motor stereotypy, including repetitive finger movements or rocking of the body,",
+        "motor stereotypy, including repetitive hand movements or spinning in place,"
+      ]
     },
     {
       "id": "disruptive_behavior",
       "label": "Disruptive Behavior (e.g., yelling, screaming)",
-      "blurb": "disruptive behavior, including yelling and screaming,"
+      "blurbs": [
+        "disruptive behavior, including yelling and screaming,",
+        "disruptive behavior, including loud vocalizations and banging on nearby surfaces,",
+        "disruptive behavior, including shouting and repeated loud noises during structured activities,"
+      ]
     },
     {
       "id": "pica",
       "label": "Pica",
-      "blurb": "pica-related behavior, including attempts to mouth or ingest non-food items,"
+      "blurbs": [
+        "pica-related behavior, including attempts to mouth or ingest non-food items,",
+        "pica-related behavior, including reaching for and attempting to place non-food items in the mouth,",
+        "pica-related behavior, including picking up small objects and bringing them toward the mouth,"
+      ]
     },
     {
       "id": "food_refusal",
       "label": "Food Selectivity / Refusal",
-      "blurb": "food selectivity and refusal behavior during mealtime routines,"
+      "blurbs": [
+        "food selectivity and refusal behavior during mealtime routines,",
+        "food selectivity and refusal behavior, including turning away from or pushing away presented foods,",
+        "food selectivity and refusal behavior, including closing the mouth or spitting out presented foods,"
+      ]
     },
     {
       "id": "climbing",
       "label": "Climbing",
-      "blurb": "climbing behavior, including climbing on furniture, shelving, and other unsafe surfaces,"
+      "blurbs": [
+        "climbing behavior, including climbing on furniture, shelving, and other unsafe surfaces,",
+        "climbing behavior, including climbing onto tables, chairs, or counters,",
+        "climbing behavior, including scaling shelving units or other elevated surfaces,"
+      ]
     },
     {
       "id": "stereotyped_behavior",
       "label": "Stereotyped Behavior",
-      "blurb": "stereotyped behavior, including repetitive motor or vocal movements engaged in for self-stimulation,"
+      "blurbs": [
+        "stereotyped behavior, including repetitive motor or vocal movements engaged in for self-stimulation,",
+        "stereotyped behavior, including repetitive body movements or sounds not tied to ongoing activities,",
+        "stereotyped behavior, including repetitive object manipulation or self-stimulatory movements,"
+      ]
     },
     {
       "id": "snatching",
       "label": "Snatching",
-      "blurb": "snatching behavior, in which the client took items from others without permission,"
+      "blurbs": [
+        "snatching behavior, in which the client took items from others without permission,",
+        "snatching behavior, in which the client grabbed materials or items from peers or staff,",
+        "snatching behavior, in which the client took possession of items being used by others,"
+      ]
     },
     {
       "id": "inattention",
       "label": "Inattention / Off-Task Behavior",
-      "blurb": "inattentive behavior, including difficulty maintaining focus on assigned tasks and activities,"
+      "blurbs": [
+        "inattentive behavior, including difficulty maintaining focus on assigned tasks and activities,",
+        "inattentive behavior, including frequent shifts in attention away from the presented task,",
+        "inattentive behavior, including looking away from materials or losing track of instructions given,"
+      ]
     },
     {
       "id": "verbal_aggression",
       "label": "Verbal Aggression",
-      "blurb": "verbal aggression, including yelling, name-calling, or making threatening statements toward others,"
+      "blurbs": [
+        "verbal aggression, including yelling, name-calling, or making threatening statements toward others,",
+        "verbal aggression, including shouting, insults, or threatening remarks directed at others,",
+        "verbal aggression, including raised-voice statements or name-calling directed toward peers or staff,"
+      ]
     },
     {
       "id": "inappropriate_language",
       "label": "Inappropriate Language",
-      "blurb": "inappropriate language, including cursing or other socially inappropriate remarks directed at others or the environment,"
+      "blurbs": [
+        "inappropriate language, including cursing or other socially inappropriate remarks directed at others or the environment,",
+        "inappropriate language, including profanity or socially inappropriate comments made during the session,",
+        "inappropriate language, including crude remarks or cursing directed at staff, peers, or materials,"
+      ]
     },
     {
       "id": "mouthing",
       "label": "Mouthing",
-      "blurb": "mouthing behavior, in which the client placed non-food objects in the mouth for oral sensory input,"
+      "blurbs": [
+        "mouthing behavior, in which the client placed non-food objects in the mouth for oral sensory input,",
+        "mouthing behavior, in which the client brought toys or materials to the mouth repeatedly,",
+        "mouthing behavior, in which the client chewed on or licked non-food items during the session,"
+      ]
     },
     {
       "id": "throwing_objects",
       "label": "Throwing Objects",
-      "blurb": "throwing behavior, in which the client threw objects or materials during the session,"
+      "blurbs": [
+        "throwing behavior, in which the client threw objects or materials during the session,",
+        "throwing behavior, in which the client threw toys, work materials, or nearby objects,",
+        "throwing behavior, in which the client launched items across the room or work area,"
+      ]
     },
     {
       "id": "self_verbal_aggression",
       "label": "Self-Verbal Aggression",
-      "blurb": "self-directed verbal aggression, including negative or self-critical statements made about oneself,"
+      "blurbs": [
+        "self-directed verbal aggression, including negative or self-critical statements made about oneself,",
+        "self-directed verbal aggression, including harsh self-critical remarks made during the session,",
+        "self-directed verbal aggression, including repeated negative statements directed at oneself,"
+      ]
     },
     {
       "id": "out_of_work",
       "label": "Out of Work",
-      "blurb": "out-of-work behavior, in which the client left the assigned task or work area without engaging in the activity,"
+      "blurbs": [
+        "out-of-work behavior, in which the client left the assigned task or work area without engaging in the activity,",
+        "out-of-work behavior, in which the client moved away from the table or task materials,",
+        "out-of-work behavior, in which the client disengaged from the assigned activity and left the immediate work space,"
+      ]
     },
     {
       "id": "arguing",
       "label": "Arguing",
-      "blurb": "arguing behavior, including talking back or disputing instructions and redirection,"
+      "blurbs": [
+        "arguing behavior, including talking back or disputing instructions and redirection,",
+        "arguing behavior, including verbal pushback or disputing directions given by staff,",
+        "arguing behavior, including negotiating or contesting instructions provided during the session,"
+      ]
     },
     {
       "id": "social_isolation",
       "label": "Social Isolation",
-      "blurb": "social isolation, in which the client withdrew from or avoided interaction with others,"
+      "blurbs": [
+        "social isolation, in which the client withdrew from or avoided interaction with others,",
+        "social isolation, in which the client moved away from peers or declined invitations to participate,",
+        "social isolation, in which the client remained apart from group activities and limited interaction with others,"
+      ]
     },
     {
       "id": "lying",
       "label": "Lying",
-      "blurb": "lying behavior, in which the client made statements that were not truthful,"
+      "blurbs": [
+        "lying behavior, in which the client made statements that were not truthful,",
+        "lying behavior, in which the client provided inaccurate accounts of events during the session,",
+        "lying behavior, in which the client made statements inconsistent with observed events,"
+      ]
     },
     {
       "id": "hyperactivity",
       "label": "Hyperactivity",
-      "blurb": "hyperactive behavior, including excessive motor activity and difficulty remaining seated or still,"
+      "blurbs": [
+        "hyperactive behavior, including excessive motor activity and difficulty remaining seated or still,",
+        "hyperactive behavior, including frequent movement out of the seat and difficulty staying still,",
+        "hyperactive behavior, including elevated activity levels and difficulty settling during structured tasks,"
+      ]
     },
     {
       "id": "spitting",
       "label": "Spitting",
-      "blurb": "spitting behavior directed at people, objects, or the environment,"
+      "blurbs": [
+        "spitting behavior directed at people, objects, or the environment,",
+        "spitting behavior, directed toward staff, peers, or nearby materials,",
+        "spitting behavior, occurring during transitions or in response to task demands,"
+      ]
     }
   ],
   "antecedents": [
