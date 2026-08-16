@@ -16,6 +16,10 @@ class User(UserMixin, db.Model):
     options_json = db.Column(db.Text, nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
+    stripe_customer_id = db.Column(db.String(255))
+    stripe_subscription_id = db.Column(db.String(255))
+    subscription_status = db.Column(db.String(30), nullable=False, default="inactive")
+
     clients = db.relationship("Client", backref="user", cascade="all, delete-orphan")
     notes = db.relationship("SavedNote", backref="user", cascade="all, delete-orphan")
     generated_notes = db.relationship("GeneratedNote", backref="user", cascade="all, delete-orphan")

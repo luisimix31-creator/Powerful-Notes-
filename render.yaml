@@ -24,3 +24,11 @@ services:
         value: onboarding@resend.dev
       - key: SUPPORT_EMAIL
         sync: false
+      - key: STRIPE_SECRET_KEY
+        sync: false
+      - key: STRIPE_PRICE_ID
+        sync: false
+      - key: STRIPE_WEBHOOK_SECRET
+        sync: false
+      - key: OWNER_EMAIL
+        sync: false

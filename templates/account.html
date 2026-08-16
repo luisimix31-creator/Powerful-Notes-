@@ -37,6 +37,37 @@
     </form>
     <div class="hint"><a href="{{ url_for('forgot_password') }}">Want to change your password instead?</a></div>
   </div>
+
+  <div class="panel auth-panel">
+    <h2>Subscription</h2>
+    {% if is_owner %}
+      <div class="hint">This account has full access as the app owner.</div>
+    {% elif subscribed %}
+      <div class="hint">Your subscription is active ($5.99/month).</div>
+      <form method="POST" action="{{ url_for('billing_portal') }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <div class="row generate-row">
+          <button type="submit" class="btn">Manage Billing</button>
+        </div>
+      </form>
+      <div class="hint">Update your card, view invoices, or cancel your subscription.</div>
+    {% elif subscription_status == "past_due" %}
+      <div class="hint auth-error">Your last payment failed. Update your card to keep your account active.</div>
+      {% if has_stripe_customer %}
+        <form method="POST" action="{{ url_for('billing_portal') }}">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+          <div class="row generate-row">
+            <button type="submit" class="btn">Update Card</button>
+          </div>
+        </form>
+      {% else %}
+        <a href="{{ url_for('subscribe') }}" class="btn">Subscribe</a>
+      {% endif %}
+    {% else %}
+      <div class="hint">No active subscription.</div>
+      <a href="{{ url_for('subscribe') }}" class="btn">Subscribe ($5.99/month)</a>
+    {% endif %}
+  </div>
 </div>
 </body>
 </html>

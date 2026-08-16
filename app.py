@@ -4,6 +4,7 @@ import os
 from datetime import datetime
 
 import requests
+import stripe
 from dotenv import load_dotenv
 from flask import Flask, Response, abort, jsonify, redirect, render_template, request, url_for
 from flask_limiter import Limiter
@@ -17,6 +18,7 @@ from flask_login import (
 )
 from flask_wtf import CSRFProtect
 from itsdangerous import BadSignature, SignatureExpired, URLSafeTimedSerializer
+from sqlalchemy import inspect, text
 
 import note_generator as ng
 from models import Client, GeneratedNote, SavedNote, User, db
@@ -34,6 +36,14 @@ DEFAULT_OPTIONS_PATH = os.path.join(BASE_DIR, "default_options.json")
 RESEND_API_KEY = os.environ.get("RESEND_API_KEY", "")
 RESEND_FROM_EMAIL = os.environ.get("RESEND_FROM_EMAIL", "onboarding@resend.dev")
 SUPPORT_EMAIL = os.environ.get("SUPPORT_EMAIL", "")
+
+STRIPE_SECRET_KEY = os.environ.get("STRIPE_SECRET_KEY", "")
+STRIPE_PRICE_ID = os.environ.get("STRIPE_PRICE_ID", "")
+STRIPE_WEBHOOK_SECRET = os.environ.get("STRIPE_WEBHOOK_SECRET", "")
+# The app owner's login email is auto-exempted from the paywall so the account
+# that generated notes before billing existed never loses access to its own data.
+OWNER_EMAIL = os.environ.get("OWNER_EMAIL", "").strip().lower()
+stripe.api_key = STRIPE_SECRET_KEY
 
 def _normalized_database_url():
     url = os.environ.get("DATABASE_URL", f"sqlite:///{os.path.join(BASE_DIR, 'app.db')}")
@@ -79,8 +89,30 @@ def _default_options_text():
         return f.read()
 
 
+def _ensure_columns():
+    """Add columns introduced after the initial schema, since this app has no
+    migration framework. Safe to run every startup: only issues ALTER TABLE for
+    columns that don't already exist, on both SQLite and Postgres."""
+    inspector = inspect(db.engine)
+    existing = {col["name"] for col in inspector.get_columns("user")}
+    additions = {
+        "stripe_customer_id": "VARCHAR(255)",
+        "stripe_subscription_id": "VARCHAR(255)",
+        "subscription_status": "VARCHAR(30)",
+    }
+    missing = {name: col_type for name, col_type in additions.items() if name not in existing}
+    if not missing:
+        return
+    with db.engine.begin() as conn:
+        for name, col_type in missing.items():
+            conn.execute(text(f'ALTER TABLE "user" ADD COLUMN {name} {col_type}'))
+        if "subscription_status" in missing:
+            conn.execute(text('UPDATE "user" SET subscription_status = :status WHERE subscription_status IS NULL'), {"status": "inactive"})
+
+
 with app.app_context():
     db.create_all()
+    _ensure_columns()
 
 
 # ---------- Auth ----------
@@ -225,6 +257,141 @@ def reset_password(token):
     return redirect(url_for("login"))
 
 
+# ---------- Billing ----------
+
+def _is_subscribed(user):
+    if OWNER_EMAIL and user.email == OWNER_EMAIL:
+        return True
+    return user.subscription_status == "active"
+
+
+def _get_or_create_stripe_customer(user):
+    if user.stripe_customer_id:
+        return user.stripe_customer_id
+    customer = stripe.Customer.create(email=user.email, metadata={"user_id": str(user.id)})
+    user.stripe_customer_id = customer.id
+    db.session.commit()
+    return customer.id
+
+
+# Endpoints reachable without an active subscription: auth, the paywall/billing
+# flow itself, and account settings (so a canceled subscriber can still resubscribe).
+PUBLIC_ENDPOINTS = {
+    "signup", "login", "logout", "forgot_password", "reset_password",
+    "subscribe", "billing_checkout", "billing_success", "billing_portal", "billing_webhook",
+    "account", "service_worker", "static",
+}
+
+
+@app.before_request
+def _require_active_subscription():
+    if not current_user.is_authenticated:
+        return None
+    if request.endpoint in PUBLIC_ENDPOINTS or request.endpoint is None:
+        return None
+    if _is_subscribed(current_user):
+        return None
+    if request.path.startswith("/api/"):
+        return jsonify({"error": "An active subscription is required.", "subscribe_url": url_for("subscribe")}), 402
+    return redirect(url_for("subscribe"))
+
+
+@app.route("/subscribe")
+@login_required
+def subscribe():
+    if _is_subscribed(current_user):
+        return redirect(url_for("index"))
+    return render_template("subscribe.html", status=current_user.subscription_status)
+
+
+@app.route("/billing/checkout", methods=["POST"])
+@login_required
+def billing_checkout():
+    if not STRIPE_PRICE_ID:
+        abort(500, description="Billing is not configured yet.")
+    customer_id = _get_or_create_stripe_customer(current_user)
+    session = stripe.checkout.Session.create(
+        customer=customer_id,
+        mode="subscription",
+        line_items=[{"price": STRIPE_PRICE_ID, "quantity": 1}],
+        success_url=url_for("billing_success", _external=True) + "?session_id={CHECKOUT_SESSION_ID}",
+        cancel_url=url_for("subscribe", _external=True),
+        client_reference_id=str(current_user.id),
+    )
+    return redirect(session.url, code=303)
+
+
+@app.route("/billing/success")
+@login_required
+def billing_success():
+    # The webhook is the source of truth for subscription state, but confirming
+    # the session here too means the paywall lifts immediately instead of
+    # waiting on webhook delivery.
+    session_id = request.args.get("session_id")
+    if session_id:
+        try:
+            session = stripe.checkout.Session.retrieve(session_id)
+            if session.customer == current_user.stripe_customer_id and session.subscription:
+                current_user.stripe_subscription_id = session.subscription
+                current_user.subscription_status = "active"
+                db.session.commit()
+        except stripe.error.StripeError:
+            app.logger.exception("Failed to confirm checkout session.")
+    return redirect(url_for("index"))
+
+
+@app.route("/billing/portal", methods=["POST"])
+@login_required
+def billing_portal():
+    if not current_user.stripe_customer_id:
+        return redirect(url_for("subscribe"))
+    session = stripe.billing_portal.Session.create(
+        customer=current_user.stripe_customer_id,
+        return_url=url_for("account", _external=True),
+    )
+    return redirect(session.url, code=303)
+
+
+@app.route("/webhooks/stripe", methods=["POST"])
+@csrf.exempt
+def billing_webhook():
+    payload = request.get_data()
+    sig_header = request.headers.get("Stripe-Signature", "")
+    try:
+        event = stripe.Webhook.construct_event(payload, sig_header, STRIPE_WEBHOOK_SECRET)
+    except (ValueError, stripe.error.SignatureVerificationError):
+        return "", 400
+
+    obj = event["data"]["object"]
+    event_type = event["type"]
+
+    if event_type == "checkout.session.completed":
+        user = User.query.filter_by(stripe_customer_id=obj.get("customer")).first()
+        if user and obj.get("subscription"):
+            user.stripe_subscription_id = obj["subscription"]
+            user.subscription_status = "active"
+            db.session.commit()
+    elif event_type in ("customer.subscription.created", "customer.subscription.updated"):
+        user = User.query.filter_by(stripe_customer_id=obj.get("customer")).first()
+        if user:
+            user.stripe_subscription_id = obj.get("id")
+            status = obj.get("status")
+            user.subscription_status = "active" if status in ("active", "trialing") else (status or "inactive")
+            db.session.commit()
+    elif event_type == "customer.subscription.deleted":
+        user = User.query.filter_by(stripe_customer_id=obj.get("customer")).first()
+        if user:
+            user.subscription_status = "canceled"
+            db.session.commit()
+    elif event_type == "invoice.payment_failed":
+        user = User.query.filter_by(stripe_customer_id=obj.get("customer")).first()
+        if user and user.subscription_status == "active":
+            user.subscription_status = "past_due"
+            db.session.commit()
+
+    return jsonify({"received": True})
+
+
 # ---------- App ----------
 
 @app.route("/")
@@ -233,11 +400,22 @@ def index():
     return render_template("index.html", practice_name=current_user.practice_name or current_user.email)
 
 
+def _account_billing_context():
+    return {
+        "subscribed": _is_subscribed(current_user),
+        "subscription_status": current_user.subscription_status,
+        "has_stripe_customer": bool(current_user.stripe_customer_id),
+        "is_owner": bool(OWNER_EMAIL and current_user.email == OWNER_EMAIL),
+    }
+
+
 @app.route("/account", methods=["GET", "POST"])
 @login_required
 def account():
     if request.method == "GET":
-        return render_template("account.html", email=current_user.email, practice_name=current_user.practice_name)
+        return render_template(
+            "account.html", email=current_user.email, practice_name=current_user.practice_name, **_account_billing_context()
+        )
 
     new_email = (request.form.get("email") or "").strip().lower()
     practice_name = (request.form.get("practice_name") or "").strip()
@@ -245,7 +423,11 @@ def account():
 
     def _rerender(error):
         return render_template(
-            "account.html", email=current_user.email, practice_name=current_user.practice_name, error=error
+            "account.html",
+            email=current_user.email,
+            practice_name=current_user.practice_name,
+            error=error,
+            **_account_billing_context(),
         ), 400
 
     if not current_user.check_password(current_password):
@@ -258,7 +440,13 @@ def account():
     current_user.email = new_email
     current_user.practice_name = practice_name
     db.session.commit()
-    return render_template("account.html", email=current_user.email, practice_name=current_user.practice_name, message="Changes saved.")
+    return render_template(
+        "account.html",
+        email=current_user.email,
+        practice_name=current_user.practice_name,
+        message="Changes saved.",
+        **_account_billing_context(),
+    )
 
 
 @app.route("/sw.js")

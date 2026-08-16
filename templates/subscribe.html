@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Subscribe - Powerful Notes</title>
+<link rel="manifest" href="{{ url_for('static', filename='manifest.json') }}">
+<link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}">
+<link rel="apple-touch-icon" href="{{ url_for('static', filename='icons/apple-touch-icon.png') }}">
+<meta name="theme-color" content="#6c5ce7">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Powerful Notes">
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<div class="auth-wrap">
+  <div class="panel auth-panel">
+    <h1 class="logo"><span class="piece">🧩</span> Powerful Notes</h1>
+    <h2>Subscribe to Continue</h2>
+
+    {% if status == "past_due" %}
+      <div class="hint auth-error">Your last payment didn't go through. Update your card to keep your account active.</div>
+    {% elif status == "canceled" %}
+      <div class="hint">Your subscription was canceled. Resubscribe below to get back into your account.</div>
+    {% else %}
+      <div class="hint">A subscription is required to generate and save notes.</div>
+    {% endif %}
+
+    <div class="hint" style="font-size: 1.4em; margin: 16px 0;">
+      <strong>$5.99</strong> / month
+    </div>
+    <ul style="margin: 0 0 20px; padding-left: 20px; color: var(--muted, #666);">
+      <li>Unlimited session, assessment, and caregiver notes</li>
+      <li>Unlimited clients</li>
+      <li>Cancel anytime from Account Settings</li>
+    </ul>
+
+    <form method="POST" action="{{ url_for('billing_checkout') }}">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+      <div class="row generate-row">
+        <button type="submit" class="btn">Subscribe with Card</button>
+      </div>
+    </form>
+
+    <div class="hint">You'll be taken to Stripe's secure checkout to enter your card.</div>
+    <div class="hint">
+      <form method="POST" action="{{ url_for('logout') }}" style="display:inline">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <button type="submit" class="btn secondary small" style="margin-top:8px;">Log Out</button>
+      </form>
+    </div>
+  </div>
+</div>
+</body>
+</html>

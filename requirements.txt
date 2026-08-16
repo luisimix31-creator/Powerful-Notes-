@@ -7,3 +7,4 @@ python-dotenv==1.2.2
 gunicorn==26.0.0
 psycopg[binary]==3.3.4
 requests==2.34.2
+stripe==15.5.0
