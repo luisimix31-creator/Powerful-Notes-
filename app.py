@@ -37,17 +37,26 @@ RESEND_API_KEY = os.environ.get("RESEND_API_KEY", "")
 RESEND_FROM_EMAIL = os.environ.get("RESEND_FROM_EMAIL", "onboarding@resend.dev")
 SUPPORT_EMAIL = os.environ.get("SUPPORT_EMAIL", "")
 
-STRIPE_SECRET_KEY = os.environ.get("STRIPE_SECRET_KEY", "")
-STRIPE_PRICE_ID = os.environ.get("STRIPE_PRICE_ID", "")
+def _clean_secret(value):
+    # Env vars pasted through a browser/dashboard UI can pick up invisible
+    # characters (smart quotes, zero-width spaces, non-breaking spaces) that
+    # aren't valid Latin-1 and crash Stripe's HTTP client when used in a
+    # header. Strip anything outside printable ASCII rather than trust the
+    # source to be clean.
+    return "".join(c for c in value.strip() if 32 <= ord(c) < 127)
+
+
+STRIPE_SECRET_KEY = _clean_secret(os.environ.get("STRIPE_SECRET_KEY", ""))
+STRIPE_PRICE_ID = _clean_secret(os.environ.get("STRIPE_PRICE_ID", ""))
 # Support more than one signing secret: Stripe issues a separate secret per event
 # destination, and a Stripe account can easily end up with several destinations
 # (one per event type) instead of one destination listening to every event.
 STRIPE_WEBHOOK_SECRETS = [
     v for v in (
-        os.environ.get("STRIPE_WEBHOOK_SECRET", "").strip(),
-        os.environ.get("STRIPE_WEBHOOK_SECRET_2", "").strip(),
-        os.environ.get("STRIPE_WEBHOOK_SECRET_3", "").strip(),
-        os.environ.get("STRIPE_WEBHOOK_SECRET_4", "").strip(),
+        _clean_secret(os.environ.get("STRIPE_WEBHOOK_SECRET", "")),
+        _clean_secret(os.environ.get("STRIPE_WEBHOOK_SECRET_2", "")),
+        _clean_secret(os.environ.get("STRIPE_WEBHOOK_SECRET_3", "")),
+        _clean_secret(os.environ.get("STRIPE_WEBHOOK_SECRET_4", "")),
     ) if v
 ]
 # The app owner's login email is auto-exempted from the paywall so the account
