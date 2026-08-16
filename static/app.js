@@ -14,12 +14,12 @@ const PARTICIPANT_ROLE_LABELS = Object.fromEntries(PARTICIPANT_ROLES.map((r) => 
 
 let participants = [];
 let programScenarios = {};
+let behaviorInterventions = {};
 
 const selections = {
   replacement_programs: new Set(),
   maladaptive_behaviors: new Set(),
   antecedents: new Set(),
-  intervention_strategies: new Set(),
   data_collection_methods: new Set(),
   environmental_changes: new Set(),
   medical_concerns: new Set(),
@@ -81,7 +81,6 @@ async function init() {
   renderChipGroup("antecedents", OPTIONS.antecedents, "antecedents", false, selections, null, null, "antecedents");
   renderChipGroup("environmentalChanges", OPTIONS.environmental_changes, "environmental_changes", false, selections, null, null, "environmental_changes");
   renderChipGroup("medicalConcerns", OPTIONS.medical_concerns, "medical_concerns", false, selections, null, null, "medical_concerns");
-  renderChipGroup("interventionStrategies", OPTIONS.intervention_strategies, "intervention_strategies", false, selections, null, null, "intervention_strategies");
   renderChipGroup("dataCollectionMethods", OPTIONS.data_collection_methods, "data_collection_methods", false, selections, null, null, "data_collection_methods");
   renderChipGroup("interventionEffectiveness", OPTIONS.intervention_effectiveness, "intervention_effectiveness", true, selections, null, null, "intervention_effectiveness");
   renderChipGroup("protocolModifications", OPTIONS.protocol_modifications, "protocol_modifications", false, selections, null, null, "protocol_modifications");
@@ -467,17 +466,16 @@ function renderClientSpecificChips(client) {
   if (!client) return;
   const programs = clientProgramItems(client);
   const behaviors = clientBehaviorItems(client);
-  const interventions = clientInterventionItems(client);
   const trainingTopics = clientTrainingTopicItems(client);
   renderChipGroup("replacementPrograms", programs, "replacement_programs", false, selections, null, renderProgramScenarioPickers, "replacement_programs");
-  renderChipGroup("maladaptiveBehaviors", behaviors, "maladaptive_behaviors", false, selections, null, null, "maladaptive_behaviors");
-  renderChipGroup("interventionStrategies", interventions, "intervention_strategies", false, selections, null, null, "intervention_strategies");
+  renderChipGroup("maladaptiveBehaviors", behaviors, "maladaptive_behaviors", false, selections, null, renderBehaviorInterventionPickers, "maladaptive_behaviors");
   renderChipGroup("trainingTopics", trainingTopics, "training_topics", false, selections, null, null, "caregiver_training_topics");
   renderChipGroup("initialSkills", programs, "replacement_programs", false, selections, null, null, "replacement_programs");
   renderChipGroup("initialBehaviors", behaviors, "maladaptive_behaviors", false, selections, null, null, "maladaptive_behaviors");
   renderChipGroup("reassessmentSkills", programs, "replacement_programs", false, selections, null, null, "replacement_programs");
   renderChipGroup("reassessmentBehaviors", behaviors, "maladaptive_behaviors", false, selections, null, null, "maladaptive_behaviors");
   renderProgramScenarioPickers();
+  renderBehaviorInterventionPickers();
 }
 
 function renderProgramScenarioPickers() {
@@ -561,6 +559,52 @@ function renderProgramScenarioPickers() {
     row.appendChild(select);
     row.appendChild(customInput);
     container.appendChild(row);
+  });
+}
+
+function renderBehaviorInterventionPickers() {
+  const container = el("behaviorInterventionPickers");
+  const selectedIds = [...selections.maladaptive_behaviors];
+  Object.keys(behaviorInterventions).forEach((id) => {
+    if (!selectedIds.includes(id)) delete behaviorInterventions[id];
+  });
+
+  const behaviors = OPTIONS.maladaptive_behaviors.filter((b) => selectedIds.includes(b.id));
+  container.innerHTML = "";
+  if (!behaviors.length) {
+    container.hidden = true;
+    return;
+  }
+  container.hidden = false;
+
+  const interventionCatalog = clientInterventionItems(currentClient() || {});
+
+  behaviors.forEach((b) => {
+    const row = document.createElement("div");
+    row.className = "scenario-picker-row";
+
+    const label = document.createElement("label");
+    label.textContent = `Interventions used for "${b.label}"`;
+    row.appendChild(label);
+
+    const chipContainerId = `behaviorIntervention_${b.id}`;
+    const chipContainer = document.createElement("div");
+    chipContainer.id = chipContainerId;
+    chipContainer.className = "chip-grid";
+    row.appendChild(chipContainer);
+    container.appendChild(row);
+
+    if (!behaviorInterventions[b.id]) behaviorInterventions[b.id] = new Set();
+    renderChipGroup(
+      chipContainerId,
+      interventionCatalog,
+      b.id,
+      false,
+      behaviorInterventions,
+      behaviorInterventions[b.id],
+      null,
+      "intervention_strategies"
+    );
   });
 }
 
@@ -763,8 +807,10 @@ function buildPayload() {
     payload.replacement_programs = [...selections.replacement_programs];
     payload.program_scenarios = { ...programScenarios };
     payload.maladaptive_behaviors = [...selections.maladaptive_behaviors];
+    payload.behavior_interventions = Object.fromEntries(
+      Object.entries(behaviorInterventions).map(([behaviorId, ids]) => [behaviorId, [...ids]])
+    );
     payload.antecedents = [...selections.antecedents];
-    payload.intervention_strategies = [...selections.intervention_strategies];
     payload.intervention_effectiveness = selections.intervention_effectiveness;
     payload.data_collection_methods = [...selections.data_collection_methods];
     payload.environmental_changes = [...selections.environmental_changes];
@@ -792,8 +838,10 @@ function buildPayload() {
     payload.replacement_programs = [...selections.replacement_programs];
     payload.program_scenarios = { ...programScenarios };
     payload.maladaptive_behaviors = [...selections.maladaptive_behaviors];
+    payload.behavior_interventions = Object.fromEntries(
+      Object.entries(behaviorInterventions).map(([behaviorId, ids]) => [behaviorId, [...ids]])
+    );
     payload.antecedents = [...selections.antecedents];
-    payload.intervention_strategies = [...selections.intervention_strategies];
     payload.intervention_effectiveness = selections.intervention_effectiveness;
     payload.data_collection_methods = [...selections.data_collection_methods];
     payload.environmental_changes = [...selections.environmental_changes];
@@ -816,8 +864,10 @@ function buildPayload() {
     payload.replacement_programs = [...selections.replacement_programs];
     payload.program_scenarios = { ...programScenarios };
     payload.maladaptive_behaviors = [...selections.maladaptive_behaviors];
+    payload.behavior_interventions = Object.fromEntries(
+      Object.entries(behaviorInterventions).map(([behaviorId, ids]) => [behaviorId, [...ids]])
+    );
     payload.antecedents = [...selections.antecedents];
-    payload.intervention_strategies = [...selections.intervention_strategies];
     payload.intervention_effectiveness = selections.intervention_effectiveness;
     payload.data_collection_methods = [...selections.data_collection_methods];
     payload.environmental_changes = [...selections.environmental_changes];

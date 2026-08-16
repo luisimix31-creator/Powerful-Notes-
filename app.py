@@ -3,6 +3,7 @@ import json
 import os
 from datetime import datetime
 
+import requests
 from dotenv import load_dotenv
 from flask import Flask, Response, abort, jsonify, redirect, render_template, request, url_for
 from flask_limiter import Limiter
@@ -15,6 +16,7 @@ from flask_login import (
     logout_user,
 )
 from flask_wtf import CSRFProtect
+from itsdangerous import BadSignature, SignatureExpired, URLSafeTimedSerializer
 
 import note_generator as ng
 from models import Client, GeneratedNote, SavedNote, User, db
@@ -22,11 +24,16 @@ from models import Client, GeneratedNote, SavedNote, User, db
 MAX_NOTE_SIMILARITY = 0.69
 MAX_GENERATION_ATTEMPTS = 15
 SIMILARITY_CORPUS_LIMIT = 100
+PASSWORD_RESET_MAX_AGE = 3600  # 1 hour
 
 load_dotenv()
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DEFAULT_OPTIONS_PATH = os.path.join(BASE_DIR, "default_options.json")
+
+RESEND_API_KEY = os.environ.get("RESEND_API_KEY", "")
+RESEND_FROM_EMAIL = os.environ.get("RESEND_FROM_EMAIL", "onboarding@resend.dev")
+SUPPORT_EMAIL = os.environ.get("SUPPORT_EMAIL", "")
 
 def _normalized_database_url():
     url = os.environ.get("DATABASE_URL", f"sqlite:///{os.path.join(BASE_DIR, 'app.db')}")
@@ -124,6 +131,97 @@ def login():
 @login_required
 def logout():
     logout_user()
+    return redirect(url_for("login"))
+
+
+def _reset_serializer():
+    return URLSafeTimedSerializer(app.config["SECRET_KEY"], salt="password-reset")
+
+
+def _generate_reset_token(user):
+    # Embedding a fingerprint of the current password hash means the token is
+    # implicitly single-use: once the password changes, old tokens stop matching.
+    return _reset_serializer().dumps({"uid": user.id, "h": user.password_hash[-12:]})
+
+
+def _verify_reset_token(token):
+    try:
+        data = _reset_serializer().loads(token, max_age=PASSWORD_RESET_MAX_AGE)
+    except (BadSignature, SignatureExpired):
+        return None
+    user = db.session.get(User, data.get("uid"))
+    if not user or user.password_hash[-12:] != data.get("h"):
+        return None
+    return user
+
+
+def _send_reset_email(user, reset_url):
+    if not RESEND_API_KEY:
+        app.logger.warning("RESEND_API_KEY is not set; skipping password reset email.")
+        return False
+    try:
+        response = requests.post(
+            "https://api.resend.com/emails",
+            headers={"Authorization": f"Bearer {RESEND_API_KEY}"},
+            json={
+                "from": RESEND_FROM_EMAIL,
+                "to": [user.email],
+                "subject": "Reset your Powerful Notes password",
+                "html": (
+                    "<p>Someone requested a password reset for your Powerful Notes account.</p>"
+                    f'<p><a href="{reset_url}">Click here to reset your password</a>. '
+                    "This link expires in 1 hour.</p>"
+                    "<p>If you didn't request this, you can safely ignore this email.</p>"
+                ),
+            },
+            timeout=10,
+        )
+        return response.ok
+    except requests.RequestException:
+        app.logger.exception("Failed to send password reset email.")
+        return False
+
+
+@app.route("/forgot-password", methods=["GET", "POST"])
+@limiter.limit("5 per hour", methods=["POST"])
+def forgot_password():
+    if request.method == "GET":
+        return render_template("forgot_password.html", support_email=SUPPORT_EMAIL)
+
+    email = (request.form.get("email") or "").strip().lower()
+    user = User.query.filter_by(email=email).first() if email else None
+    if user:
+        token = _generate_reset_token(user)
+        reset_url = url_for("reset_password", token=token, _external=True)
+        _send_reset_email(user, reset_url)
+
+    # Always show the same message whether or not the account exists, so this
+    # endpoint can't be used to discover which emails have accounts.
+    return render_template(
+        "forgot_password.html",
+        support_email=SUPPORT_EMAIL,
+        message="If an account exists for that email, we've sent a password reset link. It expires in 1 hour.",
+    )
+
+
+@app.route("/reset-password/<token>", methods=["GET", "POST"])
+def reset_password(token):
+    user = _verify_reset_token(token)
+    if not user:
+        return render_template("reset_password.html", invalid=True)
+
+    if request.method == "GET":
+        return render_template("reset_password.html", invalid=False)
+
+    password = request.form.get("password") or ""
+    confirm = request.form.get("confirm_password") or ""
+    if len(password) < 8:
+        return render_template("reset_password.html", invalid=False, error="Password must be at least 8 characters."), 400
+    if password != confirm:
+        return render_template("reset_password.html", invalid=False, error="Passwords do not match."), 400
+
+    user.set_password(password)
+    db.session.commit()
     return redirect(url_for("login"))
 
 

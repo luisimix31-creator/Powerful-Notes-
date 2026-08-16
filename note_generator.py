@@ -51,13 +51,6 @@ SESSION_BEHAVIOR_LEAD = [
     "The client's behavior was monitored throughout the session, with the following concerns noted.",
 ]
 
-SESSION_STRATEGY_LEAD = [
-    "The following intervention strategies were implemented in response to these behaviors: {strategies}.",
-    "To address these behaviors, {strategies} were implemented throughout the session.",
-    "Intervention centered on {strategies}, applied consistently across occurrences.",
-    "Staff responded to these behaviors using {strategies}.",
-]
-
 INTERVENTION_EFFECTIVENESS_TEMPLATES = [
     "This intervention {blurb}.",
     "Overall, the intervention {blurb}.",
@@ -544,7 +537,6 @@ def _session_context(data, options):
     programs = _by_id(options["replacement_programs"], data.get("replacement_programs"))
     behaviors = _by_id(options["maladaptive_behaviors"], data.get("maladaptive_behaviors"))
     antecedents = _label_list(options["antecedents"], data.get("antecedents"))
-    strategies = _label_list(options["intervention_strategies"], data.get("intervention_strategies"))
     data_methods = _label_list(options["data_collection_methods"], data.get("data_collection_methods"))
     engagement = next((e for e in options["client_engagement"] if e["id"] == data.get("client_engagement")), None)
     environmental_changes = _label_list(options["environmental_changes"], data.get("environmental_changes"))
@@ -555,13 +547,13 @@ def _session_context(data, options):
     duration = _duration_minutes(data.get("start_time", ""), data.get("end_time", ""))
     duration_str = f"{duration}-minute " if duration else ""
     return (
-        client, programs, behaviors, antecedents, strategies, data_methods, engagement,
+        client, programs, behaviors, antecedents, data_methods, engagement,
         environmental_changes, medical_concerns, effectiveness, duration_str,
     )
 
 
 def _session_body_paragraphs(
-    data, programs, behaviors, antecedents, strategies, data_methods, engagement,
+    data, options, programs, behaviors, antecedents, data_methods, engagement,
     environmental_changes=None, medical_concerns=None, effectiveness=None,
 ):
     """Programs/behaviors/data/summary paragraphs shared by both session note types."""
@@ -590,15 +582,21 @@ def _session_body_paragraphs(
     if behaviors:
         lead = random.choice(SESSION_BEHAVIOR_LEAD)
         sentences = []
+        any_paired_intervention = False
         for i, b in enumerate(behaviors):
-            sentences.append(_sentence(_connector(i == 0), f"{b['blurb']} was observed and addressed"))
+            paired_ids = (data.get("behavior_interventions") or {}).get(b["id"]) or []
+            paired_labels = _label_list(options["intervention_strategies"], paired_ids)
+            if paired_labels:
+                any_paired_intervention = True
+                text = f"{b['blurb']} was observed and addressed using {_join_natural(paired_labels)}"
+            else:
+                text = f"{b['blurb']} was observed and addressed"
+            sentences.append(_sentence(_connector(i == 0), text))
         parts = [lead] + sentences
         if antecedents:
             parts.append(random.choice(SESSION_ANTECEDENT_TEMPLATES).format(antecedents=_join_natural(antecedents)))
-        if strategies:
-            parts.append(random.choice(SESSION_STRATEGY_LEAD).format(strategies=_join_natural(strategies)))
-            if effectiveness:
-                parts.append(random.choice(INTERVENTION_EFFECTIVENESS_TEMPLATES).format(blurb=effectiveness["blurb"]))
+        if any_paired_intervention and effectiveness:
+            parts.append(random.choice(INTERVENTION_EFFECTIVENESS_TEMPLATES).format(blurb=effectiveness["blurb"]))
         behaviors_para = " ".join(parts)
 
     data_para = ""
@@ -634,7 +632,7 @@ def _generate_reviewed_session_note(data, options, title, default_reviewer_label
     the RBT, with an optional protocol-modification narrative and direct-observation
     feedback section. Only the header title and the "no name given" fallback differ."""
     (
-        client, programs, behaviors, antecedents, strategies, data_methods, engagement,
+        client, programs, behaviors, antecedents, data_methods, engagement,
         environmental_changes, medical_concerns, effectiveness, duration_str,
     ) = _session_context(data, options)
 
@@ -665,7 +663,7 @@ def _generate_reviewed_session_note(data, options, title, default_reviewer_label
     intro += _caregiver_presence_sentence(data)
 
     context_para, programs_para, behaviors_para, data_para, summary_para = _session_body_paragraphs(
-        data, programs, behaviors, antecedents, strategies, data_methods, engagement,
+        data, options, programs, behaviors, antecedents, data_methods, engagement,
         environmental_changes, medical_concerns, effectiveness,
     )
 
@@ -727,7 +725,7 @@ def generate_bcaba_session_note(data, options):
 def generate_rbt_session_note(data, options):
     """Plain RBT-authored session note: no claim of BCBA presence, just what the RBT did."""
     (
-        client, programs, behaviors, antecedents, strategies, data_methods, engagement,
+        client, programs, behaviors, antecedents, data_methods, engagement,
         environmental_changes, medical_concerns, effectiveness, duration_str,
     ) = _session_context(data, options)
 
@@ -749,7 +747,7 @@ def generate_rbt_session_note(data, options):
     intro += _caregiver_presence_sentence(data)
 
     context_para, programs_para, behaviors_para, data_para, summary_para = _session_body_paragraphs(
-        data, programs, behaviors, antecedents, strategies, data_methods, engagement,
+        data, options, programs, behaviors, antecedents, data_methods, engagement,
         environmental_changes, medical_concerns, effectiveness,
     )
 

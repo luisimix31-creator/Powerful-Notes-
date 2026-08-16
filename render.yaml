@@ -18,3 +18,9 @@ services:
         fromDatabase:
           name: powerful-notes-db
           property: connectionString
+      - key: RESEND_API_KEY
+        sync: false
+      - key: RESEND_FROM_EMAIL
+        value: onboarding@resend.dev
+      - key: SUPPORT_EMAIL
+        sync: false
