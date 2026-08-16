@@ -30,5 +30,11 @@ services:
         sync: false
       - key: STRIPE_WEBHOOK_SECRET
         sync: false
+      - key: STRIPE_WEBHOOK_SECRET_2
+        sync: false
+      - key: STRIPE_WEBHOOK_SECRET_3
+        sync: false
+      - key: STRIPE_WEBHOOK_SECRET_4
+        sync: false
       - key: OWNER_EMAIL
         sync: false

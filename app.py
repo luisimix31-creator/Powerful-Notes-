@@ -39,7 +39,17 @@ SUPPORT_EMAIL = os.environ.get("SUPPORT_EMAIL", "")
 
 STRIPE_SECRET_KEY = os.environ.get("STRIPE_SECRET_KEY", "")
 STRIPE_PRICE_ID = os.environ.get("STRIPE_PRICE_ID", "")
-STRIPE_WEBHOOK_SECRET = os.environ.get("STRIPE_WEBHOOK_SECRET", "")
+# Support more than one signing secret: Stripe issues a separate secret per event
+# destination, and a Stripe account can easily end up with several destinations
+# (one per event type) instead of one destination listening to every event.
+STRIPE_WEBHOOK_SECRETS = [
+    v for v in (
+        os.environ.get("STRIPE_WEBHOOK_SECRET", "").strip(),
+        os.environ.get("STRIPE_WEBHOOK_SECRET_2", "").strip(),
+        os.environ.get("STRIPE_WEBHOOK_SECRET_3", "").strip(),
+        os.environ.get("STRIPE_WEBHOOK_SECRET_4", "").strip(),
+    ) if v
+]
 # The app owner's login email is auto-exempted from the paywall so the account
 # that generated notes before billing existed never loses access to its own data.
 OWNER_EMAIL = os.environ.get("OWNER_EMAIL", "").strip().lower()
@@ -357,9 +367,17 @@ def billing_portal():
 def billing_webhook():
     payload = request.get_data()
     sig_header = request.headers.get("Stripe-Signature", "")
-    try:
-        event = stripe.Webhook.construct_event(payload, sig_header, STRIPE_WEBHOOK_SECRET)
-    except (ValueError, stripe.error.SignatureVerificationError):
+
+    event = None
+    for secret in STRIPE_WEBHOOK_SECRETS:
+        try:
+            event = stripe.Webhook.construct_event(payload, sig_header, secret)
+            break
+        except stripe.error.SignatureVerificationError:
+            continue
+        except ValueError:
+            return "", 400
+    if event is None:
         return "", 400
 
     obj = event["data"]["object"]
