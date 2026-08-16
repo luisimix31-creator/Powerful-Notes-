@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Account Settings - Powerful Notes</title>
+<link rel="manifest" href="{{ url_for('static', filename='manifest.json') }}">
+<link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}">
+<link rel="apple-touch-icon" href="{{ url_for('static', filename='icons/apple-touch-icon.png') }}">
+<meta name="theme-color" content="#6c5ce7">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Powerful Notes">
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<div class="navbar">
+  <span class="logo"><span class="piece">🧩</span> Powerful Notes</span>
+  <div class="row">
+    <a href="{{ url_for('index') }}" class="btn secondary small">Back to App</a>
+  </div>
+</div>
+<div class="auth-wrap">
+  <div class="panel auth-panel">
+    <h2>Account Settings</h2>
+    {% if message %}<div class="hint">{{ message }}</div>{% endif %}
+    {% if error %}<div class="hint auth-error">{{ error }}</div>{% endif %}
+    <form method="POST" action="{{ url_for('account') }}">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+      <label>Email <input type="email" name="email" value="{{ email }}" required></label>
+      <label>Practice Name <input type="text" name="practice_name" value="{{ practice_name }}"></label>
+      <label>Current Password <input type="password" name="current_password" required placeholder="Required to save changes"></label>
+      <div class="row generate-row">
+        <button type="submit" class="btn">Save Changes</button>
+      </div>
+    </form>
+    <div class="hint"><a href="{{ url_for('forgot_password') }}">Want to change your password instead?</a></div>
+  </div>
+</div>
+</body>
+</html>

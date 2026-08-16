@@ -20,6 +20,7 @@
   <span class="logo"><span class="piece">🧩</span> Powerful Notes</span>
   <div class="row">
     <span class="practice-name">{{ practice_name }}</span>
+    <a href="{{ url_for('account') }}" class="btn secondary small">Account Settings</a>
     <form method="POST" action="{{ url_for('logout') }}">
       <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
       <button type="submit" class="btn secondary small">Log Out</button>

@@ -233,6 +233,34 @@ def index():
     return render_template("index.html", practice_name=current_user.practice_name or current_user.email)
 
 
+@app.route("/account", methods=["GET", "POST"])
+@login_required
+def account():
+    if request.method == "GET":
+        return render_template("account.html", email=current_user.email, practice_name=current_user.practice_name)
+
+    new_email = (request.form.get("email") or "").strip().lower()
+    practice_name = (request.form.get("practice_name") or "").strip()
+    current_password = request.form.get("current_password") or ""
+
+    def _rerender(error):
+        return render_template(
+            "account.html", email=current_user.email, practice_name=current_user.practice_name, error=error
+        ), 400
+
+    if not current_user.check_password(current_password):
+        return _rerender("Current password is incorrect.")
+    if not new_email:
+        return _rerender("Email is required.")
+    if new_email != current_user.email and User.query.filter_by(email=new_email).first():
+        return _rerender("An account with that email already exists.")
+
+    current_user.email = new_email
+    current_user.practice_name = practice_name
+    db.session.commit()
+    return render_template("account.html", email=current_user.email, practice_name=current_user.practice_name, message="Changes saved.")
+
+
 @app.route("/sw.js")
 def service_worker():
     response = app.send_static_file("sw.js")
