@@ -320,7 +320,9 @@ def _require_active_subscription():
 def subscribe():
     if _is_subscribed(current_user):
         return redirect(url_for("index"))
-    return render_template("subscribe.html", status=current_user.subscription_status)
+    return render_template(
+        "subscribe.html", status=current_user.subscription_status, stripe_error=request.args.get("stripe_error", "")
+    )
 
 
 @app.route("/billing/checkout", methods=["POST"])
@@ -328,15 +330,19 @@ def subscribe():
 def billing_checkout():
     if not STRIPE_PRICE_ID:
         abort(500, description="Billing is not configured yet.")
-    customer_id = _get_or_create_stripe_customer(current_user)
-    session = stripe.checkout.Session.create(
-        customer=customer_id,
-        mode="subscription",
-        line_items=[{"price": STRIPE_PRICE_ID, "quantity": 1}],
-        success_url=url_for("billing_success", _external=True) + "?session_id={CHECKOUT_SESSION_ID}",
-        cancel_url=url_for("subscribe", _external=True),
-        client_reference_id=str(current_user.id),
-    )
+    try:
+        customer_id = _get_or_create_stripe_customer(current_user)
+        session = stripe.checkout.Session.create(
+            customer=customer_id,
+            mode="subscription",
+            line_items=[{"price": STRIPE_PRICE_ID, "quantity": 1}],
+            success_url=url_for("billing_success", _external=True) + "?session_id={CHECKOUT_SESSION_ID}",
+            cancel_url=url_for("subscribe", _external=True),
+            client_reference_id=str(current_user.id),
+        )
+    except stripe.error.StripeError as e:
+        app.logger.exception("Stripe checkout session creation failed.")
+        return redirect(url_for("subscribe", stripe_error=str(e)))
     return redirect(session.url, code=303)
 
 

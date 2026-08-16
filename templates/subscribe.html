@@ -27,6 +27,9 @@
     {% else %}
       <div class="hint">A subscription is required to generate and save notes.</div>
     {% endif %}
+    {% if stripe_error %}
+      <div class="hint auth-error">Checkout couldn't start: {{ stripe_error }}</div>
+    {% endif %}
 
     <div class="hint" style="font-size: 1.4em; margin: 16px 0;">
       <strong>$5.99</strong> / month
