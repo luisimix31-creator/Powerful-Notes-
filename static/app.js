@@ -15,11 +15,11 @@ const PARTICIPANT_ROLE_LABELS = Object.fromEntries(PARTICIPANT_ROLES.map((r) => 
 let participants = [];
 let programScenarios = {};
 let behaviorInterventions = {};
+let behaviorAntecedents = {};
 
 const selections = {
   replacement_programs: new Set(),
   maladaptive_behaviors: new Set(),
-  antecedents: new Set(),
   data_collection_methods: new Set(),
   environmental_changes: new Set(),
   medical_concerns: new Set(),
@@ -78,7 +78,6 @@ async function init() {
   fillPlaceOfService();
   el("sessionDate").value = new Date().toISOString().slice(0, 10);
   applyProviderDefaults(null);
-  renderChipGroup("antecedents", OPTIONS.antecedents, "antecedents", false, selections, null, null, "antecedents");
   renderChipGroup("environmentalChanges", OPTIONS.environmental_changes, "environmental_changes", false, selections, null, null, "environmental_changes");
   renderChipGroup("medicalConcerns", OPTIONS.medical_concerns, "medical_concerns", false, selections, null, null, "medical_concerns");
   renderChipGroup("dataCollectionMethods", OPTIONS.data_collection_methods, "data_collection_methods", false, selections, null, null, "data_collection_methods");
@@ -468,14 +467,14 @@ function renderClientSpecificChips(client) {
   const behaviors = clientBehaviorItems(client);
   const trainingTopics = clientTrainingTopicItems(client);
   renderChipGroup("replacementPrograms", programs, "replacement_programs", false, selections, null, renderProgramScenarioPickers, "replacement_programs");
-  renderChipGroup("maladaptiveBehaviors", behaviors, "maladaptive_behaviors", false, selections, null, renderBehaviorInterventionPickers, "maladaptive_behaviors");
+  renderChipGroup("maladaptiveBehaviors", behaviors, "maladaptive_behaviors", false, selections, null, renderBehaviorPairingPickers, "maladaptive_behaviors");
   renderChipGroup("trainingTopics", trainingTopics, "training_topics", false, selections, null, null, "caregiver_training_topics");
   renderChipGroup("initialSkills", programs, "replacement_programs", false, selections, null, null, "replacement_programs");
   renderChipGroup("initialBehaviors", behaviors, "maladaptive_behaviors", false, selections, null, null, "maladaptive_behaviors");
   renderChipGroup("reassessmentSkills", programs, "replacement_programs", false, selections, null, null, "replacement_programs");
   renderChipGroup("reassessmentBehaviors", behaviors, "maladaptive_behaviors", false, selections, null, null, "maladaptive_behaviors");
   renderProgramScenarioPickers();
-  renderBehaviorInterventionPickers();
+  renderBehaviorPairingPickers();
 }
 
 function renderProgramScenarioPickers() {
@@ -562,11 +561,14 @@ function renderProgramScenarioPickers() {
   });
 }
 
-function renderBehaviorInterventionPickers() {
+function renderBehaviorPairingPickers() {
   const container = el("behaviorInterventionPickers");
   const selectedIds = [...selections.maladaptive_behaviors];
   Object.keys(behaviorInterventions).forEach((id) => {
     if (!selectedIds.includes(id)) delete behaviorInterventions[id];
+  });
+  Object.keys(behaviorAntecedents).forEach((id) => {
+    if (!selectedIds.includes(id)) delete behaviorAntecedents[id];
   });
 
   const behaviors = OPTIONS.maladaptive_behaviors.filter((b) => selectedIds.includes(b.id));
@@ -583,9 +585,19 @@ function renderBehaviorInterventionPickers() {
     const row = document.createElement("div");
     row.className = "scenario-picker-row";
 
-    const label = document.createElement("label");
-    label.textContent = `Interventions used for "${b.label}"`;
-    row.appendChild(label);
+    const antecedentLabel = document.createElement("label");
+    antecedentLabel.textContent = `Antecedents/triggers for "${b.label}"`;
+    row.appendChild(antecedentLabel);
+
+    const antecedentContainerId = `behaviorAntecedent_${b.id}`;
+    const antecedentContainer = document.createElement("div");
+    antecedentContainer.id = antecedentContainerId;
+    antecedentContainer.className = "chip-grid";
+    row.appendChild(antecedentContainer);
+
+    const interventionLabel = document.createElement("label");
+    interventionLabel.textContent = `Interventions used for "${b.label}"`;
+    row.appendChild(interventionLabel);
 
     const chipContainerId = `behaviorIntervention_${b.id}`;
     const chipContainer = document.createElement("div");
@@ -593,6 +605,18 @@ function renderBehaviorInterventionPickers() {
     chipContainer.className = "chip-grid";
     row.appendChild(chipContainer);
     container.appendChild(row);
+
+    if (!behaviorAntecedents[b.id]) behaviorAntecedents[b.id] = new Set();
+    renderChipGroup(
+      antecedentContainerId,
+      OPTIONS.antecedents,
+      b.id,
+      false,
+      behaviorAntecedents,
+      behaviorAntecedents[b.id],
+      null,
+      "antecedents"
+    );
 
     if (!behaviorInterventions[b.id]) behaviorInterventions[b.id] = new Set();
     renderChipGroup(
@@ -810,7 +834,9 @@ function buildPayload() {
     payload.behavior_interventions = Object.fromEntries(
       Object.entries(behaviorInterventions).map(([behaviorId, ids]) => [behaviorId, [...ids]])
     );
-    payload.antecedents = [...selections.antecedents];
+    payload.behavior_antecedents = Object.fromEntries(
+      Object.entries(behaviorAntecedents).map(([behaviorId, ids]) => [behaviorId, [...ids]])
+    );
     payload.intervention_effectiveness = selections.intervention_effectiveness;
     payload.data_collection_methods = [...selections.data_collection_methods];
     payload.environmental_changes = [...selections.environmental_changes];
@@ -841,7 +867,9 @@ function buildPayload() {
     payload.behavior_interventions = Object.fromEntries(
       Object.entries(behaviorInterventions).map(([behaviorId, ids]) => [behaviorId, [...ids]])
     );
-    payload.antecedents = [...selections.antecedents];
+    payload.behavior_antecedents = Object.fromEntries(
+      Object.entries(behaviorAntecedents).map(([behaviorId, ids]) => [behaviorId, [...ids]])
+    );
     payload.intervention_effectiveness = selections.intervention_effectiveness;
     payload.data_collection_methods = [...selections.data_collection_methods];
     payload.environmental_changes = [...selections.environmental_changes];
@@ -867,7 +895,9 @@ function buildPayload() {
     payload.behavior_interventions = Object.fromEntries(
       Object.entries(behaviorInterventions).map(([behaviorId, ids]) => [behaviorId, [...ids]])
     );
-    payload.antecedents = [...selections.antecedents];
+    payload.behavior_antecedents = Object.fromEntries(
+      Object.entries(behaviorAntecedents).map(([behaviorId, ids]) => [behaviorId, [...ids]])
+    );
     payload.intervention_effectiveness = selections.intervention_effectiveness;
     payload.data_collection_methods = [...selections.data_collection_methods];
     payload.environmental_changes = [...selections.environmental_changes];
