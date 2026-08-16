@@ -1,0 +1,915 @@
+let OPTIONS = null;
+let CLIENTS = [];
+let currentNoteType = "session";
+let editingClientId = null;
+let quickMode = false;
+
+const PARTICIPANT_ROLES = [
+  { id: "bcba", label: "BCBA" },
+  { id: "bcaba", label: "BCaBA" },
+  { id: "rbt", label: "RBT" },
+  { id: "caregiver", label: "Caregiver" },
+];
+const PARTICIPANT_ROLE_LABELS = Object.fromEntries(PARTICIPANT_ROLES.map((r) => [r.id, r.label]));
+
+let participants = [];
+let programScenarios = {};
+
+const selections = {
+  replacement_programs: new Set(),
+  maladaptive_behaviors: new Set(),
+  antecedents: new Set(),
+  intervention_strategies: new Set(),
+  data_collection_methods: new Set(),
+  environmental_changes: new Set(),
+  medical_concerns: new Set(),
+  intervention_effectiveness: null,
+  protocol_modifications: new Set(),
+  client_engagement: null,
+  observation_method: null,
+  session_rating: null,
+  protocol_fidelity: null,
+  rbt_strengths: new Set(),
+  rbt_feedback_areas: new Set(),
+  training_topics: new Set(),
+  teaching_methods: new Set(),
+  caregiver_competency: null,
+  caregiver_response: new Set(),
+  training_barriers: new Set(),
+  referral_reason: null,
+  assessment_methods: new Set(),
+  treatment_intensity: null,
+  recommended_services: new Set(),
+  progress_rating: null,
+  reassessment_recommendations: new Set(),
+};
+
+const targetEditSelections = {
+  replacement_programs: new Set(),
+  maladaptive_behaviors: new Set(),
+  intervention_strategies: new Set(),
+  training_topics: new Set(),
+};
+
+const newClientSelections = {
+  replacement_programs: new Set(),
+  maladaptive_behaviors: new Set(),
+  intervention_strategies: new Set(),
+  training_topics: new Set(),
+};
+
+const el = (id) => document.getElementById(id);
+
+const CSRF_TOKEN = document.querySelector('meta[name="csrf-token"]').content;
+
+function apiFetch(url, options = {}) {
+  const headers = { ...(options.headers || {}) };
+  const method = (options.method || "GET").toUpperCase();
+  if (method !== "GET") {
+    headers["X-CSRFToken"] = CSRF_TOKEN;
+  }
+  return fetch(url, { ...options, headers });
+}
+
+async function init() {
+  OPTIONS = await fetch("/api/options").then((r) => r.json());
+  await refreshClients();
+
+  fillPlaceOfService();
+  el("sessionDate").value = new Date().toISOString().slice(0, 10);
+  applyProviderDefaults(null);
+  renderChipGroup("antecedents", OPTIONS.antecedents, "antecedents", false, selections, null, null, "antecedents");
+  renderChipGroup("environmentalChanges", OPTIONS.environmental_changes, "environmental_changes", false, selections, null, null, "environmental_changes");
+  renderChipGroup("medicalConcerns", OPTIONS.medical_concerns, "medical_concerns", false, selections, null, null, "medical_concerns");
+  renderChipGroup("interventionStrategies", OPTIONS.intervention_strategies, "intervention_strategies", false, selections, null, null, "intervention_strategies");
+  renderChipGroup("dataCollectionMethods", OPTIONS.data_collection_methods, "data_collection_methods", false, selections, null, null, "data_collection_methods");
+  renderChipGroup("interventionEffectiveness", OPTIONS.intervention_effectiveness, "intervention_effectiveness", true, selections, null, null, "intervention_effectiveness");
+  renderChipGroup("protocolModifications", OPTIONS.protocol_modifications, "protocol_modifications", false, selections, null, null, "protocol_modifications");
+  renderChipGroup("clientEngagement", OPTIONS.client_engagement, "client_engagement", true, selections, null, null, "client_engagement");
+  renderChipGroup("observationMethod", OPTIONS.observation_methods, "observation_method", true, selections, null, null, "observation_methods");
+  renderChipGroup("sessionRating", OPTIONS.session_ratings, "session_rating", true, selections, null, null, "session_ratings");
+  renderChipGroup("protocolFidelity", OPTIONS.protocol_fidelity, "protocol_fidelity", true, selections, null, null, "protocol_fidelity");
+  renderChipGroup("rbtStrengths", OPTIONS.rbt_strengths, "rbt_strengths", false, selections, null, null, "rbt_strengths");
+  renderChipGroup("rbtFeedbackAreas", OPTIONS.rbt_feedback_areas, "rbt_feedback_areas", false, selections, null, null, "rbt_feedback_areas");
+
+  renderChipGroup("trainingTopics", OPTIONS.caregiver_training_topics, "training_topics", false, selections, null, null, "caregiver_training_topics");
+  renderChipGroup("teachingMethods", OPTIONS.teaching_methods, "teaching_methods", false, selections, null, null, "teaching_methods");
+  renderChipGroup("caregiverCompetency", OPTIONS.caregiver_competency, "caregiver_competency", true, selections, null, null, "caregiver_competency");
+  renderChipGroup("caregiverResponse", OPTIONS.caregiver_response, "caregiver_response", false, selections, null, null, "caregiver_response");
+  renderChipGroup("trainingBarriers", OPTIONS.training_barriers, "training_barriers", false, selections, null, null, "training_barriers");
+
+  renderChipGroup("referralReason", OPTIONS.referral_reasons, "referral_reason", true, selections, null, null, "referral_reasons");
+  renderChipGroup("assessmentMethodsInitial", OPTIONS.assessment_methods, "assessment_methods", false, selections, null, null, "assessment_methods");
+  renderChipGroup("treatmentIntensity", OPTIONS.treatment_intensity, "treatment_intensity", true, selections, null, null, "treatment_intensity");
+  renderChipGroup("recommendedServices", OPTIONS.recommended_services, "recommended_services", false, selections, null, null, "recommended_services");
+  renderChipGroup("assessmentMethodsReassessment", OPTIONS.assessment_methods, "assessment_methods", false, selections, null, null, "assessment_methods");
+  renderChipGroup("progressRating", OPTIONS.progress_ratings, "progress_rating", true, selections, null, null, "progress_ratings");
+  renderChipGroup("reassessmentDataMethods", OPTIONS.data_collection_methods, "data_collection_methods", false, selections, null, null, "data_collection_methods");
+  renderChipGroup("reassessmentRecommendations", OPTIONS.reassessment_recommendations, "reassessment_recommendations", false, selections, null, null, "reassessment_recommendations");
+
+  renderChipGroup("ncReplacementPrograms", OPTIONS.replacement_programs, "replacement_programs", false, newClientSelections, null, null, "replacement_programs");
+  renderChipGroup("ncMaladaptiveBehaviors", OPTIONS.maladaptive_behaviors, "maladaptive_behaviors", false, newClientSelections, null, null, "maladaptive_behaviors");
+  renderChipGroup("ncInterventionStrategies", OPTIONS.intervention_strategies, "intervention_strategies", false, newClientSelections, null, null, "intervention_strategies");
+  renderChipGroup("ncTrainingTopics", OPTIONS.caregiver_training_topics, "training_topics", false, newClientSelections, null, null, "caregiver_training_topics");
+
+  bindStaticEvents();
+}
+
+function fillPlaceOfService() {
+  const sel = el("placeOfService");
+  sel.innerHTML = "";
+  OPTIONS.place_of_service.forEach((p) => {
+    const opt = document.createElement("option");
+    opt.value = p;
+    opt.textContent = p;
+    sel.appendChild(opt);
+  });
+  const otherOpt = document.createElement("option");
+  otherOpt.value = "__other__";
+  otherOpt.textContent = "Other (specify)...";
+  sel.appendChild(otherOpt);
+
+  sel.addEventListener("change", () => {
+    el("placeOfServiceCustom").hidden = sel.value !== "__other__";
+  });
+}
+
+function renderChipGroup(containerId, items, key, singleSelect, store, preselected, onChange, customCategory) {
+  const container = el(containerId);
+  container.innerHTML = "";
+  items.forEach((item) => {
+    const chip = document.createElement("div");
+    chip.className = "chip";
+    chip.textContent = item.label;
+    chip.dataset.id = item.id;
+
+    const isPreselected = singleSelect ? preselected === item.id : (preselected && preselected.has(item.id));
+    if (isPreselected) {
+      chip.classList.add("selected");
+      if (singleSelect) store[key] = item.id;
+      else store[key].add(item.id);
+    }
+
+    chip.addEventListener("click", () => {
+      if (singleSelect) {
+        store[key] = store[key] === item.id ? null : item.id;
+        [...container.children].forEach((c) => c.classList.toggle("selected", c.dataset.id === store[key]));
+      } else {
+        if (store[key].has(item.id)) {
+          store[key].delete(item.id);
+          chip.classList.remove("selected");
+        } else {
+          store[key].add(item.id);
+          chip.classList.add("selected");
+        }
+      }
+      if (onChange) onChange();
+    });
+    container.appendChild(chip);
+  });
+
+  if (customCategory) {
+    ensureCustomAddRow(containerId, customCategory, key, singleSelect, store, onChange);
+  }
+}
+
+// Auto-injects a "Not listed? Add one manually..." row immediately after a chip-grid
+// container the first time it's rendered with a customCategory, then leaves it in place
+// (and its listeners intact) across re-renders of that same chip-grid.
+function ensureCustomAddRow(containerId, category, key, singleSelect, store, onChange) {
+  const rowId = `${containerId}CustomRow`;
+  if (el(rowId)) return;
+
+  const container = el(containerId);
+  const row = document.createElement("div");
+  row.id = rowId;
+  row.className = "custom-add-row";
+
+  const input = document.createElement("input");
+  input.type = "text";
+  input.placeholder = "Not listed? Add one manually...";
+
+  const btn = document.createElement("button");
+  btn.type = "button";
+  btn.className = "btn secondary small";
+  btn.textContent = "Add";
+
+  const submit = async () => {
+    const label = input.value.trim();
+    if (!label) return;
+
+    const res = await apiFetch("/api/options/custom", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ category, label }),
+    });
+    if (!res.ok) {
+      const err = await res.json();
+      alert(err.error || "Failed to add custom option.");
+      return;
+    }
+    const item = await res.json();
+    OPTIONS[category].push(item);
+    if (singleSelect) {
+      store[key] = item.id;
+    } else {
+      if (!store[key]) store[key] = new Set();
+      store[key].add(item.id);
+    }
+    input.value = "";
+    renderChipGroup(containerId, OPTIONS[category], key, singleSelect, store, store[key], onChange, category);
+    if (onChange) onChange();
+  };
+
+  btn.addEventListener("click", submit);
+  input.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      submit();
+    }
+  });
+
+  row.appendChild(input);
+  row.appendChild(btn);
+  container.insertAdjacentElement("afterend", row);
+}
+
+async function refreshClients() {
+  CLIENTS = await fetch("/api/clients").then((r) => r.json());
+  const sel = el("clientSelect");
+  const current = sel.value;
+  sel.innerHTML = '<option value="">-- Select client --</option>';
+  CLIENTS.forEach((c) => {
+    const opt = document.createElement("option");
+    opt.value = c.id;
+    opt.textContent = c.name;
+    sel.appendChild(opt);
+  });
+  if (current) sel.value = current;
+}
+
+function currentClient() {
+  return CLIENTS.find((c) => c.id === el("clientSelect").value);
+}
+
+function clientProgramItems(client) {
+  const ids = client.replacement_programs || [];
+  if (!ids.length) return OPTIONS.replacement_programs;
+  return OPTIONS.replacement_programs.filter((p) => ids.includes(p.id));
+}
+
+function clientBehaviorItems(client) {
+  const ids = client.maladaptive_behaviors || [];
+  if (!ids.length) return OPTIONS.maladaptive_behaviors;
+  return OPTIONS.maladaptive_behaviors.filter((b) => ids.includes(b.id));
+}
+
+function clientInterventionItems(client) {
+  const ids = client.intervention_strategies || [];
+  if (!ids.length) return OPTIONS.intervention_strategies;
+  return OPTIONS.intervention_strategies.filter((s) => ids.includes(s.id));
+}
+
+function clientTrainingTopicItems(client) {
+  const ids = client.training_topics || [];
+  if (!ids.length) return OPTIONS.caregiver_training_topics;
+  return OPTIONS.caregiver_training_topics.filter((t) => ids.includes(t.id));
+}
+
+function resetNewClientChips() {
+  newClientSelections.replacement_programs = new Set();
+  newClientSelections.maladaptive_behaviors = new Set();
+  newClientSelections.intervention_strategies = new Set();
+  newClientSelections.training_topics = new Set();
+  renderChipGroup("ncReplacementPrograms", OPTIONS.replacement_programs, "replacement_programs", false, newClientSelections, null, null, "replacement_programs");
+  renderChipGroup("ncMaladaptiveBehaviors", OPTIONS.maladaptive_behaviors, "maladaptive_behaviors", false, newClientSelections, null, null, "maladaptive_behaviors");
+  renderChipGroup("ncInterventionStrategies", OPTIONS.intervention_strategies, "intervention_strategies", false, newClientSelections, null, null, "intervention_strategies");
+  renderChipGroup("ncTrainingTopics", OPTIONS.caregiver_training_topics, "training_topics", false, newClientSelections, null, null, "caregiver_training_topics");
+}
+
+function bindStaticEvents() {
+  el("clientSelect").addEventListener("change", onClientChange);
+
+  el("addParticipantBtn").addEventListener("click", () => addParticipantRow("bcba", ""));
+
+  el("quickModeToggle").addEventListener("change", () => {
+    quickMode = el("quickModeToggle").checked;
+    el("clientSelectWrap").hidden = quickMode;
+    el("quickClientNameField").hidden = !quickMode;
+    el("saveBtn").hidden = quickMode;
+
+    if (quickMode) {
+      el("clientSelect").value = "";
+      el("newClientPanel").hidden = true;
+      el("clientTargetsPanel").hidden = true;
+      el("notesHistoryPanel").hidden = true;
+      el("noSelectionMsg").hidden = true;
+      el("outputPanel").hidden = true;
+      el("noteForm").hidden = false;
+      el("quickClientName").value = "";
+      selections.replacement_programs = new Set();
+      selections.maladaptive_behaviors = new Set();
+      renderClientSpecificChips({});
+      applyProviderDefaults(null);
+    } else {
+      el("notesHistoryPanel").hidden = false;
+      onClientChange();
+    }
+  });
+
+  el("wordTargetSlider").addEventListener("input", () => {
+    el("wordTargetValue").textContent = `${el("wordTargetSlider").value} words`;
+  });
+
+  el("newClientBtn").addEventListener("click", () => {
+    editingClientId = null;
+    el("clientFormTitle").textContent = "New Client";
+    ["ncName", "ncDob", "ncDiagnosis", "ncGuardianName", "ncGuardianRel", "ncRbtName"].forEach((id) => (el(id).value = ""));
+    resetNewClientChips();
+    el("newClientTargetsSection").hidden = false;
+    el("newClientPanel").hidden = false;
+    el("newClientPanel").scrollIntoView({ behavior: "smooth" });
+  });
+  el("editClientBtn").addEventListener("click", () => {
+    const client = currentClient();
+    if (!client) return;
+    editingClientId = client.id;
+    el("clientFormTitle").textContent = `Edit ${client.name}`;
+    el("ncName").value = client.name || "";
+    el("ncDob").value = client.dob || "";
+    el("ncDiagnosis").value = client.diagnosis || "";
+    el("ncGuardianName").value = client.guardian_name || "";
+    el("ncGuardianRel").value = client.guardian_relationship || "";
+    el("ncRbtName").value = client.rbt_name || "";
+    el("newClientTargetsSection").hidden = true;
+    el("newClientPanel").hidden = false;
+    el("newClientPanel").scrollIntoView({ behavior: "smooth" });
+  });
+  el("ncCancel").addEventListener("click", () => {
+    el("newClientPanel").hidden = true;
+    editingClientId = null;
+  });
+  el("ncSave").addEventListener("click", saveClientForm);
+
+  el("targetsToggleBtn").addEventListener("click", () => {
+    el("targetsEditArea").hidden = !el("targetsEditArea").hidden;
+  });
+  el("saveTargetsBtn").addEventListener("click", saveClientTargets);
+
+  document.querySelectorAll(".tab").forEach((tab) => {
+    tab.addEventListener("click", () => {
+      document.querySelectorAll(".tab").forEach((t) => t.classList.remove("active"));
+      tab.classList.add("active");
+      currentNoteType = tab.dataset.type;
+      const isSessionLike = currentNoteType === "session" || currentNoteType === "bcaba_session" || currentNoteType === "rbt_session";
+      const isReviewedSession = currentNoteType === "session" || currentNoteType === "bcaba_session";
+      el("sessionFields").hidden = !isSessionLike;
+      el("caregiverFields").hidden = currentNoteType !== "caregiver";
+      el("initialAssessmentFields").hidden = currentNoteType !== "initial_assessment";
+      el("reassessmentFields").hidden = currentNoteType !== "reassessment";
+      el("sessionTimingFields").hidden = !isSessionLike;
+      el("cptCodeField").hidden = !isSessionLike;
+      el("protocolModificationSection").hidden = !isReviewedSession;
+      el("bcbaFeedbackSection").hidden = !isReviewedSession;
+      el("bcbaFeedbackHeading").textContent =
+        currentNoteType === "bcaba_session"
+          ? "BCaBA Direct Observation & Feedback (optional)"
+          : "BCBA Direct Observation & Feedback (optional)";
+      if (isSessionLike) {
+        el("cptCode").value = isReviewedSession ? "97155" : "97153";
+      }
+      el("outputPanel").hidden = true;
+      applyProviderDefaults(currentClient());
+      renderClientSpecificChips(currentClient());
+    });
+  });
+
+  el("noteForm").addEventListener("submit", (e) => {
+    e.preventDefault();
+    generateNote();
+  });
+  el("regenerateBtn").addEventListener("click", generateNote);
+  el("saveBtn").addEventListener("click", saveNote);
+  el("copyBtn").addEventListener("click", async () => {
+    await navigator.clipboard.writeText(el("outputText").value);
+    const btn = el("copyBtn");
+    const original = btn.textContent;
+    btn.textContent = "Copied!";
+    setTimeout(() => (btn.textContent = original), 1500);
+  });
+}
+
+async function saveClientForm() {
+  const name = el("ncName").value.trim();
+  if (!name) {
+    alert("Client name is required.");
+    return;
+  }
+  const body = {
+    name,
+    dob: el("ncDob").value,
+    diagnosis: el("ncDiagnosis").value,
+    guardian_name: el("ncGuardianName").value,
+    guardian_relationship: el("ncGuardianRel").value,
+    rbt_name: el("ncRbtName").value,
+  };
+
+  const isEditing = !!editingClientId;
+  if (!isEditing) {
+    body.replacement_programs = [...newClientSelections.replacement_programs];
+    body.maladaptive_behaviors = [...newClientSelections.maladaptive_behaviors];
+    body.intervention_strategies = [...newClientSelections.intervention_strategies];
+    body.training_topics = [...newClientSelections.training_topics];
+  }
+  const url = isEditing ? `/api/clients/${editingClientId}` : "/api/clients";
+  const method = isEditing ? "PATCH" : "POST";
+
+  const res = await apiFetch(url, {
+    method,
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  });
+  if (!res.ok) {
+    const err = await res.json();
+    alert(err.error || "Failed to save client.");
+    return;
+  }
+  const client = await res.json();
+  await refreshClients();
+  el("clientSelect").value = client.id;
+  el("newClientPanel").hidden = true;
+  editingClientId = null;
+  onClientChange();
+}
+
+function onClientChange() {
+  const client = currentClient();
+  el("noteForm").hidden = !client;
+  el("noSelectionMsg").hidden = !!client;
+  el("outputPanel").hidden = true;
+  el("clientTargetsPanel").hidden = !client;
+  el("editClientBtn").hidden = !client;
+
+  selections.replacement_programs = new Set();
+  selections.maladaptive_behaviors = new Set();
+
+  if (client) {
+    loadNotesHistory(client.id);
+    renderTargetsPanel(client);
+    renderClientSpecificChips(client);
+    applyProviderDefaults(client);
+  } else {
+    el("notesHistory").innerHTML = "Select a client to view saved notes.";
+  }
+}
+
+function renderClientSpecificChips(client) {
+  if (!client) return;
+  const programs = clientProgramItems(client);
+  const behaviors = clientBehaviorItems(client);
+  const interventions = clientInterventionItems(client);
+  const trainingTopics = clientTrainingTopicItems(client);
+  renderChipGroup("replacementPrograms", programs, "replacement_programs", false, selections, null, renderProgramScenarioPickers, "replacement_programs");
+  renderChipGroup("maladaptiveBehaviors", behaviors, "maladaptive_behaviors", false, selections, null, null, "maladaptive_behaviors");
+  renderChipGroup("interventionStrategies", interventions, "intervention_strategies", false, selections, null, null, "intervention_strategies");
+  renderChipGroup("trainingTopics", trainingTopics, "training_topics", false, selections, null, null, "caregiver_training_topics");
+  renderChipGroup("initialSkills", programs, "replacement_programs", false, selections, null, null, "replacement_programs");
+  renderChipGroup("initialBehaviors", behaviors, "maladaptive_behaviors", false, selections, null, null, "maladaptive_behaviors");
+  renderChipGroup("reassessmentSkills", programs, "replacement_programs", false, selections, null, null, "replacement_programs");
+  renderChipGroup("reassessmentBehaviors", behaviors, "maladaptive_behaviors", false, selections, null, null, "maladaptive_behaviors");
+  renderProgramScenarioPickers();
+}
+
+function renderProgramScenarioPickers() {
+  const container = el("programScenarioPickers");
+  const selectedIds = [...selections.replacement_programs];
+  Object.keys(programScenarios).forEach((id) => {
+    if (!selectedIds.includes(id)) delete programScenarios[id];
+  });
+
+  const programs = OPTIONS.replacement_programs.filter((p) => selectedIds.includes(p.id) && p.blurbs && p.blurbs.length > 1);
+  container.innerHTML = "";
+  if (!programs.length) {
+    container.hidden = true;
+    return;
+  }
+  container.hidden = false;
+
+  programs.forEach((p) => {
+    const row = document.createElement("div");
+    row.className = "scenario-picker-row";
+
+    const label = document.createElement("label");
+    label.textContent = `Scenario for "${p.label}"`;
+    row.appendChild(label);
+
+    const select = document.createElement("select");
+    const randomOpt = document.createElement("option");
+    randomOpt.value = "";
+    randomOpt.textContent = "Random (varies each time)";
+    select.appendChild(randomOpt);
+
+    p.blurbs.forEach((blurb, idx) => {
+      const opt = document.createElement("option");
+      opt.value = idx;
+      const preview = blurb.length > 90 ? `${blurb.slice(0, 90)}...` : blurb;
+      opt.textContent = `Scenario ${idx + 1}: ${preview}`;
+      select.appendChild(opt);
+    });
+
+    const customOpt = document.createElement("option");
+    customOpt.value = "custom";
+    customOpt.textContent = "Write my own...";
+    select.appendChild(customOpt);
+
+    const current = programScenarios[p.id];
+    const isCustom = typeof current === "string";
+    select.value = current !== undefined ? (isCustom ? "custom" : String(current)) : "";
+
+    const customInput = document.createElement("input");
+    customInput.type = "text";
+    customInput.className = "scenario-custom-input";
+    customInput.placeholder = "Describe what the RBT did for this program during this session...";
+    customInput.hidden = !isCustom;
+    customInput.value = isCustom ? current : "";
+    customInput.addEventListener("input", () => {
+      if (customInput.value.trim()) {
+        programScenarios[p.id] = customInput.value.trim();
+      } else {
+        delete programScenarios[p.id];
+      }
+    });
+
+    select.addEventListener("change", () => {
+      if (select.value === "") {
+        delete programScenarios[p.id];
+        customInput.hidden = true;
+      } else if (select.value === "custom") {
+        customInput.hidden = false;
+        customInput.focus();
+        if (customInput.value.trim()) {
+          programScenarios[p.id] = customInput.value.trim();
+        } else {
+          delete programScenarios[p.id];
+        }
+      } else {
+        customInput.hidden = true;
+        programScenarios[p.id] = Number(select.value);
+      }
+    });
+
+    row.appendChild(select);
+    row.appendChild(customInput);
+    container.appendChild(row);
+  });
+}
+
+function renderParticipants() {
+  const container = el("participantsList");
+  container.innerHTML = "";
+  participants.forEach((p, idx) => {
+    const row = document.createElement("div");
+    row.className = "participant-row";
+
+    const roleSelect = document.createElement("select");
+    PARTICIPANT_ROLES.forEach((r) => {
+      const opt = document.createElement("option");
+      opt.value = r.id;
+      opt.textContent = r.label;
+      if (r.id === p.role) opt.selected = true;
+      roleSelect.appendChild(opt);
+    });
+    roleSelect.addEventListener("change", () => {
+      participants[idx].role = roleSelect.value;
+    });
+
+    const nameInput = document.createElement("input");
+    nameInput.type = "text";
+    nameInput.placeholder = "Name";
+    nameInput.value = p.name;
+    nameInput.addEventListener("input", () => {
+      participants[idx].name = nameInput.value;
+    });
+
+    const removeBtn = document.createElement("button");
+    removeBtn.type = "button";
+    removeBtn.className = "btn secondary small";
+    removeBtn.textContent = "Remove";
+    removeBtn.addEventListener("click", () => {
+      participants.splice(idx, 1);
+      renderParticipants();
+    });
+
+    row.appendChild(roleSelect);
+    row.appendChild(nameInput);
+    row.appendChild(removeBtn);
+    container.appendChild(row);
+  });
+}
+
+function addParticipantRow(role, name) {
+  participants.push({ role: role || "bcba", name: name || "" });
+  renderParticipants();
+}
+
+function findParticipant(role) {
+  return participants.find((p) => p.role === role && p.name.trim());
+}
+
+function participantNames(role) {
+  return participants.filter((p) => p.role === role && p.name.trim()).map((p) => p.name.trim());
+}
+
+function applyProviderDefaults(client) {
+  const hasBcbaLike = participants.some((p) => (p.role === "bcba" || p.role === "bcaba") && p.name.trim());
+  if (!hasBcbaLike) {
+    const existingBcba = participants.find((p) => p.role === "bcba");
+    if (existingBcba) {
+      existingBcba.name = "Luis";
+    } else {
+      participants.push({ role: "bcba", name: "Luis" });
+    }
+  }
+  if (client && client.rbt_name) {
+    const existingRbt = participants.find((p) => p.role === "rbt");
+    if (existingRbt) {
+      existingRbt.name = client.rbt_name;
+    } else {
+      participants.push({ role: "rbt", name: client.rbt_name });
+    }
+  }
+  renderParticipants();
+}
+
+function renderTargetsPanel(client, forceOpen) {
+  const programIds = client.replacement_programs || [];
+  const behaviorIds = client.maladaptive_behaviors || [];
+  const interventionIds = client.intervention_strategies || [];
+  const topicIds = client.training_topics || [];
+
+  const summary = el("targetsSummary");
+  if (!programIds.length && !behaviorIds.length && !interventionIds.length && !topicIds.length) {
+    summary.textContent = "No client-specific targets set — all standard programs, behaviors, interventions, and training topics are available. Click Edit to restrict this client's list.";
+  } else {
+    const programLabels = clientProgramItems(client).map((p) => p.label).join(", ") || "none";
+    const behaviorLabels = clientBehaviorItems(client).map((b) => b.label).join(", ") || "none";
+    const interventionLabels = clientInterventionItems(client).map((s) => s.label).join(", ") || "none";
+    const topicLabels = clientTrainingTopicItems(client).map((t) => t.label).join(", ") || "none";
+    summary.textContent = `Programs: ${programLabels} | Behaviors: ${behaviorLabels} | Interventions: ${interventionLabels} | Training Topics: ${topicLabels}`;
+  }
+
+  el("targetsEditArea").hidden = !forceOpen;
+  targetEditSelections.replacement_programs = new Set(programIds);
+  targetEditSelections.maladaptive_behaviors = new Set(behaviorIds);
+  targetEditSelections.intervention_strategies = new Set(interventionIds);
+  targetEditSelections.training_topics = new Set(topicIds);
+  renderChipGroup("clientReplacementPrograms", OPTIONS.replacement_programs, "replacement_programs", false, targetEditSelections, new Set(programIds), null, "replacement_programs");
+  renderChipGroup("clientMaladaptiveBehaviors", OPTIONS.maladaptive_behaviors, "maladaptive_behaviors", false, targetEditSelections, new Set(behaviorIds), null, "maladaptive_behaviors");
+  renderChipGroup("clientInterventionStrategies", OPTIONS.intervention_strategies, "intervention_strategies", false, targetEditSelections, new Set(interventionIds), null, "intervention_strategies");
+  renderChipGroup("clientTrainingTopics", OPTIONS.caregiver_training_topics, "training_topics", false, targetEditSelections, new Set(topicIds), null, "caregiver_training_topics");
+  el("targetsSaveStatus").textContent = "";
+}
+
+async function saveClientTargets() {
+  const client = currentClient();
+  const body = {
+    replacement_programs: [...targetEditSelections.replacement_programs],
+    maladaptive_behaviors: [...targetEditSelections.maladaptive_behaviors],
+    intervention_strategies: [...targetEditSelections.intervention_strategies],
+    training_topics: [...targetEditSelections.training_topics],
+  };
+  const res = await apiFetch(`/api/clients/${client.id}`, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  });
+  if (!res.ok) {
+    el("targetsSaveStatus").textContent = "Failed to save targets.";
+    return;
+  }
+  await refreshClients();
+  el("clientSelect").value = client.id;
+  const updatedClient = currentClient();
+  renderTargetsPanel(updatedClient);
+  renderClientSpecificChips(updatedClient);
+  el("targetsSaveStatus").textContent = "Targets saved.";
+}
+
+async function loadNotesHistory(clientId) {
+  const notes = await fetch(`/api/notes?client_id=${clientId}`).then((r) => r.json());
+  const container = el("notesHistory");
+  if (!notes.length) {
+    container.innerHTML = "No saved notes yet.";
+    return;
+  }
+  container.innerHTML = "";
+  notes.forEach((n) => {
+    const row = document.createElement("div");
+    row.className = "note-row";
+    const label = document.createElement("span");
+    const typeLabels = {
+      session: "BCBA Session",
+      bcaba_session: "BCaBA Session",
+      rbt_session: "RBT Session",
+      caregiver: "Caregiver",
+      initial_assessment: "Initial Assessment",
+      reassessment: "Reassessment",
+    };
+    label.textContent = `${n.session_date} · ${typeLabels[n.note_type] || n.note_type}`;
+    const link = document.createElement("a");
+    link.href = `/api/notes/download/${n.id}`;
+    link.textContent = "download";
+    row.appendChild(label);
+    row.appendChild(link);
+    container.appendChild(row);
+  });
+}
+
+function buildPayload() {
+  const placeOfService =
+    el("placeOfService").value === "__other__" ? el("placeOfServiceCustom").value.trim() : el("placeOfService").value;
+  const payload = {
+    note_type: currentNoteType,
+    place_of_service: placeOfService,
+    additional_notes: el("additionalNotes").value,
+    plan_next_session: el("planNextSession").value,
+    target_word_count: el("wordTargetSlider").value,
+  };
+
+  if (quickMode) {
+    payload.client_name = el("quickClientName").value.trim();
+  } else {
+    payload.client_id = currentClient().id;
+  }
+
+  const rbtParticipant = findParticipant("rbt");
+  const bcbaParticipant = findParticipant("bcba") || findParticipant("bcaba");
+  const bcabaOnlyParticipant = findParticipant("bcaba");
+  const caregiverNames = participantNames("caregiver");
+
+  if (currentNoteType === "session") {
+    payload.session_date = el("sessionDate").value;
+    payload.start_time = el("startTime").value;
+    payload.end_time = el("endTime").value;
+    payload.cpt_code = el("cptCode").value;
+    payload.provider_name = rbtParticipant ? rbtParticipant.name.trim() : "";
+    payload.provider_credential = "RBT";
+    payload.reviewing_bcba_name = bcbaParticipant ? bcbaParticipant.name.trim() : "";
+    payload.reviewing_bcba_credential = bcbaParticipant ? PARTICIPANT_ROLE_LABELS[bcbaParticipant.role] : "";
+    payload.caregiver_participant_names = caregiverNames;
+    payload.protocol_modifications = [...selections.protocol_modifications];
+    payload.protocol_modification_data = el("protocolModData").value;
+    payload.protocol_modification_response = el("protocolModResponse").value;
+    payload.replacement_programs = [...selections.replacement_programs];
+    payload.program_scenarios = { ...programScenarios };
+    payload.maladaptive_behaviors = [...selections.maladaptive_behaviors];
+    payload.antecedents = [...selections.antecedents];
+    payload.intervention_strategies = [...selections.intervention_strategies];
+    payload.intervention_effectiveness = selections.intervention_effectiveness;
+    payload.data_collection_methods = [...selections.data_collection_methods];
+    payload.environmental_changes = [...selections.environmental_changes];
+    payload.medical_concerns = [...selections.medical_concerns];
+    payload.client_engagement = selections.client_engagement;
+    payload.observation_method = selections.observation_method;
+    payload.session_rating = selections.session_rating;
+    payload.protocol_fidelity = selections.protocol_fidelity;
+    payload.rbt_strengths = [...selections.rbt_strengths];
+    payload.rbt_feedback_areas = [...selections.rbt_feedback_areas];
+    payload.review_additional_notes = el("reviewAdditionalNotes").value;
+  } else if (currentNoteType === "bcaba_session") {
+    payload.session_date = el("sessionDate").value;
+    payload.start_time = el("startTime").value;
+    payload.end_time = el("endTime").value;
+    payload.cpt_code = el("cptCode").value;
+    payload.provider_name = rbtParticipant ? rbtParticipant.name.trim() : "";
+    payload.provider_credential = "RBT";
+    payload.reviewing_bcba_name = bcabaOnlyParticipant ? bcabaOnlyParticipant.name.trim() : "";
+    payload.reviewing_bcba_credential = bcabaOnlyParticipant ? "BCaBA" : "";
+    payload.caregiver_participant_names = caregiverNames;
+    payload.protocol_modifications = [...selections.protocol_modifications];
+    payload.protocol_modification_data = el("protocolModData").value;
+    payload.protocol_modification_response = el("protocolModResponse").value;
+    payload.replacement_programs = [...selections.replacement_programs];
+    payload.program_scenarios = { ...programScenarios };
+    payload.maladaptive_behaviors = [...selections.maladaptive_behaviors];
+    payload.antecedents = [...selections.antecedents];
+    payload.intervention_strategies = [...selections.intervention_strategies];
+    payload.intervention_effectiveness = selections.intervention_effectiveness;
+    payload.data_collection_methods = [...selections.data_collection_methods];
+    payload.environmental_changes = [...selections.environmental_changes];
+    payload.medical_concerns = [...selections.medical_concerns];
+    payload.client_engagement = selections.client_engagement;
+    payload.observation_method = selections.observation_method;
+    payload.session_rating = selections.session_rating;
+    payload.protocol_fidelity = selections.protocol_fidelity;
+    payload.rbt_strengths = [...selections.rbt_strengths];
+    payload.rbt_feedback_areas = [...selections.rbt_feedback_areas];
+    payload.review_additional_notes = el("reviewAdditionalNotes").value;
+  } else if (currentNoteType === "rbt_session") {
+    payload.session_date = el("sessionDate").value;
+    payload.start_time = el("startTime").value;
+    payload.end_time = el("endTime").value;
+    payload.cpt_code = el("cptCode").value;
+    payload.provider_name = rbtParticipant ? rbtParticipant.name.trim() : "";
+    payload.provider_credential = "RBT";
+    payload.caregiver_participant_names = caregiverNames;
+    payload.replacement_programs = [...selections.replacement_programs];
+    payload.program_scenarios = { ...programScenarios };
+    payload.maladaptive_behaviors = [...selections.maladaptive_behaviors];
+    payload.antecedents = [...selections.antecedents];
+    payload.intervention_strategies = [...selections.intervention_strategies];
+    payload.intervention_effectiveness = selections.intervention_effectiveness;
+    payload.data_collection_methods = [...selections.data_collection_methods];
+    payload.environmental_changes = [...selections.environmental_changes];
+    payload.medical_concerns = [...selections.medical_concerns];
+    payload.client_engagement = selections.client_engagement;
+  } else if (currentNoteType === "caregiver") {
+    payload.provider_name = bcbaParticipant ? bcbaParticipant.name.trim() : "";
+    payload.provider_credential = bcbaParticipant ? PARTICIPANT_ROLE_LABELS[bcbaParticipant.role] : "";
+    payload.caregiver_name = el("caregiverName").value;
+    payload.caregiver_relationship = el("caregiverRelationship").value;
+    payload.training_topics = [...selections.training_topics];
+    payload.teaching_methods = [...selections.teaching_methods];
+    payload.caregiver_competency = selections.caregiver_competency;
+    payload.caregiver_response = [...selections.caregiver_response];
+    payload.training_barriers = [...selections.training_barriers];
+  } else if (currentNoteType === "initial_assessment") {
+    payload.provider_name = bcbaParticipant ? bcbaParticipant.name.trim() : "";
+    payload.provider_credential = bcbaParticipant ? PARTICIPANT_ROLE_LABELS[bcbaParticipant.role] : "";
+    payload.referral_reason = selections.referral_reason;
+    payload.assessment_methods = [...selections.assessment_methods];
+    payload.maladaptive_behaviors = [...selections.maladaptive_behaviors];
+    payload.replacement_programs = [...selections.replacement_programs];
+    payload.treatment_intensity = selections.treatment_intensity;
+    payload.recommended_services = [...selections.recommended_services];
+  } else if (currentNoteType === "reassessment") {
+    payload.provider_name = bcbaParticipant ? bcbaParticipant.name.trim() : "";
+    payload.provider_credential = bcbaParticipant ? PARTICIPANT_ROLE_LABELS[bcbaParticipant.role] : "";
+    payload.assessment_methods = [...selections.assessment_methods];
+    payload.progress_rating = selections.progress_rating;
+    payload.replacement_programs = [...selections.replacement_programs];
+    payload.maladaptive_behaviors = [...selections.maladaptive_behaviors];
+    payload.data_collection_methods = [...selections.data_collection_methods];
+    payload.reassessment_recommendations = [...selections.reassessment_recommendations];
+  }
+  return payload;
+}
+
+async function generateNote() {
+  if (quickMode && !el("quickClientName").value.trim()) {
+    alert("Enter a client name to generate a quick note.");
+    return;
+  }
+  const payload = buildPayload();
+  const res = await apiFetch("/api/generate", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+  });
+  if (!res.ok) {
+    const err = await res.json();
+    alert(err.error || "Failed to generate note.");
+    return;
+  }
+  const result = await res.json();
+  el("outputText").value = result.note_text;
+  el("wordCount").textContent = `${result.word_count} words`;
+  el("similarityBadge").textContent = `${result.max_similarity}% similar to prior notes`;
+  el("outputPanel").hidden = false;
+  el("saveStatus").textContent = "";
+}
+
+async function saveNote() {
+  if (quickMode) {
+    return;
+  }
+  const client = currentClient();
+  const body = {
+    client_id: client.id,
+    note_type: currentNoteType,
+    note_text: el("outputText").value,
+  };
+  if (el("sessionDate").value) {
+    body.session_date = el("sessionDate").value;
+  }
+  const res = await apiFetch("/api/save", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  });
+  const result = await res.json();
+  if (!res.ok) {
+    el("saveStatus").textContent = result.error || "Failed to save note.";
+    return;
+  }
+  el("saveStatus").textContent = `Saved as ${result.filename}`;
+  loadNotesHistory(client.id);
+}
+
+init();
+
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("/sw.js", { scope: "/" });
+  });
+}

@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Log In - Powerful Notes</title>
+<link rel="manifest" href="{{ url_for('static', filename='manifest.json') }}">
+<link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}">
+<link rel="apple-touch-icon" href="{{ url_for('static', filename='icons/apple-touch-icon.png') }}">
+<meta name="theme-color" content="#6c5ce7">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Powerful Notes">
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<div class="auth-wrap">
+  <div class="panel auth-panel">
+    <h1 class="logo"><span class="piece">🧩</span> Powerful Notes</h1>
+    <h2>Log In</h2>
+    {% if error %}<div class="hint auth-error">{{ error }}</div>{% endif %}
+    <form method="POST" action="{{ url_for('login') }}">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+      <label>Email <input type="email" name="email" required autofocus></label>
+      <label>Password <input type="password" name="password" required></label>
+      <div class="row generate-row">
+        <button type="submit" class="btn">Log In</button>
+      </div>
+    </form>
+    <div class="hint">No account yet? <a href="{{ url_for('signup') }}">Sign up</a></div>
+  </div>
+</div>
+</body>
+</html>

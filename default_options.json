@@ -1,0 +1,1970 @@
+{
+  "place_of_service": [
+    "Client's Home",
+    "School",
+    "Clinic / Center-Based",
+    "Telehealth",
+    "Community",
+    "Daycare / Afterschool Program"
+  ],
+  "replacement_programs": [
+    {
+      "id": "functional_communication",
+      "label": "Functional Communication Training (FCT)",
+      "blurbs": [
+        "the RBT prompted the client to use a communication card to request a preferred item before delivering brief access to it",
+        "the RBT modeled an appropriate vocal or AAC-based request during a naturally occurring want and prompted the client to imitate it before reinforcing the response",
+        "the RBT set up a communication temptation, such as a closed container of a preferred item, and prompted the client to request access before opening it",
+        "the RBT used a picture exchange system during a snack activity and prompted the client to exchange a picture to request more",
+        "the RBT paired natural environment teaching with a preferred activity, prompting a functional communication response before providing access",
+        "the RBT used a least-to-most prompting hierarchy to support the client's use of a communication device to request a break",
+        "the RBT arranged multiple communication opportunities across different activities and reinforced each independent or prompted communicative attempt",
+        "the RBT conducted a structured discrete-trial series targeting the client's primary communication response across a rotation of preferred items",
+        "the RBT used a communication device during a community outing and prompted the client to request a preferred item from a caregiver",
+        "the RBT captured a spontaneous communication opportunity during unstructured play and reinforced the client's independent use of the response"
+      ]
+    },
+    {
+      "id": "manding",
+      "label": "Manding / Requesting Skills",
+      "blurbs": [
+        "the RBT presented preferred items just out of reach and prompted the client to request them using their primary communication mode",
+        "the RBT created opportunities across the session for the client to request assistance, items, and activities, prompting and reinforcing each appropriate request",
+        "the RBT conducted structured manding trials using a rotation of preferred items presented one at a time",
+        "the RBT used incidental teaching during free play, capturing the client's motivation to request items as they arose naturally",
+        "the RBT presented a choice board and prompted the client to mand for a specific item from the array",
+        "the RBT used time delay procedures to prompt independent manding before providing physical or verbal prompts",
+        "the RBT captured multiple naturally occurring motivating operations throughout the session and reinforced each appropriate mand",
+        "the RBT conducted manding trials via telehealth, prompting the client to request items visible on screen using their primary communication mode",
+        "the RBT used a mand training protocol with a rotation of high-preference items identified through an informal preference assessment",
+        "the RBT involved a sibling in a preferred activity and prompted the client to mand for a turn with a shared item"
+      ]
+    },
+    {
+      "id": "tolerating_denial",
+      "label": "Tolerating Denial and Delay of Reinforcement",
+      "blurbs": [
+        "the RBT delivered a brief 'not right now' response to a request and prompted the client to wait calmly before reinforcement was provided",
+        "the RBT gradually increased the delay between a client's request and the delivery of the requested item, reinforcing the client for waiting without problem behavior",
+        "the RBT presented a preferred item, then removed it briefly while stating 'wait,' reinforcing the client for tolerating the removal",
+        "the RBT used a visual 'wait' card paired with a timer to help the client tolerate delay following a denied request",
+        "the RBT interspersed 'yes' and 'no' responses to requests across the session, reinforcing calm responding to both outcomes",
+        "the RBT gradually thinned the reinforcement schedule for tolerating denial, extending the wait interval across successful trials",
+        "the RBT paired denial of a request with an immediate alternative activity, reinforcing the client's acceptance of the substitution",
+        "the RBT conducted denial tolerance trials across multiple item categories to promote generalization of waiting skills",
+        "the RBT used a token-based system to bridge the gap between denial of a request and access to an alternative reinforcer",
+        "the RBT practiced tolerating denial during a community outing when a requested item was unavailable"
+      ]
+    },
+    {
+      "id": "following_instructions",
+      "label": "Following One- and Two-Step Instructions",
+      "blurbs": [
+        "the RBT delivered a series of one- and two-step instructions across different materials and prompted the client to complete each step in sequence",
+        "the RBT presented novel two-step directions throughout structured activities and provided prompting as needed to support correct completion",
+        "the RBT ran discrete trials targeting two-step directions using classroom-style materials",
+        "the RBT embedded one- and two-step instructions into a preferred game to increase motivation to respond",
+        "the RBT used a first-then visual paired with each instruction to support the client's understanding of task expectations",
+        "the RBT varied the instructions and materials across trials to promote generalization of instruction-following",
+        "the RBT reduced prompting across the session as the client demonstrated consistent responding to novel instructions",
+        "the RBT conducted instruction-following trials during a community outing, prompting the client to follow directions in a natural setting",
+        "the RBT used errorless teaching to introduce a novel two-step instruction, prompting immediately to prevent incorrect responses",
+        "the RBT increased the complexity of instructions across the session as the client's accuracy remained high"
+      ]
+    },
+    {
+      "id": "social_skills",
+      "label": "Social Skills / Peer Interaction",
+      "blurbs": [
+        "the RBT facilitated a turn-taking game with a peer or the RBT and prompted the client to initiate and respond appropriately during the exchange",
+        "the RBT arranged a cooperative play activity and prompted the client to share materials and take turns with a peer",
+        "the RBT set up a board game with a peer and prompted the client to take turns and respond to the peer's comments",
+        "the RBT used video modeling to demonstrate an appropriate social greeting before prompting the client to practice it with a peer",
+        "the RBT facilitated a joint art activity, prompting the client to comment on and share materials with a peer",
+        "the RBT scripted and faded a social exchange, prompting the client to initiate and respond during a peer interaction",
+        "the RBT arranged a structured recess-style activity and prompted appropriate social responses to peer initiations",
+        "the RBT facilitated a group activity with multiple peers during a community-based outing, prompting appropriate social exchanges",
+        "the RBT used a social script paired with role-play to practice initiating and maintaining a peer interaction",
+        "the RBT involved a sibling in a shared game, prompting the client to engage in reciprocal social exchanges"
+      ]
+    },
+    {
+      "id": "imitation",
+      "label": "Motor and Vocal Imitation",
+      "blurbs": [
+        "the RBT modeled a series of motor and vocal actions and prompted the client to imitate each one before providing reinforcement",
+        "the RBT presented novel gross motor and vocal imitation targets across the session, prompting and fading as the client's responding improved",
+        "the RBT ran a series of rapid imitation trials using both gross motor and fine motor actions",
+        "the RBT modeled a novel action with a toy and prompted the client to imitate it before providing reinforcement",
+        "the RBT used a mirror activity to support the client's imitation of facial expressions and simple gestures",
+        "the RBT interspersed mastered and acquisition imitation targets to maintain a high rate of correct responding",
+        "the RBT faded physical prompts across imitation trials as the client's independent responding increased",
+        "the RBT conducted imitation trials via telehealth, modeling actions on screen for the client to replicate",
+        "the RBT used a musical or rhythmic imitation activity to increase motivation for motor imitation trials",
+        "the RBT introduced imitation targets during a community outing, prompting the client to imitate novel actions observed in the environment"
+      ]
+    },
+    {
+      "id": "labeling_tacting",
+      "label": "Labeling / Tacting",
+      "blurbs": [
+        "the RBT presented a rotation of objects, pictures, and actions and prompted the client to label each one",
+        "the RBT pointed out items in the client's natural environment throughout the session and prompted the client to tact them spontaneously",
+        "the RBT conducted a picture card sort, prompting the client to label each card before placing it in the correct category",
+        "the RBT used a 'what do you see' activity during a community outing to prompt spontaneous tacting",
+        "the RBT presented novel and mastered labeling targets in a randomized rotation to maintain engagement",
+        "the RBT used a barrier game to prompt the client to tact items for a partner to identify",
+        "the RBT captured naturally occurring labeling opportunities throughout play and reinforced each spontaneous tact",
+        "the RBT conducted a labeling activity during a community outing, prompting the client to tact novel items in the environment",
+        "the RBT used a digital app or tablet activity to present labeling targets in a randomized rotation",
+        "the RBT prompted the client to tact emotions displayed in pictures or by others during the session"
+      ]
+    },
+    {
+      "id": "conversation_skills",
+      "label": "Conversational / Intraverbal Skills",
+      "blurbs": [
+        "the RBT asked a series of 'wh' questions during structured trials and prompted the client to respond with a relevant answer",
+        "the RBT engaged the client in a brief reciprocal exchange during a preferred activity and prompted the client to respond to and initiate conversational turns",
+        "the RBT used a conversation card game to prompt the client to ask and answer questions with a peer or the RBT",
+        "the RBT modeled a topic-appropriate comment during a shared activity and prompted the client to respond in kind",
+        "the RBT used video modeling of a reciprocal conversation before prompting the client to practice similar exchanges",
+        "the RBT faded scripted prompts across the session as the client's spontaneous conversational responses increased",
+        "the RBT embedded 'wh' question opportunities into a story-reading activity and prompted relevant responses",
+        "the RBT conducted a telehealth conversation activity, prompting the client to respond to questions presented on screen",
+        "the RBT used a topic board to prompt the client to initiate and maintain a conversation on a preferred subject",
+        "the RBT practiced conversational turn-taking during a shared snack activity with a peer or the RBT"
+      ]
+    },
+    {
+      "id": "self_help_toileting",
+      "label": "Toileting / Self-Help Skills",
+      "blurbs": [
+        "the RBT guided the client through each step of the toileting routine, providing physical or gestural prompts as needed",
+        "the RBT reviewed the toileting sequence with the client using a visual schedule and prompted completion of each step with fading support",
+        "the RBT used a visual task analysis posted in the bathroom to prompt the client through each step of the toileting routine",
+        "the RBT provided scheduled toileting opportunities throughout the session, prompting the client through the routine at each interval",
+        "the RBT faded physical prompts across the session as the client completed more steps of the toileting routine independently",
+        "the RBT used a first-then visual to motivate the client to complete the toileting routine before accessing a preferred item",
+        "the RBT reinforced each successfully completed step of the toileting sequence with immediate praise and a preferred item",
+        "the RBT coordinated with the caregiver to practice the toileting routine in the client's natural bathroom setting",
+        "the RBT used a token system to reinforce successful completion of the toileting routine across the session",
+        "the RBT practiced initiating the toileting routine independently following a scheduled prompt"
+      ]
+    },
+    {
+      "id": "self_help_dressing",
+      "label": "Dressing and Self-Care Skills",
+      "blurbs": [
+        "the RBT provided step-by-step prompts as the client practiced putting on and removing an article of clothing",
+        "the RBT modeled a self-care task, such as washing hands or brushing teeth, and prompted the client to complete each step independently",
+        "the RBT used backward chaining to teach the client to complete the final step of a dressing task independently",
+        "the RBT provided a visual sequence for a self-care task and prompted the client to complete each step in order",
+        "the RBT modeled a dressing step and prompted the client to imitate it before moving to the next step",
+        "the RBT faded hand-over-hand prompting across the session as the client's independent dressing skills increased",
+        "the RBT practiced a self-care routine using errorless teaching, prompting immediately to prevent incorrect responses",
+        "the RBT practiced a dressing task in the natural context of arriving or leaving the session",
+        "the RBT used a token system to reinforce independent completion of a self-care task",
+        "the RBT practiced a self-care skill using a video model before prompting the client to complete it independently"
+      ]
+    },
+    {
+      "id": "safety_skills",
+      "label": "Safety Awareness Skills",
+      "blurbs": [
+        "the RBT presented a simulated safety scenario, such as approaching a street or an unfamiliar person, and prompted the client to respond with the appropriate safety response",
+        "the RBT reviewed a safety rule with the client using a visual cue and prompted the client to demonstrate the correct response during a role-play",
+        "the RBT conducted a stop-and-check drill, prompting the client to stop and look both ways before crossing a simulated street",
+        "the RBT presented pictures of unfamiliar situations and prompted the client to identify the safe response",
+        "the RBT used a role-play scenario involving a stranger approach and prompted the client to demonstrate the safety response",
+        "the RBT reviewed emergency contact information with the client using a visual prompt and practiced the response to a safety cue",
+        "the RBT faded verbal prompts across safety trials as the client's independent responding to safety cues increased",
+        "the RBT practiced a safety skill during a community outing, prompting the client to respond appropriately to a real environmental cue",
+        "the RBT used a social story to review a safety expectation before practicing the response through role-play",
+        "the RBT reinforced the client's independent use of a safety response following a naturally occurring opportunity during the session"
+      ]
+    },
+    {
+      "id": "transition_skills",
+      "label": "Transitioning Between Activities",
+      "blurbs": [
+        "the RBT provided a verbal and visual warning before each transition and prompted the client to move to the next activity within the session",
+        "the RBT used a timer and first-then visual to prepare the client for an upcoming transition and prompted an independent move between activities",
+        "the RBT used a countdown timer paired with a verbal warning to prepare the client for an upcoming transition",
+        "the RBT practiced a series of transitions between preferred and non-preferred activities, reinforcing calm transitions",
+        "the RBT used a transition object to help the client move between activities without a decrease in engagement",
+        "the RBT gradually reduced the amount of warning time provided before a transition as the client's tolerance increased",
+        "the RBT modeled an appropriate transition response and prompted the client to use it independently during the session",
+        "the RBT practiced a transition during a community outing, moving between a preferred and non-preferred location",
+        "the RBT used a token system to reinforce calm transitions between activities across the session",
+        "the RBT gradually reduced the use of a transition object as the client's tolerance for change increased"
+      ]
+    },
+    {
+      "id": "coping_skills",
+      "label": "Coping and Calming Strategies",
+      "blurbs": [
+        "the RBT prompted the client to request a break or use a calming strategy, such as deep breaths or a preferred fidget, when early signs of distress were observed",
+        "the RBT modeled a coping strategy following an observed precursor to problem behavior and prompted the client to use the replacement response instead",
+        "the RBT taught a deep breathing strategy using a visual prompt and reinforced the client for using it during a brief pause",
+        "the RBT introduced a calming corner with sensory materials and prompted the client to use it following an observed precursor",
+        "the RBT modeled use of a feelings-check visual and prompted the client to identify and respond to early signs of escalation",
+        "the RBT practiced a coping strategy proactively before a known difficult transition, reinforcing its use",
+        "the RBT faded prompting for the use of a coping strategy as the client began using it more independently across the session",
+        "the RBT practiced a coping strategy proactively before a community outing known to be challenging for the client",
+        "the RBT used a video model to teach a new coping strategy before prompting the client to practice it",
+        "the RBT reinforced the client's independent use of a coping strategy following a naturally occurring precursor during the session"
+      ]
+    },
+    {
+      "id": "play_skills",
+      "label": "Independent and Cooperative Play Skills",
+      "blurbs": [
+        "the RBT structured a play activity with a preferred toy and prompted the client to engage in independent play for an increasing duration",
+        "the RBT joined the client's play and modeled cooperative play behaviors, prompting the client to take turns and share materials",
+        "the RBT modeled functional play with a toy set and prompted the client to imitate the play sequence",
+        "the RBT introduced a new toy during free play and prompted the client to explore it appropriately",
+        "the RBT used a parallel play activity to build toward cooperative play with a peer",
+        "the RBT faded adult involvement across the session as the client's independent play duration increased",
+        "the RBT prompted pretend play scenarios using props, reinforcing creative and appropriate play responses",
+        "the RBT facilitated a group play activity with peers during a community-based outing",
+        "the RBT introduced a turn-based board game to build cooperative play skills",
+        "the RBT used video modeling to teach a novel play sequence before prompting the client to imitate it"
+      ]
+    },
+    {
+      "id": "academic_readiness",
+      "label": "Pre-Academic / Academic Readiness Skills",
+      "blurbs": [
+        "the RBT presented a matching or sorting task and prompted the client to complete each trial before providing reinforcement",
+        "the RBT ran a series of attending-to-task trials using academic materials and prompted the client to remain oriented to the task until completion",
+        "the RBT ran a series of discrete trials targeting color, shape, and number identification",
+        "the RBT used a worksheet-based activity to target attending and following directions in a table-top format",
+        "the RBT presented a puzzle task to target visual-motor and attending skills",
+        "the RBT faded prompting across matching and sorting trials as the client's independent accuracy increased",
+        "the RBT embedded academic readiness targets into a game format to increase engagement and motivation",
+        "the RBT conducted academic readiness trials via telehealth using digital matching and sorting activities",
+        "the RBT used a tablet-based application to target early academic skills in a game-based format",
+        "the RBT practiced academic readiness skills during a community-based activity, such as identifying items while shopping"
+      ]
+    },
+    {
+      "id": "mand_for_break",
+      "label": "Mand for a Break",
+      "blurbs": [
+        "the RBT prompted the client to request a break using a break card during a non-preferred task, providing a brief pause before returning to the activity",
+        "the RBT modeled requesting a break during a demanding task and prompted the client to use the same response independently",
+        "the RBT introduced a break card at the start of a demanding activity and reinforced its use throughout the session",
+        "the RBT used a first-then visual paired with the opportunity to request a break before returning to task",
+        "the RBT faded physical prompting for requesting a break as the client began using the response independently",
+        "the RBT provided several structured opportunities across the session for the client to request a break during effortful tasks",
+        "the RBT reinforced the client immediately upon requesting a break, providing a brief pause before returning to programming",
+        "the RBT practiced requesting a break during a community outing when the client showed reduced engagement",
+        "the RBT used a token system paired with break requests to reinforce appropriate communication during effortful tasks",
+        "the RBT captured a spontaneous break request during the session and reinforced it immediately"
+      ]
+    },
+    {
+      "id": "mand_for_tangible",
+      "label": "Mand for Tangible Items",
+      "blurbs": [
+        "the RBT placed a preferred item within view but out of reach and prompted the client to request it using an appropriate communicative response",
+        "the RBT withheld a preferred item briefly during play and prompted the client to mand for it before returning access",
+        "the RBT rotated a set of preferred tangible items throughout the session and prompted a request before each was delivered",
+        "the RBT used a time delay procedure before prompting the client to request a visible but inaccessible item",
+        "the RBT captured spontaneous manding opportunities during play and reinforced each independent request",
+        "the RBT presented a choice of two tangible items and prompted the client to request their preferred option",
+        "the RBT faded prompting across tangible-request trials as the client's independent responding increased",
+        "the RBT conducted tangible-request trials via telehealth, prompting the client to request items visible on screen",
+        "the RBT used an array of three or more preferred items to prompt a specific tangible request",
+        "the RBT practiced requesting a tangible item during a community outing, such as at a store or park"
+      ]
+    },
+    {
+      "id": "time_on_task",
+      "label": "Time on Task",
+      "blurbs": [
+        "the RBT set a visual timer for the assigned activity and prompted the client to remain engaged until the timer signaled a break",
+        "the RBT gradually increased the length of each work interval before providing reinforcement, prompting continued engagement with the task",
+        "the RBT used a visual work system to structure the session and reinforced sustained engagement at each checkpoint",
+        "the RBT gradually thinned the schedule of reinforcement for on-task behavior across the session",
+        "the RBT provided brief movement breaks between work intervals to support sustained attention to task",
+        "the RBT tracked the client's on-task duration across trials and adjusted the work interval length accordingly",
+        "the RBT paired a preferred activity with the completion of an assigned task to increase time on task",
+        "the RBT used a token system to reinforce sustained engagement with an assigned activity across the session",
+        "the RBT gradually increased task complexity while monitoring the client's sustained engagement",
+        "the RBT practiced time on task during a community-based activity requiring sustained attention"
+      ]
+    },
+    {
+      "id": "appropriate_sitting_school",
+      "label": "Appropriate Sitting During School Activities",
+      "blurbs": [
+        "the RBT arranged a simulated classroom activity and prompted the client to remain seated and oriented toward the instructional materials",
+        "the RBT provided reinforcement at increasing intervals for the client remaining seated during a table-top academic task",
+        "the RBT set up a mock classroom seating arrangement and reinforced the client for remaining seated during instruction",
+        "the RBT used a visual timer to build the client's tolerance for remaining seated during structured lessons",
+        "the RBT provided a fidget tool to support sustained seated engagement during a table-top task",
+        "the RBT gradually increased the seated interval required before reinforcement was provided",
+        "the RBT modeled appropriate sitting posture and prompted the client to imitate it during instructional time",
+        "the RBT practiced classroom-style sitting expectations during a simulated group lesson with multiple materials",
+        "the RBT used a token system to reinforce sustained seated engagement during instructional time",
+        "the RBT gradually increased the complexity of seated tasks while monitoring the client's engagement"
+      ]
+    },
+    {
+      "id": "follow_routine",
+      "label": "Follow Routine",
+      "blurbs": [
+        "the RBT walked the client through each step of a familiar routine using a visual sequence and prompted completion in the correct order",
+        "the RBT reduced prompting across the session as the client completed the steps of an established routine with increasing independence",
+        "the RBT used a picture schedule to guide the client through a multi-step morning or arrival routine",
+        "the RBT faded verbal prompting across the session as the client completed routine steps with a visual cue alone",
+        "the RBT practiced a novel routine using the same prompting sequence used for previously mastered routines",
+        "the RBT reinforced each correctly completed step of a routine before moving to the next",
+        "the RBT introduced a routine change and supported the client through the modified sequence using visual supports",
+        "the RBT practiced a novel routine in the client's natural home or community environment",
+        "the RBT used a token system to reinforce independent completion of each step of a routine",
+        "the RBT coordinated with the caregiver to practice a routine consistent with the home environment"
+      ]
+    },
+    {
+      "id": "follow_one_step_instructions",
+      "label": "Follow 1-Step Instructions",
+      "blurbs": [
+        "the RBT delivered a series of single-step directions across different activities and prompted the client to complete each one",
+        "the RBT presented novel one-step instructions throughout the session, providing prompting and reinforcement for correct responding",
+        "the RBT delivered single-step instructions during a clean-up activity and prompted immediate compliance",
+        "the RBT used a most-to-least prompting hierarchy to teach a novel one-step instruction",
+        "the RBT interspersed mastered and novel one-step instructions to maintain a high rate of correct responding",
+        "the RBT delivered one-step instructions across different rooms and settings to promote generalization",
+        "the RBT reinforced each instance of independent compliance with a one-step direction throughout the session",
+        "the RBT practiced one-step instruction-following during a community outing in a natural context",
+        "the RBT used errorless teaching to introduce a novel one-step instruction with immediate prompting",
+        "the RBT increased the pace of instruction delivery as the client's accuracy remained consistently high"
+      ]
+    },
+    {
+      "id": "daily_living_skills",
+      "label": "Daily Living Skills (Dressing, Brushing Teeth, Washing Hands, Showering, Putting Shoes On)",
+      "blurbs": [
+        "the RBT prompted the client through a daily living task, such as brushing teeth or washing hands, using a step-by-step visual sequence",
+        "the RBT provided hand-over-hand or gestural prompting as needed while the client practiced a self-care routine, fading support as skills improved",
+        "the RBT used a visual task analysis to guide the client through a multi-step daily living task",
+        "the RBT practiced a daily living skill using backward chaining, reinforcing completion of the final step first",
+        "the RBT modeled each step of a self-care routine before prompting the client to complete it independently",
+        "the RBT faded prompting across the session as the client completed more steps of the routine without support",
+        "the RBT embedded a daily living skill into the natural context of the session, such as washing hands before a snack",
+        "the RBT coordinated with the caregiver to practice a daily living skill consistent with the home routine",
+        "the RBT used a token system to reinforce independent completion of a daily living task",
+        "the RBT practiced a daily living skill during a community outing, such as ordering at a restaurant"
+      ]
+    },
+    {
+      "id": "remain_seated",
+      "label": "Remain Seated",
+      "blurbs": [
+        "the RBT reinforced the client at increasing intervals for remaining seated during structured activities throughout the session",
+        "the RBT provided a preferred item contingent on the client remaining seated for a set duration, gradually extending the requirement",
+        "the RBT used a visual timer to build the client's tolerance for remaining seated during a preferred activity",
+        "the RBT provided a preferred seating cushion or fidget to support sustained seated engagement",
+        "the RBT gradually extended the seated interval required before a break was provided",
+        "the RBT reinforced brief periods of seated engagement, building toward longer durations across the session",
+        "the RBT modeled remaining seated during a table-top task and prompted the client to imitate the response",
+        "the RBT used a token system to reinforce sustained seated engagement across the session",
+        "the RBT practiced remaining seated during a community-based activity, such as a waiting room or restaurant",
+        "the RBT gradually increased task complexity while the client remained seated to maintain engagement"
+      ]
+    },
+    {
+      "id": "accept_delay_of_reinforcement",
+      "label": "Accept Delay of Reinforcement",
+      "blurbs": [
+        "the RBT introduced a brief delay between the client's response and delivery of reinforcement, gradually increasing the wait time across trials",
+        "the RBT used a visual timer to signal an upcoming delay and prompted the client to wait calmly before reinforcement was delivered",
+        "the RBT used a visual countdown to signal the length of delay before reinforcement was delivered",
+        "the RBT paired an activity with the delay period to help the client tolerate waiting for reinforcement",
+        "the RBT gradually increased the delay interval across successful trials, reinforcing calm waiting at each step",
+        "the RBT used a token system to bridge the delay between a correct response and delivery of the backup reinforcer",
+        "the RBT faded prompting for calm waiting as the client's tolerance for delayed reinforcement increased",
+        "the RBT practiced tolerating delay during a community outing when access to a preferred item was not immediate",
+        "the RBT used a token system to bridge increasingly longer delays before backup reinforcement was delivered",
+        "the RBT paired a brief preferred activity with the delay period to help the client tolerate waiting"
+      ]
+    },
+    {
+      "id": "follow_daily_schedule",
+      "label": "Follow a Daily Schedule of Activities",
+      "blurbs": [
+        "the RBT reviewed the client's visual schedule at each transition and prompted the client to move to the next scheduled activity",
+        "the RBT reduced prompting across the session as the client followed the sequence of scheduled activities with increasing independence",
+        "the RBT used a visual schedule with removable icons to help the client track progress through the day's activities",
+        "the RBT prompted the client to check the schedule independently before transitioning to the next activity",
+        "the RBT introduced an unexpected change to the schedule and supported the client through the adjustment",
+        "the RBT faded verbal prompting across the session as the client followed the visual schedule with increasing independence",
+        "the RBT reinforced the client at each successful transition to the next scheduled activity",
+        "the RBT coordinated with the caregiver to align the session schedule with the client's home routine",
+        "the RBT used a digital schedule application to help the client track and follow the day's activities",
+        "the RBT practiced following an altered schedule when a planned activity was unexpectedly unavailable"
+      ]
+    },
+    {
+      "id": "accept_no_tangibles",
+      "label": "Accept 'No' as an Answer When Requesting Tangibles",
+      "blurbs": [
+        "the RBT said 'no' to a request for a tangible item and prompted the client to accept the response calmly before offering an alternative",
+        "the RBT gradually introduced denial of preferred tangibles across trials, reinforcing the client for tolerating the response without problem behavior",
+        "the RBT paired denial of a tangible item with an immediate alternative, reinforcing the client's acceptance",
+        "the RBT used a visual 'not now' card when denying access to a tangible item, reinforcing calm responding",
+        "the RBT gradually increased the frequency of denied tangible requests across the session to build tolerance",
+        "the RBT modeled an appropriate response to hearing 'no' and prompted the client to use the same response",
+        "the RBT reinforced the client immediately following calm acceptance of a denied tangible request",
+        "the RBT practiced tolerating denial of a tangible item during a community outing, such as at a store",
+        "the RBT used a token system to reinforce calm acceptance of denied tangible requests",
+        "the RBT gradually varied the type of tangible item denied across trials to promote generalized tolerance"
+      ]
+    },
+    {
+      "id": "remain_on_task",
+      "label": "Remain on Task",
+      "blurbs": [
+        "the RBT provided prompting and reinforcement to support the client continuing an assigned activity until it was completed",
+        "the RBT redirected the client back to the assigned task following brief off-task moments, reinforcing sustained engagement",
+        "the RBT used a visual checklist to help the client track progress and remain engaged with the assigned activity",
+        "the RBT provided brief verbal encouragement at intervals to support sustained engagement with the task",
+        "the RBT reduced the length of work intervals when off-task behavior increased, gradually building duration back up",
+        "the RBT paired task completion with access to a preferred item to increase motivation to remain on task",
+        "the RBT faded redirection prompts across the session as the client's independent task engagement increased",
+        "the RBT used a token system to reinforce sustained engagement with an assigned task across the session",
+        "the RBT practiced remaining on task during a community-based activity requiring sustained attention",
+        "the RBT gradually increased task duration while monitoring the client's sustained engagement"
+      ]
+    },
+    {
+      "id": "comply_with_instructions",
+      "label": "Comply with Instructions",
+      "blurbs": [
+        "the RBT delivered a series of adult-led instructions across the session and prompted the client to comply within a set time window",
+        "the RBT used a three-step prompting procedure to support the client's compliance with directions throughout structured activities",
+        "the RBT used a token economy to reinforce prompt compliance with adult-delivered instructions",
+        "the RBT delivered instructions using a consistent format and tone to support the client's understanding and compliance",
+        "the RBT gradually increased the number of instructions delivered in sequence as compliance improved",
+        "the RBT faded physical prompting across compliance trials as the client's independent responding increased",
+        "the RBT reinforced immediate compliance with instructions across a variety of activities during the session",
+        "the RBT practiced compliance with instructions during a community outing in a natural context",
+        "the RBT used a token system to reinforce prompt compliance with a variety of instructions",
+        "the RBT increased the pace and variety of instructions as the client's compliance remained consistent"
+      ]
+    },
+    {
+      "id": "compliance_training_less_preferred",
+      "label": "Compliance Training: Compliance with Requests Including Less-Preferred Tasks",
+      "blurbs": [
+        "the RBT presented a less-preferred task and used a structured prompting and reinforcement procedure to support the client's compliance",
+        "the RBT interspersed less-preferred demands among preferred activities, prompting compliance and reinforcing completion of each instruction",
+        "the RBT used high-probability instructions to build momentum before presenting a less-preferred demand",
+        "the RBT paired completion of a less-preferred task with immediate access to a highly preferred item",
+        "the RBT gradually increased the number of less-preferred instructions presented across the session",
+        "the RBT faded the density of reinforcement for compliance as the client's responding to less-preferred tasks stabilized",
+        "the RBT interspersed brief less-preferred demands throughout an otherwise preferred activity",
+        "the RBT practiced compliance with a less-preferred task during a community outing",
+        "the RBT used a token system to reinforce compliance with less-preferred instructions across the session",
+        "the RBT gradually reduced the density of reinforcement as the client's compliance with less-preferred tasks stabilized"
+      ]
+    },
+    {
+      "id": "accept_alternative_activities",
+      "label": "Accepting Alternative Activities or Interests",
+      "blurbs": [
+        "the RBT offered an alternative activity when the client's first-choice item was unavailable and prompted acceptance of the substitute option",
+        "the RBT presented two alternative activities following denial of a preferred item and prompted the client to select and engage with one",
+        "the RBT presented a preferred activity as unavailable and immediately offered two alternative options",
+        "the RBT reinforced the client for engaging with an alternative activity without protest",
+        "the RBT gradually reduced the similarity between the client's first choice and the offered alternative across trials",
+        "the RBT modeled accepting an alternative activity and prompted the client to use the same response",
+        "the RBT faded prompting for accepting alternatives as the client's flexibility with substituted activities increased",
+        "the RBT practiced accepting an alternative activity during a community outing when the first choice was unavailable",
+        "the RBT used a token system to reinforce the client's acceptance of a substituted activity",
+        "the RBT gradually offered less similar alternatives across trials to build flexibility"
+      ]
+    },
+    {
+      "id": "request_break",
+      "label": "Request Break",
+      "blurbs": [
+        "the RBT prompted the client to use a break card or verbal request to request a pause from the current activity",
+        "the RBT modeled requesting a break during a lengthy work interval and prompted the client to use the response independently",
+        "the RBT introduced a break request opportunity at the midpoint of a demanding activity",
+        "the RBT used a visual break card paired with a designated break area to support the request",
+        "the RBT reinforced the client immediately upon an independent request for a break",
+        "the RBT gradually increased the work requirement before a break request was honored, building tolerance",
+        "the RBT faded physical prompting for requesting a break across the session",
+        "the RBT practiced requesting a break during a community-based activity requiring sustained effort",
+        "the RBT used a token system paired with break requests to reinforce the response across the session",
+        "the RBT captured a spontaneous break request and reinforced it immediately during the session"
+      ]
+    },
+    {
+      "id": "self_management_transitions",
+      "label": "Self-Management: Transitions (with Visual and Verbal Prompt)",
+      "blurbs": [
+        "the RBT provided a visual schedule and verbal prompt to support the client independently transitioning between activities",
+        "the RBT faded verbal prompting across the session as the client used visual cues to self-manage transitions between tasks",
+        "the RBT introduced a self-monitoring checklist to support the client's independent movement between activities",
+        "the RBT faded adult-delivered prompts across transitions as the client relied more on visual supports alone",
+        "the RBT reinforced the client for independently checking a schedule and transitioning without a verbal prompt",
+        "the RBT practiced a series of transitions across the session, gradually reducing the level of support provided",
+        "the RBT used a self-management chart to track and reinforce independent transitions throughout the session",
+        "the RBT coordinated with the caregiver to practice self-managed transitions consistent with the home routine",
+        "the RBT used a digital or picture-based checklist to support the client's independent transitions",
+        "the RBT practiced self-managed transitions during a community outing between different locations"
+      ]
+    },
+    {
+      "id": "compliance_nonpreferred_no_behavior",
+      "label": "Compliance with Non-Preferred Demands Without Maladaptive Behavior Occurring",
+      "blurbs": [
+        "the RBT delivered a non-preferred instruction and prompted the client to follow through with the request without engaging in problem behavior",
+        "the RBT reinforced the client for completing less-preferred instructions calmly across several trials during the session",
+        "the RBT presented a non-preferred instruction and reinforced immediate compliance without problem behavior",
+        "the RBT used behavioral momentum, presenting several easy instructions before a non-preferred demand",
+        "the RBT gradually increased the difficulty of non-preferred demands as compliance without problem behavior increased",
+        "the RBT faded the level of prompting needed to support compliance with non-preferred instructions",
+        "the RBT reinforced the client at each instance of following through with a non-preferred instruction calmly",
+        "the RBT practiced compliance with a non-preferred instruction during a community outing",
+        "the RBT used a token system to reinforce compliance with non-preferred instructions without problem behavior",
+        "the RBT gradually increased the frequency of non-preferred instructions as calm compliance remained consistent"
+      ]
+    },
+    {
+      "id": "appropriate_sitting_activities",
+      "label": "Appropriate Sitting During Activities",
+      "blurbs": [
+        "the RBT reinforced the client at increasing intervals for remaining seated and attentive during structured table-top activities",
+        "the RBT provided prompting as needed to support the client remaining seated throughout a structured task",
+        "the RBT used a visual timer to build the client's tolerance for remaining seated during structured activities",
+        "the RBT provided intermittent reinforcement for sustained seated engagement throughout the session",
+        "the RBT modeled appropriate sitting and prompted the client to imitate the response during table-top tasks",
+        "the RBT gradually increased the seated interval required before a break was provided",
+        "the RBT paired remaining seated with access to a preferred activity to increase motivation",
+        "the RBT used a token system to reinforce sustained seated engagement during structured activities",
+        "the RBT practiced appropriate sitting during a community-based activity, such as a waiting room",
+        "the RBT gradually increased task complexity while the client remained seated and attentive"
+      ]
+    },
+    {
+      "id": "accept_no_general",
+      "label": "Accept 'No' as an Answer",
+      "blurbs": [
+        "the RBT delivered a 'no' response to a variety of requests across the session and prompted the client to tolerate the denial calmly",
+        "the RBT gradually introduced denial across different request types, reinforcing the client for accepting 'no' without problem behavior",
+        "the RBT varied the type of request denied across the session to build generalized tolerance for hearing 'no'",
+        "the RBT modeled a calm response to denial and prompted the client to use the same response",
+        "the RBT reinforced the client immediately following calm acceptance of a denied request",
+        "the RBT gradually increased the frequency of denied requests across the session to build tolerance",
+        "the RBT paired denial with an immediate alternative option, reinforcing the client's acceptance",
+        "the RBT practiced tolerating denial across a variety of requests during a community outing",
+        "the RBT used a token system to reinforce calm acceptance of denial across different request types",
+        "the RBT gradually varied the context of denied requests across trials to promote generalized tolerance"
+      ]
+    },
+    {
+      "id": "taking_turns",
+      "label": "Taking Turns",
+      "blurbs": [
+        "the RBT facilitated a turn-taking activity and prompted the client to wait for their turn before engaging with the materials",
+        "the RBT used a visual turn-taking cue during a shared activity and prompted the client to wait appropriately for their turn",
+        "the RBT used a visual turn-taking cue, such as a token or card, to signal whose turn it was during a shared game",
+        "the RBT modeled waiting for a turn and prompted the client to imitate the response during a group activity",
+        "the RBT gradually increased the number of turns the client was required to wait through before their turn",
+        "the RBT reinforced the client for waiting appropriately during a peer's turn in a structured game",
+        "the RBT faded verbal prompting for turn-taking as the client's independent waiting increased",
+        "the RBT facilitated turn-taking during a community-based group activity",
+        "the RBT used a token system to reinforce appropriate waiting during a peer's turn",
+        "the RBT involved a sibling in a shared game to practice turn-taking in a natural context"
+      ]
+    },
+    {
+      "id": "sharing_skills",
+      "label": "Sharing Skills",
+      "blurbs": [
+        "the RBT prompted the client to share a preferred item or material with the RBT or a peer during a joint activity",
+        "the RBT modeled sharing during play and prompted the client to offer materials to another participant",
+        "the RBT set up a shared materials activity and prompted the client to offer an item to a peer or the RBT",
+        "the RBT reinforced spontaneous sharing behavior observed during an unstructured play activity",
+        "the RBT modeled sharing a preferred item and prompted the client to imitate the response",
+        "the RBT gradually increased the value of items the client was prompted to share across trials",
+        "the RBT faded prompting for sharing as the client began offering materials independently during play",
+        "the RBT facilitated sharing during a community-based group activity with peers",
+        "the RBT used a token system to reinforce spontaneous sharing behavior during play",
+        "the RBT involved a sibling in a shared activity to practice sharing materials in a natural context"
+      ]
+    },
+    {
+      "id": "request_attention",
+      "label": "Request Attention",
+      "blurbs": [
+        "the RBT withheld attention briefly during play and prompted the client to request attention using an appropriate communicative response",
+        "the RBT modeled an appropriate attention-getting response and prompted the client to use it before providing attention",
+        "the RBT engaged in a separate task briefly and prompted the client to request attention using an appropriate response",
+        "the RBT reinforced the client immediately upon an independent, appropriate request for attention",
+        "the RBT modeled an appropriate attention-getting phrase and prompted the client to use it during the session",
+        "the RBT gradually increased the delay before providing attention following a request, reinforcing calm waiting",
+        "the RBT faded physical prompting for requesting attention across the session",
+        "the RBT practiced requesting attention during a community outing when engaged with another task",
+        "the RBT used a token system to reinforce appropriate requests for attention across the session",
+        "the RBT captured a spontaneous attention-seeking opportunity and reinforced the appropriate response"
+      ]
+    },
+    {
+      "id": "asking_for_access",
+      "label": "Asking for Access",
+      "blurbs": [
+        "the RBT placed a preferred item or activity within view and prompted the client to request access using an appropriate communicative response",
+        "the RBT created several opportunities across the session for the client to request access to materials, prompting and reinforcing each request",
+        "the RBT placed preferred materials in a closed container and prompted the client to request access before opening it",
+        "the RBT reinforced the client immediately upon an independent request for access to a preferred item",
+        "the RBT used a time delay procedure before prompting the client to request access to an activity",
+        "the RBT rotated access-request opportunities across several preferred items and activities during the session",
+        "the RBT faded prompting for requesting access as the client's independent responding increased",
+        "the RBT practiced requesting access to materials during a community-based activity",
+        "the RBT used a token system to reinforce independent requests for access to preferred items",
+        "the RBT rotated access-request opportunities across a variety of settings during the session"
+      ]
+    },
+    {
+      "id": "appropriate_protesting",
+      "label": "Appropriate Protesting",
+      "blurbs": [
+        "the RBT presented a non-preferred demand and prompted the client to use words or a gesture to protest instead of engaging in problem behavior",
+        "the RBT modeled an appropriate refusal response during a non-preferred activity and prompted the client to use it independently",
+        "the RBT modeled an appropriate protest phrase, such as 'I don't want to,' and prompted the client to use it",
+        "the RBT reinforced the client for using words or a gesture to protest instead of engaging in problem behavior",
+        "the RBT presented a non-preferred demand and prompted an appropriate protest response before offering an alternative",
+        "the RBT gradually increased the difficulty of demands paired with appropriate protesting practice",
+        "the RBT faded prompting for appropriate protesting as the client's independent use of the response increased",
+        "the RBT practiced appropriate protesting during a community outing when a non-preferred demand was presented",
+        "the RBT used a token system to reinforce the client's use of an appropriate protest response",
+        "the RBT gradually increased the difficulty of demands paired with protesting practice across settings"
+      ]
+    },
+    {
+      "id": "toilet_training",
+      "label": "Toilet Training",
+      "blurbs": [
+        "the RBT guided the client through the toileting routine on a scheduled interval, providing prompting at each step",
+        "the RBT used a visual sequence to walk the client through the toileting routine, reducing prompting as independence increased",
+        "the RBT used a sticker chart to reinforce successful completion of the toileting routine",
+        "the RBT provided scheduled toileting opportunities at consistent intervals throughout the session",
+        "the RBT faded physical prompting across the toileting routine as the client's independence increased",
+        "the RBT used a visual cue to prompt the client to initiate the toileting routine independently",
+        "the RBT reinforced each successfully completed step of the toileting sequence with praise and a preferred item",
+        "the RBT coordinated with the caregiver to align the toileting schedule with the home routine",
+        "the RBT used a token system to reinforce successful completion of the toileting routine",
+        "the RBT practiced initiating the toileting routine independently following a scheduled prompt"
+      ]
+    },
+    {
+      "id": "initiate_social_interaction",
+      "label": "Initiate a Social Interaction",
+      "blurbs": [
+        "the RBT prompted the client to initiate a greeting or invitation to play with a peer or the RBT during the session",
+        "the RBT modeled an appropriate social initiation and prompted the client to use it to begin an interaction",
+        "the RBT arranged an opportunity for the client to approach a peer and initiate a greeting or invitation to play",
+        "the RBT modeled an appropriate social initiation and prompted the client to use it with a peer or the RBT",
+        "the RBT reinforced the client immediately following an independent social initiation",
+        "the RBT faded scripted prompts for social initiation as the client's spontaneous initiations increased",
+        "the RBT used video modeling to demonstrate a social initiation before prompting the client to practice it",
+        "the RBT facilitated a social initiation opportunity during a community-based outing",
+        "the RBT used a token system to reinforce independent social initiations across the session",
+        "the RBT involved a sibling to practice initiating a social interaction in a natural context"
+      ]
+    },
+    {
+      "id": "mand_for_help",
+      "label": "Mand for Help",
+      "blurbs": [
+        "the RBT presented a task with a component the client could not complete independently and prompted the client to request help",
+        "the RBT modeled requesting assistance during a challenging task and prompted the client to use the same response",
+        "the RBT presented a task with a component the client could not complete independently and prompted a request for help",
+        "the RBT reinforced the client immediately upon an independent request for assistance",
+        "the RBT modeled requesting help using a specific phrase and prompted the client to use it",
+        "the RBT used a visual 'help' card to support the client's request for assistance during a challenging task",
+        "the RBT faded physical prompting for requesting help as the client's independent responding increased",
+        "the RBT practiced requesting help during a community-based activity requiring assistance",
+        "the RBT used a token system to reinforce independent requests for assistance across the session",
+        "the RBT captured a spontaneous help-seeking opportunity and reinforced the appropriate response"
+      ]
+    },
+    {
+      "id": "tangible_activity_request",
+      "label": "Tangible and Activity Request",
+      "blurbs": [
+        "the RBT presented preferred items and activities throughout the session and prompted the client to request access using an appropriate response",
+        "the RBT created structured opportunities for the client to request a tangible item or activity, reinforcing each appropriate request",
+        "the RBT rotated preferred tangible items and activities across the session, prompting a request before each was made available",
+        "the RBT reinforced the client immediately upon an independent request for a preferred tangible item or activity",
+        "the RBT used a choice board to prompt the client to request their preferred tangible item or activity",
+        "the RBT captured naturally occurring opportunities for the client to request access during play",
+        "the RBT faded prompting across tangible and activity request trials as independent responding increased",
+        "the RBT practiced requesting a tangible item or activity during a community outing",
+        "the RBT used a token system to reinforce independent requests for tangible items and activities",
+        "the RBT rotated tangible and activity request opportunities across a variety of settings"
+      ]
+    },
+    {
+      "id": "remain_seated_nonpreferred",
+      "label": "Remain Seated During Non-Preferred Tasks",
+      "blurbs": [
+        "the RBT reinforced the client at increasing intervals for remaining seated during a less-preferred task",
+        "the RBT provided a preferred item contingent on sustained seated engagement during a non-preferred activity",
+        "the RBT used a visual timer to build the client's tolerance for remaining seated during a less-preferred activity",
+        "the RBT paired remaining seated during a non-preferred task with access to a preferred item afterward",
+        "the RBT gradually increased the seated interval required during non-preferred tasks before reinforcement",
+        "the RBT provided intermittent reinforcement for sustained seated engagement during a less-preferred activity",
+        "the RBT modeled remaining seated during a non-preferred task and prompted the client to imitate the response",
+        "the RBT used a token system to reinforce sustained seated engagement during a less-preferred task",
+        "the RBT practiced remaining seated during a non-preferred community-based activity",
+        "the RBT gradually increased task duration while the client remained seated during non-preferred work"
+      ]
+    },
+    {
+      "id": "compliance_adls",
+      "label": "Compliance with Activities and Daily Living",
+      "blurbs": [
+        "the RBT prompted the client through an activity of daily living, such as cleaning up materials, with prompting faded as independence increased",
+        "the RBT reduced prompting across the session as the client completed expected daily living tasks with increasing independence",
+        "the RBT used a visual task analysis to guide the client through an activity of daily living with reduced prompting",
+        "the RBT reinforced independent completion of a daily living task without additional prompting",
+        "the RBT modeled a daily living task and prompted the client to complete it independently afterward",
+        "the RBT embedded a daily living expectation, such as putting away materials, into the natural flow of the session",
+        "the RBT faded prompting across daily living tasks as the client's independence increased",
+        "the RBT coordinated with the caregiver to practice a daily living task consistent with the home routine",
+        "the RBT used a token system to reinforce independent completion of daily living expectations",
+        "the RBT practiced a daily living task during a community outing to promote generalization"
+      ]
+    },
+    {
+      "id": "wait_for_attention",
+      "label": "Wait for Attention to Be Delivered",
+      "blurbs": [
+        "the RBT briefly delayed attention following a client's request and prompted the client to wait calmly before providing it",
+        "the RBT gradually increased the wait time between the client's request for attention and its delivery, reinforcing calm waiting",
+        "the RBT used a visual 'wait' card while briefly attending to another task before providing requested attention",
+        "the RBT gradually increased the wait interval for attention across successful trials",
+        "the RBT reinforced the client for waiting calmly without repeating the request for attention",
+        "the RBT paired a brief activity with the wait period to help the client tolerate the delay",
+        "the RBT faded prompting for calm waiting as the client's tolerance for delayed attention increased",
+        "the RBT practiced waiting for attention during a community-based activity requiring patience",
+        "the RBT used a token system to bridge the delay between requesting and receiving attention",
+        "the RBT gradually varied the context in which the client practiced waiting for attention"
+      ]
+    },
+    {
+      "id": "wait_for_tangible",
+      "label": "Wait for Tangible to Be Delivered",
+      "blurbs": [
+        "the RBT briefly delayed delivery of a requested item and prompted the client to wait calmly before providing it",
+        "the RBT gradually increased the wait time between the client's request for a tangible item and its delivery, reinforcing calm waiting",
+        "the RBT used a visual 'wait' card while briefly delaying delivery of a requested tangible item",
+        "the RBT gradually increased the wait interval for a requested item across successful trials",
+        "the RBT reinforced the client for waiting calmly without repeating the request for the item",
+        "the RBT paired a brief activity with the wait period to help the client tolerate the delay",
+        "the RBT faded prompting for calm waiting as the client's tolerance for delayed tangibles increased",
+        "the RBT practiced waiting for a tangible item during a community-based activity, such as ordering food",
+        "the RBT used a token system to bridge the delay between requesting and receiving a tangible item",
+        "the RBT gradually varied the context in which the client practiced waiting for a requested item"
+      ]
+    },
+    {
+      "id": "completing_nonpreferred_activities",
+      "label": "Completing Non-Preferred Activities",
+      "blurbs": [
+        "the RBT provided prompting and reinforcement to support the client completing a non-preferred activity from start to finish",
+        "the RBT broke a non-preferred task into smaller steps and reinforced the client for completing each one until the activity was finished",
+        "the RBT used a first-then visual to motivate the client to complete a non-preferred activity before a preferred one",
+        "the RBT broke a non-preferred activity into smaller checkpoints, reinforcing completion of each portion",
+        "the RBT paired a non-preferred activity with a preferred item to increase motivation to complete it",
+        "the RBT faded prompting across the session as the client completed more of the non-preferred activity independently",
+        "the RBT reinforced the client immediately upon full completion of the non-preferred activity",
+        "the RBT practiced completing a non-preferred activity during a community-based outing",
+        "the RBT used a token system to reinforce full completion of non-preferred activities across the session",
+        "the RBT gradually increased the length of non-preferred activities as completion remained consistent"
+      ]
+    },
+    {
+      "id": "accepting_losing_game",
+      "label": "Accepting Losing a Game",
+      "blurbs": [
+        "the RBT played a structured game with the client and prompted an appropriate response when the client did not win",
+        "the RBT modeled a calm response to losing during a game and prompted the client to use the same response following an undesired outcome",
+        "the RBT modeled a calm response to losing a game and prompted the client to use the same response",
+        "the RBT reinforced the client for responding calmly to an undesired outcome during a structured game",
+        "the RBT gradually increased the frequency of the client not winning across game trials to build tolerance",
+        "the RBT used a visual 'good sport' cue to prompt an appropriate response following a loss",
+        "the RBT faded prompting for accepting a loss as the client's calm responding to game outcomes increased",
+        "the RBT practiced accepting a loss during a community-based group game with peers",
+        "the RBT used a token system to reinforce calm responses to losing across multiple game trials",
+        "the RBT involved a sibling in a game activity to practice accepting losing in a natural context"
+      ]
+    },
+    {
+      "id": "communication_wants_needs_no_behavior",
+      "label": "Communication of Wants and Needs Without Maladaptive Behavior",
+      "blurbs": [
+        "the RBT prompted the client to use an appropriate communicative response to express a want or need instead of engaging in problem behavior",
+        "the RBT created opportunities across the session for the client to communicate wants and needs, reinforcing appropriate communication over problem behavior",
+        "the RBT arranged multiple opportunities across the session for the client to communicate a want or need",
+        "the RBT reinforced the client immediately upon using an appropriate communicative response instead of problem behavior",
+        "the RBT modeled an appropriate communicative response during a moment of unmet want or need",
+        "the RBT faded prompting for appropriate communication as the client's independent use of the response increased",
+        "the RBT captured naturally occurring opportunities throughout the session to reinforce appropriate communication",
+        "the RBT practiced appropriate communication of wants and needs during a community outing",
+        "the RBT used a token system to reinforce appropriate communication instead of problem behavior across the session",
+        "the RBT captured a spontaneous communication opportunity during an unmet want and reinforced the appropriate response"
+      ]
+    },
+    {
+      "id": "accept_small_group",
+      "label": "Accept Working in a Small Group",
+      "blurbs": [
+        "the RBT facilitated a small group activity with peers and prompted the client to participate alongside the group",
+        "the RBT gradually increased the client's participation in a small group instructional setting, prompting engagement with peers",
+        "the RBT facilitated a small group art or game activity and prompted the client to participate alongside peers",
+        "the RBT reinforced the client for remaining engaged with the group activity for an increasing duration",
+        "the RBT gradually increased the size of the group the client was prompted to participate with",
+        "the RBT faded individual prompting as the client's participation in the small group setting increased",
+        "the RBT modeled appropriate group participation and prompted the client to imitate the response",
+        "the RBT facilitated a small group activity during a community-based outing with peers",
+        "the RBT used a token system to reinforce sustained participation in a small group setting",
+        "the RBT gradually increased the complexity of small group tasks as participation remained consistent"
+      ]
+    },
+    {
+      "id": "greeting_independently",
+      "label": "Greeting Independently and Appropriately",
+      "blurbs": [
+        "the RBT prompted the client to initiate a greeting upon arrival and prompted an appropriate response when greeted by others",
+        "the RBT modeled greeting behaviors across the session and prompted the client to initiate and return greetings independently",
+        "the RBT arranged an opportunity for the client to greet a new person entering the session",
+        "the RBT reinforced the client immediately upon an independent greeting response",
+        "the RBT modeled a greeting exchange and prompted the client to imitate it with the RBT or a peer",
+        "the RBT practiced greetings across different people and settings to promote generalization",
+        "the RBT faded prompting for greetings as the client's independent initiation and response increased",
+        "the RBT practiced greeting new people during a community outing",
+        "the RBT used a token system to reinforce independent and appropriate greetings across the session",
+        "the RBT involved a sibling or family member to practice greetings in a natural home context"
+      ]
+    }
+  ],
+  "maladaptive_behaviors": [
+    {
+      "id": "tantrums",
+      "label": "Tantrum Behavior",
+      "blurb": "tantrum behavior, characterized by crying, whining, and dropping to the floor,"
+    },
+    {
+      "id": "aggression",
+      "label": "Aggression (e.g., hitting, kicking, biting)",
+      "blurb": "aggressive behavior, including hitting, kicking, and/or biting directed toward others,"
+    },
+    {
+      "id": "self_injury",
+      "label": "Self-Injurious Behavior (SIB)",
+      "blurb": "self-injurious behavior, including head-banging, hand-biting, or self-hitting,"
+    },
+    {
+      "id": "elopement",
+      "label": "Elopement / Running Away",
+      "blurb": "elopement behavior, in which the client left the immediate area without permission,"
+    },
+    {
+      "id": "property_destruction",
+      "label": "Property Destruction",
+      "blurb": "property destruction, including throwing or breaking materials,"
+    },
+    {
+      "id": "non_compliance",
+      "label": "Non-Compliance / Task Refusal",
+      "blurb": "non-compliance and task refusal, observed as ignoring, verbal refusal, or delayed responding to instructions,"
+    },
+    {
+      "id": "vocal_stereotypy",
+      "label": "Vocal Stereotypy",
+      "blurb": "vocal stereotypy, including repetitive vocalizations unrelated to the ongoing activity,"
+    },
+    {
+      "id": "motor_stereotypy",
+      "label": "Motor Stereotypy / Repetitive Movements",
+      "blurb": "motor stereotypy, including repetitive hand-flapping or body-rocking movements,"
+    },
+    {
+      "id": "disruptive_behavior",
+      "label": "Disruptive Behavior (e.g., yelling, screaming)",
+      "blurb": "disruptive behavior, including yelling and screaming,"
+    },
+    {
+      "id": "pica",
+      "label": "Pica",
+      "blurb": "pica-related behavior, including attempts to mouth or ingest non-food items,"
+    },
+    {
+      "id": "food_refusal",
+      "label": "Food Selectivity / Refusal",
+      "blurb": "food selectivity and refusal behavior during mealtime routines,"
+    },
+    {
+      "id": "climbing",
+      "label": "Climbing",
+      "blurb": "climbing behavior, including climbing on furniture, shelving, and other unsafe surfaces,"
+    },
+    {
+      "id": "stereotyped_behavior",
+      "label": "Stereotyped Behavior",
+      "blurb": "stereotyped behavior, including repetitive motor or vocal movements engaged in for self-stimulation,"
+    },
+    {
+      "id": "snatching",
+      "label": "Snatching",
+      "blurb": "snatching behavior, in which the client took items from others without permission,"
+    },
+    {
+      "id": "inattention",
+      "label": "Inattention / Off-Task Behavior",
+      "blurb": "inattentive behavior, including difficulty maintaining focus on assigned tasks and activities,"
+    },
+    {
+      "id": "verbal_aggression",
+      "label": "Verbal Aggression",
+      "blurb": "verbal aggression, including yelling, name-calling, or making threatening statements toward others,"
+    },
+    {
+      "id": "inappropriate_language",
+      "label": "Inappropriate Language",
+      "blurb": "inappropriate language, including cursing or other socially inappropriate remarks directed at others or the environment,"
+    },
+    {
+      "id": "mouthing",
+      "label": "Mouthing",
+      "blurb": "mouthing behavior, in which the client placed non-food objects in the mouth for oral sensory input,"
+    },
+    {
+      "id": "throwing_objects",
+      "label": "Throwing Objects",
+      "blurb": "throwing behavior, in which the client threw objects or materials during the session,"
+    },
+    {
+      "id": "self_verbal_aggression",
+      "label": "Self-Verbal Aggression",
+      "blurb": "self-directed verbal aggression, including negative or self-critical statements made about oneself,"
+    },
+    {
+      "id": "out_of_work",
+      "label": "Out of Work",
+      "blurb": "out-of-work behavior, in which the client left the assigned task or work area without engaging in the activity,"
+    },
+    {
+      "id": "arguing",
+      "label": "Arguing",
+      "blurb": "arguing behavior, including talking back or disputing instructions and redirection,"
+    },
+    {
+      "id": "social_isolation",
+      "label": "Social Isolation",
+      "blurb": "social isolation, in which the client withdrew from or avoided interaction with others,"
+    },
+    {
+      "id": "lying",
+      "label": "Lying",
+      "blurb": "lying behavior, in which the client made statements that were not truthful,"
+    },
+    {
+      "id": "hyperactivity",
+      "label": "Hyperactivity",
+      "blurb": "hyperactive behavior, including excessive motor activity and difficulty remaining seated or still,"
+    },
+    {
+      "id": "spitting",
+      "label": "Spitting",
+      "blurb": "spitting behavior directed at people, objects, or the environment,"
+    }
+  ],
+  "antecedents": [
+    {
+      "id": "non_preferred_activity",
+      "label": "Non-Preferred Activity/Task Presented"
+    },
+    {
+      "id": "instruction_given",
+      "label": "Instruction or Task Demand Given"
+    },
+    {
+      "id": "denied_preferred_item",
+      "label": "Denied Access to Preferred Item/Activity"
+    },
+    {
+      "id": "preferred_item_removed",
+      "label": "Preferred Item/Activity Removed"
+    },
+    {
+      "id": "transition_demanded",
+      "label": "Transition Between Activities"
+    },
+    {
+      "id": "waiting_delay",
+      "label": "Waiting or Delay in Access to Reinforcement"
+    },
+    {
+      "id": "attention_diverted",
+      "label": "Attention Diverted to Others"
+    },
+    {
+      "id": "alone_unattended",
+      "label": "Left Alone or Unattended"
+    },
+    {
+      "id": "change_in_routine",
+      "label": "Unexpected Change in Routine"
+    },
+    {
+      "id": "peer_conflict",
+      "label": "Conflict or Interaction with Peers"
+    },
+    {
+      "id": "physical_discomfort",
+      "label": "Physical Discomfort or Illness"
+    },
+    {
+      "id": "sensory_stimulation",
+      "label": "Sensory Stimulation (e.g., noise, lighting, textures)"
+    },
+    {
+      "id": "task_too_difficult",
+      "label": "Task Perceived as Too Difficult"
+    },
+    {
+      "id": "multi_step_instruction",
+      "label": "Multi-Step Instruction Given"
+    },
+    {
+      "id": "correction_given",
+      "label": "Correction or Error Feedback Given"
+    },
+    {
+      "id": "preferred_activity_ending",
+      "label": "Preferred Activity Ending"
+    },
+    {
+      "id": "told_no",
+      "label": "Told 'No' or Denied a Request"
+    },
+    {
+      "id": "new_unfamiliar_setting",
+      "label": "New or Unfamiliar Setting"
+    },
+    {
+      "id": "unfamiliar_person_present",
+      "label": "Unfamiliar Person Present"
+    },
+    {
+      "id": "change_in_staff",
+      "label": "Change in Staff or Caregiver"
+    },
+    {
+      "id": "group_setting",
+      "label": "Group or Classroom Setting"
+    },
+    {
+      "id": "fatigue_lack_of_sleep",
+      "label": "Fatigue or Lack of Sleep"
+    },
+    {
+      "id": "hunger",
+      "label": "Hunger"
+    },
+    {
+      "id": "low_stimulation_boredom",
+      "label": "Low Stimulation / Boredom"
+    }
+  ],
+  "environmental_changes": [
+    {
+      "id": "change_in_household",
+      "label": "Change in Caregiver or Household Member"
+    },
+    {
+      "id": "new_sibling",
+      "label": "New Sibling"
+    },
+    {
+      "id": "recent_move",
+      "label": "Recent Move or Change of Residence"
+    },
+    {
+      "id": "change_in_school_daycare",
+      "label": "Change in School or Daycare"
+    },
+    {
+      "id": "change_in_classroom_teacher",
+      "label": "Change in Classroom or Teacher"
+    },
+    {
+      "id": "change_in_routine_schedule",
+      "label": "Change in Daily Schedule or Routine"
+    },
+    {
+      "id": "visitors_extended_family",
+      "label": "Presence of Visitors or Extended Family"
+    },
+    {
+      "id": "change_in_rbt_provider",
+      "label": "Change in RBT or Service Provider"
+    },
+    {
+      "id": "holiday_break_from_routine",
+      "label": "Holiday or Break from Typical Routine"
+    },
+    {
+      "id": "no_environmental_changes",
+      "label": "None Noted"
+    }
+  ],
+  "medical_concerns": [
+    {
+      "id": "illness",
+      "label": "Illness (e.g., Cold, Fever, Cough)"
+    },
+    {
+      "id": "lack_of_sleep_medical",
+      "label": "Lack of Sleep"
+    },
+    {
+      "id": "medication_change",
+      "label": "Recent Medication Change"
+    },
+    {
+      "id": "teething",
+      "label": "Teething"
+    },
+    {
+      "id": "allergies",
+      "label": "Allergies"
+    },
+    {
+      "id": "recent_medical_appointment",
+      "label": "Recent Doctor or Dentist Appointment"
+    },
+    {
+      "id": "reported_pain_discomfort",
+      "label": "Reported Pain or Physical Discomfort"
+    },
+    {
+      "id": "gi_symptoms",
+      "label": "Gastrointestinal Symptoms"
+    },
+    {
+      "id": "recent_illness_recovery",
+      "label": "Recovering from Recent Illness"
+    },
+    {
+      "id": "no_medical_concerns",
+      "label": "None Noted"
+    }
+  ],
+  "intervention_strategies": [
+    {
+      "id": "differential_reinforcement",
+      "label": "Differential Reinforcement (DRA/DRO/DRI)"
+    },
+    {
+      "id": "extinction",
+      "label": "Extinction"
+    },
+    {
+      "id": "redirection",
+      "label": "Redirection"
+    },
+    {
+      "id": "planned_ignoring",
+      "label": "Planned Ignoring"
+    },
+    {
+      "id": "prompting_fading",
+      "label": "Prompting and Prompt Fading"
+    },
+    {
+      "id": "visual_supports",
+      "label": "Visual Supports / Schedules"
+    },
+    {
+      "id": "token_economy",
+      "label": "Token Economy / Reinforcement System"
+    },
+    {
+      "id": "antecedent_modification",
+      "label": "Antecedent Modification"
+    },
+    {
+      "id": "errorless_teaching",
+      "label": "Errorless Teaching"
+    },
+    {
+      "id": "response_blocking",
+      "label": "Response Blocking"
+    },
+    {
+      "id": "noncontingent_reinforcement",
+      "label": "Noncontingent Reinforcement (NCR)"
+    },
+    {
+      "id": "behavioral_momentum",
+      "label": "Behavioral Momentum / High-Probability Request Sequence"
+    },
+    {
+      "id": "providing_choice",
+      "label": "Providing Choice"
+    }
+  ],
+  "intervention_effectiveness": [
+    {
+      "id": "fully_effective",
+      "label": "Fully Effective",
+      "blurb": "resulted in an immediate and consistent reduction in the target behavior across the session"
+    },
+    {
+      "id": "partially_effective",
+      "label": "Partially Effective",
+      "blurb": "resulted in a partial reduction in the target behavior, with continued variability in responding across the session"
+    },
+    {
+      "id": "minimally_effective",
+      "label": "Minimally Effective",
+      "blurb": "resulted in minimal change in the rate of the target behavior during the session"
+    },
+    {
+      "id": "not_effective",
+      "label": "Not Effective",
+      "blurb": "did not result in a measurable change in the target behavior during the session"
+    },
+    {
+      "id": "too_early_to_determine",
+      "label": "Too Early to Determine",
+      "blurb": "was newly introduced during this session, and insufficient data exists at this time to determine its effectiveness"
+    }
+  ],
+  "protocol_modifications": [
+    {
+      "id": "reinforcement_continuous_to_intermittent",
+      "label": "Reinforcement Schedule: Continuous to Intermittent",
+      "blurb": "shifting the reinforcement schedule from continuous to intermittent for the target response"
+    },
+    {
+      "id": "reinforcement_intermittent_to_continuous",
+      "label": "Reinforcement Schedule: Intermittent to Continuous",
+      "blurb": "shifting the reinforcement schedule from intermittent back to continuous to strengthen the target response"
+    },
+    {
+      "id": "increased_reinforcement_density",
+      "label": "Increased Reinforcement Density",
+      "blurb": "increasing the density of reinforcement delivered for correct responding"
+    },
+    {
+      "id": "decreased_reinforcement_density",
+      "label": "Decreased Reinforcement Density (Thinned Schedule)",
+      "blurb": "thinning the reinforcement schedule as mastery criteria were approached"
+    },
+    {
+      "id": "changed_reinforcer_type",
+      "label": "Changed Type of Reinforcer",
+      "blurb": "changing the type of reinforcer delivered to better match current preference"
+    },
+    {
+      "id": "introduced_token_economy",
+      "label": "Introduced Token Economy / Point System",
+      "blurb": "introducing a token economy to bridge delays between responding and backup reinforcement"
+    },
+    {
+      "id": "discontinued_token_economy",
+      "label": "Discontinued Token Economy",
+      "blurb": "discontinuing the token economy in favor of direct reinforcement delivery"
+    },
+    {
+      "id": "introduced_differential_reinforcement",
+      "label": "Introduced Differential Reinforcement (DRA/DRO/DRI)",
+      "blurb": "introducing a differential reinforcement procedure to increase the target replacement response"
+    },
+    {
+      "id": "increased_prompting_level",
+      "label": "Increased Prompting Level",
+      "blurb": "increasing the level of prompting provided to support correct responding"
+    },
+    {
+      "id": "decreased_prompting_level",
+      "label": "Decreased Prompting Level (Faded Prompts)",
+      "blurb": "fading the level of prompting provided to promote independent responding"
+    },
+    {
+      "id": "changed_prompting_hierarchy",
+      "label": "Changed Prompting Hierarchy",
+      "blurb": "changing the prompting hierarchy used to support the target skill"
+    },
+    {
+      "id": "introduced_errorless_teaching",
+      "label": "Introduced Errorless Teaching Procedure",
+      "blurb": "introducing an errorless teaching procedure to reduce the likelihood of incorrect responding"
+    },
+    {
+      "id": "introduced_time_delay_prompting",
+      "label": "Introduced Time-Delay Prompting Procedure",
+      "blurb": "introducing a time-delay prompting procedure to promote independent responding"
+    },
+    {
+      "id": "modified_antecedent_arrangement",
+      "label": "Modified Antecedent Arrangement",
+      "blurb": "modifying the antecedent arrangement, including seating and materials placement"
+    },
+    {
+      "id": "introduced_visual_supports",
+      "label": "Introduced or Modified Visual Supports",
+      "blurb": "introducing or modifying visual supports to clarify task expectations"
+    },
+    {
+      "id": "increased_task_difficulty",
+      "label": "Increased Task Difficulty",
+      "blurb": "increasing task difficulty in response to the client's mastery of the current level"
+    },
+    {
+      "id": "decreased_task_difficulty",
+      "label": "Decreased Task Difficulty",
+      "blurb": "decreasing task difficulty to reduce errors and support continued responding"
+    },
+    {
+      "id": "modified_session_pacing",
+      "label": "Modified Session Pacing",
+      "blurb": "adjusting the pacing of the session to better match the client's rate of responding"
+    },
+    {
+      "id": "introduced_choice_making",
+      "label": "Introduced Choice-Making Opportunity",
+      "blurb": "introducing a choice-making opportunity to increase motivation and engagement"
+    },
+    {
+      "id": "modified_instructional_format",
+      "label": "Modified Instructional Format",
+      "blurb": "modifying the instructional format used to deliver programming"
+    },
+    {
+      "id": "introduced_extinction",
+      "label": "Introduced Extinction Procedure",
+      "blurb": "introducing an extinction procedure for the target behavior"
+    },
+    {
+      "id": "modified_extinction",
+      "label": "Modified Extinction Procedure",
+      "blurb": "modifying the existing extinction procedure based on the behavior's response"
+    },
+    {
+      "id": "introduced_response_cost",
+      "label": "Introduced Response Cost",
+      "blurb": "introducing a response cost procedure for the target behavior"
+    },
+    {
+      "id": "modified_crisis_procedure",
+      "label": "Modified Crisis Prevention Procedure",
+      "blurb": "modifying the crisis prevention and de-escalation procedure"
+    },
+    {
+      "id": "modified_mastery_criteria",
+      "label": "Modified Mastery Criteria",
+      "blurb": "modifying the mastery criteria for a current program"
+    },
+    {
+      "id": "added_new_program",
+      "label": "Added New Program/Target",
+      "blurb": "adding a new program or target to the treatment protocol"
+    },
+    {
+      "id": "discontinued_mastered_program",
+      "label": "Discontinued Mastered Program",
+      "blurb": "discontinuing a mastered program and moving to maintenance"
+    },
+    {
+      "id": "modified_generalization_procedures",
+      "label": "Modified Generalization Procedures",
+      "blurb": "modifying procedures to promote generalization across settings or people"
+    },
+    {
+      "id": "changed_data_collection_method",
+      "label": "Changed Data Collection Method",
+      "blurb": "changing the data collection method used to monitor progress"
+    }
+  ],
+  "data_collection_methods": [
+    {
+      "id": "frequency",
+      "label": "Frequency / Event Recording"
+    },
+    {
+      "id": "rate",
+      "label": "Rate Recording"
+    },
+    {
+      "id": "duration",
+      "label": "Duration Recording"
+    },
+    {
+      "id": "latency",
+      "label": "Latency Recording"
+    },
+    {
+      "id": "interval",
+      "label": "Partial / Whole Interval Recording"
+    },
+    {
+      "id": "momentary_time_sampling",
+      "label": "Momentary Time Sampling"
+    },
+    {
+      "id": "abc_data",
+      "label": "ABC (Antecedent-Behavior-Consequence) Data"
+    },
+    {
+      "id": "trial_by_trial",
+      "label": "Trial-by-Trial Data"
+    },
+    {
+      "id": "permanent_product",
+      "label": "Permanent Product Recording"
+    }
+  ],
+  "client_engagement": [
+    {
+      "id": "highly_engaged",
+      "label": "High Participation (Minimal Prompting)",
+      "blurb": "The client independently initiated and completed the majority of presented tasks, responding to programming with prompting consistent with the planned prompting hierarchy."
+    },
+    {
+      "id": "moderately_engaged",
+      "label": "Moderate Participation (Intermittent Prompting)",
+      "blurb": "The client completed the majority of presented tasks and required intermittent verbal or gestural prompting beyond the planned prompting hierarchy to continue responding."
+    },
+    {
+      "id": "minimally_engaged",
+      "label": "Low Participation (Frequent Prompting)",
+      "blurb": "The client required prompting on the majority of trials to initiate or complete responses, and an increased rate of reinforcement delivery was used to support continued participation in programming."
+    },
+    {
+      "id": "resistant_dysregulated",
+      "label": "Behavior Interfered with Programming",
+      "blurb": "The client engaged in behavior (e.g., turning away, refusal statements, off-task behavior) that interfered with continued participation in programming for portions of the session, requiring additional behavioral support to resume programming."
+    }
+  ],
+  "observation_methods": [
+    {
+      "id": "in_person",
+      "label": "In Person"
+    },
+    {
+      "id": "recorded_video",
+      "label": "Recorded Video Review"
+    },
+    {
+      "id": "live_remote_video",
+      "label": "Live Remote Video"
+    }
+  ],
+  "session_ratings": [
+    {
+      "id": "excellent",
+      "label": "Excellent",
+      "blurb": "excellent, reflecting strong and consistent implementation of the protocol throughout the session"
+    },
+    {
+      "id": "good",
+      "label": "Good",
+      "blurb": "good, reflecting generally consistent implementation of the protocol with only minor areas identified for refinement"
+    },
+    {
+      "id": "satisfactory",
+      "label": "Satisfactory",
+      "blurb": "satisfactory, reflecting adequate implementation of the protocol with some areas identified for continued development"
+    },
+    {
+      "id": "needs_improvement",
+      "label": "Needs Improvement",
+      "blurb": "in need of improvement, with several areas of protocol implementation identified for continued development"
+    },
+    {
+      "id": "unsatisfactory",
+      "label": "Unsatisfactory",
+      "blurb": "unsatisfactory, with significant areas of protocol implementation requiring immediate attention"
+    }
+  ],
+  "protocol_fidelity": [
+    {
+      "id": "full_fidelity",
+      "label": "Full Fidelity to Protocol",
+      "blurb": "the protocol was implemented with full fidelity throughout the session"
+    },
+    {
+      "id": "minor_deviations",
+      "label": "Minor Deviations Noted",
+      "blurb": "minor deviations from the protocol were noted during the session"
+    },
+    {
+      "id": "significant_deviations",
+      "label": "Significant Deviations Noted",
+      "blurb": "significant deviations from the protocol were noted during the session"
+    }
+  ],
+  "rbt_strengths": [
+    {
+      "id": "reinforcement_delivery",
+      "label": "Consistent Reinforcement Delivery"
+    },
+    {
+      "id": "data_accuracy",
+      "label": "Accurate Data Collection"
+    },
+    {
+      "id": "prompting_hierarchy",
+      "label": "Effective Use of the Prompting Hierarchy"
+    },
+    {
+      "id": "rapport",
+      "label": "Strong Rapport with the Client"
+    },
+    {
+      "id": "instruction_delivery",
+      "label": "Clear and Consistent Instruction Delivery"
+    },
+    {
+      "id": "response_to_behavior",
+      "label": "Appropriate Response to Problem Behavior"
+    },
+    {
+      "id": "pacing",
+      "label": "Good Pacing Between Trials"
+    },
+    {
+      "id": "visual_supports_use",
+      "label": "Consistent Use of Visual Supports"
+    }
+  ],
+  "rbt_feedback_areas": [
+    {
+      "id": "increase_reinforcement_density",
+      "label": "Increase Reinforcement Schedule Density"
+    },
+    {
+      "id": "improve_prompt_fading",
+      "label": "Improve Prompt Fading Pace"
+    },
+    {
+      "id": "strengthen_data_accuracy",
+      "label": "Strengthen Data Collection Accuracy"
+    },
+    {
+      "id": "adjust_antecedent_arrangement",
+      "label": "Adjust Antecedent Arrangement"
+    },
+    {
+      "id": "improve_extinction_consistency",
+      "label": "Improve Consistency of Extinction Procedures"
+    },
+    {
+      "id": "review_safety_protocol",
+      "label": "Review Safety Protocol Adherence"
+    },
+    {
+      "id": "increase_trial_pacing",
+      "label": "Increase Pacing Between Trials"
+    },
+    {
+      "id": "clarify_instructions",
+      "label": "Clarify Instruction Delivery"
+    },
+    {
+      "id": "improve_reinforcement_timing",
+      "label": "Improve Consistency of Reinforcement Timing"
+    }
+  ],
+  "caregiver_training_topics": [
+    {
+      "id": "aba_principles",
+      "label": "Basic Principles of ABA (Reinforcement, Antecedents, Consequences)",
+      "blurb": "basic principles of Applied Behavior Analysis, including how antecedents, behaviors, and consequences interact to influence behavior"
+    },
+    {
+      "id": "behavior_management",
+      "label": "Behavior Management Strategies for Maladaptive Behavior",
+      "blurb": "behavior management strategies for responding to maladaptive behavior in the home and community"
+    },
+    {
+      "id": "replacement_behavior_prompting",
+      "label": "Prompting and Reinforcing Replacement Behaviors",
+      "blurb": "how to prompt and reinforce the client's replacement behaviors across daily routines"
+    },
+    {
+      "id": "reinforcement_schedules",
+      "label": "Implementing Reinforcement Schedules",
+      "blurb": "how to implement reinforcement schedules consistently outside of scheduled sessions"
+    },
+    {
+      "id": "data_collection_training",
+      "label": "Data Collection Procedures",
+      "blurb": "basic data collection procedures to track target behaviors between sessions"
+    },
+    {
+      "id": "crisis_deescalation",
+      "label": "Crisis Prevention and De-escalation Techniques",
+      "blurb": "crisis prevention and de-escalation techniques for managing intense behavioral episodes safely"
+    },
+    {
+      "id": "generalization_strategies",
+      "label": "Promoting Generalization Across Settings",
+      "blurb": "strategies for promoting generalization of acquired skills across people, settings, and materials"
+    },
+    {
+      "id": "visual_supports_training",
+      "label": "Use of Visual Supports and Schedules",
+      "blurb": "the use of visual supports and schedules to increase predictability and independence"
+    },
+    {
+      "id": "communication_strategies",
+      "label": "Supporting Functional Communication",
+      "blurb": "strategies for supporting and reinforcing the client's functional communication attempts"
+    },
+    {
+      "id": "safety_procedures",
+      "label": "Safety Procedures and Emergency Protocols",
+      "blurb": "safety procedures and emergency protocols relevant to the client's identified risk behaviors"
+    },
+    {
+      "id": "self_care_routines",
+      "label": "Supporting Self-Care / Daily Living Routines",
+      "blurb": "strategies for supporting the client's self-care and daily living routines at home"
+    },
+    {
+      "id": "understanding_behavior_function",
+      "label": "Understanding the Function of Behavior",
+      "blurb": "the basic functions of behavior and how identifying a behavior's function guides the selection of an appropriate intervention"
+    },
+    {
+      "id": "prompting_fading_caregiver",
+      "label": "Prompting and Prompt Fading Techniques",
+      "blurb": "prompting techniques and how to fade prompts gradually over time to build the client's independence"
+    },
+    {
+      "id": "toilet_training_support",
+      "label": "Toilet Training Support",
+      "blurb": "strategies for supporting toilet training consistently across home and community settings"
+    },
+    {
+      "id": "mealtime_behavior",
+      "label": "Managing Mealtime Behaviors",
+      "blurb": "strategies for managing mealtime behaviors, including food selectivity and maintaining an appropriate mealtime routine"
+    },
+    {
+      "id": "sleep_bedtime_routines",
+      "label": "Sleep and Bedtime Routine Support",
+      "blurb": "strategies for supporting a consistent sleep and bedtime routine at home"
+    },
+    {
+      "id": "community_outings",
+      "label": "Managing Behavior During Community Outings",
+      "blurb": "strategies for managing behavior and maintaining safety during community outings and public settings"
+    },
+    {
+      "id": "sibling_involvement",
+      "label": "Sibling Involvement and Interaction Strategies",
+      "blurb": "strategies for involving siblings appropriately and supporting positive interactions in the home"
+    },
+    {
+      "id": "token_economy_home",
+      "label": "Implementing a Token Economy or Reward System at Home",
+      "blurb": "how to implement and maintain a token economy or reward system consistently at home"
+    },
+    {
+      "id": "positive_reinforcement_techniques",
+      "label": "Positive Reinforcement Techniques",
+      "blurb": "positive reinforcement techniques and how to apply them consistently to strengthen desired behavior"
+    },
+    {
+      "id": "caregiver_self_care",
+      "label": "Caregiver Well-Being and Stress Management",
+      "blurb": "strategies for managing caregiver stress and maintaining well-being while supporting the client's progress"
+    },
+    {
+      "id": "school_collaboration",
+      "label": "Collaborating with School / IEP Team",
+      "blurb": "strategies for collaborating with the client's school or IEP team to support consistency across settings"
+    },
+    {
+      "id": "naturalistic_teaching",
+      "label": "Naturalistic Teaching Strategies in the Home",
+      "blurb": "naturalistic teaching strategies that embed learning opportunities into everyday home routines"
+    }
+  ],
+  "teaching_methods": [
+    {
+      "id": "didactic_instruction",
+      "label": "Didactic Instruction"
+    },
+    {
+      "id": "modeling",
+      "label": "Modeling"
+    },
+    {
+      "id": "role_play",
+      "label": "Role-Play / Rehearsal"
+    },
+    {
+      "id": "in_vivo_coaching",
+      "label": "In-Vivo Coaching"
+    },
+    {
+      "id": "video_review",
+      "label": "Video Review"
+    },
+    {
+      "id": "written_materials",
+      "label": "Written/Handout Materials"
+    }
+  ],
+  "caregiver_competency": [
+    {
+      "id": "independent",
+      "label": "Independent",
+      "blurb": "demonstrated independent implementation of the strategies discussed, requiring no additional prompting"
+    },
+    {
+      "id": "verbal_prompts",
+      "label": "Needs Verbal Prompts",
+      "blurb": "was able to implement the strategies discussed with verbal prompts and guidance"
+    },
+    {
+      "id": "physical_model_prompts",
+      "label": "Needs Physical/Modeled Prompts",
+      "blurb": "required modeling and physical guidance to implement the strategies discussed accurately"
+    },
+    {
+      "id": "requires_additional_training",
+      "label": "Requires Additional Training",
+      "blurb": "will require continued training and follow-up before independently implementing the strategies discussed"
+    }
+  ],
+  "caregiver_response": [
+    {
+      "id": "engaged_receptive",
+      "label": "Active Participation",
+      "blurb": "asked questions, practiced the strategies as modeled, and participated in role-play throughout the training"
+    },
+    {
+      "id": "asked_questions",
+      "label": "Asked Clarifying Questions",
+      "blurb": "asked clarifying questions to better understand the strategies presented"
+    },
+    {
+      "id": "expressed_concerns",
+      "label": "Expressed Concerns",
+      "blurb": "verbally reported concerns about implementing the strategies consistently"
+    },
+    {
+      "id": "appeared_overwhelmed",
+      "label": "Required Repetition of Information",
+      "blurb": "required repetition and simplified explanations of the information presented and may benefit from a slower pace in future sessions"
+    }
+  ],
+  "training_barriers": [
+    {
+      "id": "time_constraints",
+      "label": "Time Constraints",
+      "blurb": "limited time availability was noted as a barrier to consistent implementation"
+    },
+    {
+      "id": "competing_demands",
+      "label": "Competing Sibling/Household Demands",
+      "blurb": "competing demands from siblings and other household responsibilities were noted as a barrier"
+    },
+    {
+      "id": "inconsistent_implementation",
+      "label": "Inconsistent Implementation Across Caregivers",
+      "blurb": "inconsistent implementation across caregivers in the home was noted as a barrier"
+    },
+    {
+      "id": "none_noted",
+      "label": "None Noted",
+      "blurb": "no significant barriers to implementation were noted at this time"
+    }
+  ],
+  "referral_reasons": [
+    {
+      "id": "parent_referral",
+      "label": "Parent/Guardian Referral"
+    },
+    {
+      "id": "physician_referral",
+      "label": "Pediatrician/Physician Referral"
+    },
+    {
+      "id": "school_referral",
+      "label": "School Referral"
+    },
+    {
+      "id": "insurance_required",
+      "label": "Insurance-Required Evaluation"
+    },
+    {
+      "id": "early_intervention_transition",
+      "label": "Early Intervention Program Transition"
+    },
+    {
+      "id": "other_provider_referral",
+      "label": "Other Provider Referral"
+    }
+  ],
+  "assessment_methods": [
+    {
+      "id": "record_review",
+      "label": "Record Review"
+    },
+    {
+      "id": "caregiver_interview",
+      "label": "Caregiver/Parent Interview"
+    },
+    {
+      "id": "direct_observation_assessment",
+      "label": "Direct Observation"
+    },
+    {
+      "id": "indirect_assessment",
+      "label": "Indirect Assessment (e.g., QABF, FAST)"
+    },
+    {
+      "id": "fba",
+      "label": "Functional Behavior Assessment (FBA)"
+    },
+    {
+      "id": "preference_assessment",
+      "label": "Preference Assessment"
+    },
+    {
+      "id": "developmental_skills_assessment",
+      "label": "Developmental/Adaptive Skills Assessment (e.g., VB-MAPP, ABLLS-R, AFLS)"
+    },
+    {
+      "id": "vineland",
+      "label": "Vineland Adaptive Behavior Scales"
+    }
+  ],
+  "treatment_intensity": [
+    {
+      "id": "comprehensive",
+      "label": "Comprehensive (30+ Hours per Week)",
+      "blurb": "comprehensive treatment, at a recommended intensity of 30 or more hours per week"
+    },
+    {
+      "id": "focused",
+      "label": "Focused (10-25 Hours per Week)",
+      "blurb": "focused treatment, at a recommended intensity of 10 to 25 hours per week"
+    },
+    {
+      "id": "low_intensity",
+      "label": "Low-Intensity (Under 10 Hours per Week)",
+      "blurb": "low-intensity treatment, at a recommended intensity of under 10 hours per week"
+    }
+  ],
+  "recommended_services": [
+    {
+      "id": "direct_aba_therapy",
+      "label": "Direct ABA Therapy"
+    },
+    {
+      "id": "caregiver_training_service",
+      "label": "Caregiver Training"
+    },
+    {
+      "id": "bcba_observation_guidance",
+      "label": "BCBA Direct Observation and Guidance"
+    },
+    {
+      "id": "school_iep_coordination",
+      "label": "Coordination with School/IEP Team"
+    },
+    {
+      "id": "other_provider_coordination",
+      "label": "Coordination with Other Providers (e.g., Speech, OT)"
+    }
+  ],
+  "progress_ratings": [
+    {
+      "id": "significant_progress",
+      "label": "Significant Progress",
+      "blurb": "significant progress across the majority of targeted goals since the last assessment period"
+    },
+    {
+      "id": "moderate_progress",
+      "label": "Moderate Progress",
+      "blurb": "moderate progress across targeted goals since the last assessment period"
+    },
+    {
+      "id": "minimal_progress",
+      "label": "Minimal Progress",
+      "blurb": "minimal progress across targeted goals since the last assessment period"
+    },
+    {
+      "id": "no_significant_change",
+      "label": "No Significant Change",
+      "blurb": "no significant change in performance across targeted goals since the last assessment period"
+    },
+    {
+      "id": "regression_noted",
+      "label": "Regression Noted",
+      "blurb": "regression in performance on select goals since the last assessment period"
+    },
+    {
+      "id": "mixed_progress",
+      "label": "Mixed Progress Across Goals",
+      "blurb": "mixed progress, with clear gains on some goals and slower progress on others since the last assessment period"
+    }
+  ],
+  "reassessment_recommendations": [
+    {
+      "id": "continue_intensity",
+      "label": "Continue Current Treatment Intensity"
+    },
+    {
+      "id": "increase_intensity",
+      "label": "Increase Treatment Intensity"
+    },
+    {
+      "id": "decrease_intensity",
+      "label": "Decrease Treatment Intensity"
+    },
+    {
+      "id": "add_new_goals",
+      "label": "Add New Skill Acquisition Goals"
+    },
+    {
+      "id": "discontinue_mastered_goals",
+      "label": "Discontinue Mastered Goals"
+    },
+    {
+      "id": "continue_caregiver_training",
+      "label": "Continue Caregiver Training"
+    },
+    {
+      "id": "begin_discharge_planning",
+      "label": "Begin Discharge Planning"
+    },
+    {
+      "id": "continue_bip",
+      "label": "Continue Current Behavior Intervention Plan"
+    },
+    {
+      "id": "revise_bip",
+      "label": "Revise Behavior Intervention Plan"
+    }
+  ]
+}

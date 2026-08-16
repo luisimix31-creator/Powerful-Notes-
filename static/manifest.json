@@ -1,0 +1,16 @@
+{
+  "name": "Powerful Notes",
+  "short_name": "Powerful Notes",
+  "description": "BCBA session notes and caregiver training notes, generated from client-specific data.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#f6f5ff",
+  "theme_color": "#6c5ce7",
+  "orientation": "portrait-primary",
+  "icons": [
+    { "src": "/static/icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/static/icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/static/icons/icon-512-maskable.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

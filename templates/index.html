@@ -1,0 +1,383 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="csrf-token" content="{{ csrf_token() }}">
+<title>Powerful Notes</title>
+<link rel="manifest" href="{{ url_for('static', filename='manifest.json') }}">
+<link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}">
+<link rel="apple-touch-icon" href="{{ url_for('static', filename='icons/apple-touch-icon.png') }}">
+<meta name="theme-color" content="#6c5ce7">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Powerful Notes">
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<div class="navbar">
+  <span class="logo"><span class="piece">🧩</span> Powerful Notes</span>
+  <div class="row">
+    <span class="practice-name">{{ practice_name }}</span>
+    <form method="POST" action="{{ url_for('logout') }}">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+      <button type="submit" class="btn secondary small">Log Out</button>
+    </form>
+  </div>
+</div>
+<div class="app">
+  <aside class="sidebar">
+    <section class="panel">
+      <h2>Client</h2>
+      <div id="clientSelectWrap">
+        <select id="clientSelect"><option value="">-- Select client --</option></select>
+        <div class="row">
+          <button id="newClientBtn" class="btn secondary">+ New Client</button>
+          <button id="editClientBtn" class="btn secondary" hidden>Edit Info</button>
+        </div>
+      </div>
+      <label class="quick-toggle">
+        <input type="checkbox" id="quickModeToggle">
+        Quick note — skip saving a client record
+      </label>
+    </section>
+
+    <section class="panel" id="notesHistoryPanel">
+      <h2>Saved Notes</h2>
+      <div id="notesHistory" class="notes-history">Select a client to view saved notes.</div>
+    </section>
+  </aside>
+
+  <main class="main">
+    <section class="panel" id="newClientPanel" hidden>
+      <h2 id="clientFormTitle">New Client</h2>
+      <div class="grid3">
+        <label>Name <input id="ncName" type="text"></label>
+        <label>DOB <input id="ncDob" type="date"></label>
+        <label>Diagnosis <input id="ncDiagnosis" type="text" placeholder="e.g. Autism Spectrum Disorder"></label>
+      </div>
+      <div class="grid3">
+        <label>Guardian Name <input id="ncGuardianName" type="text"></label>
+        <label>Guardian Relationship <input id="ncGuardianRel" type="text" placeholder="e.g. Mother"></label>
+        <label>RBT Name <input id="ncRbtName" type="text" placeholder="e.g. Maria"></label>
+      </div>
+
+      <div id="newClientTargetsSection">
+        <h2>Maladaptive Behaviors</h2>
+        <div id="ncMaladaptiveBehaviors" class="chip-grid"></div>
+
+        <h2>Replacement Programs</h2>
+        <div id="ncReplacementPrograms" class="chip-grid"></div>
+
+        <h2>Intervention Strategies</h2>
+        <div id="ncInterventionStrategies" class="chip-grid"></div>
+
+        <h2>Training Topics Covered for the Caregiver</h2>
+        <div id="ncTrainingTopics" class="chip-grid"></div>
+      </div>
+
+      <div class="row" style="margin-top:12px;">
+        <button id="ncSave" class="btn">Save Client</button>
+        <button id="ncCancel" class="btn secondary">Cancel</button>
+      </div>
+    </section>
+
+    <section class="panel" id="clientTargetsPanel" hidden>
+      <div class="row output-header">
+        <h2>Client Targets (used to build this client's chip lists)</h2>
+        <button id="targetsToggleBtn" class="btn secondary small">Edit</button>
+      </div>
+      <div id="targetsEditArea" hidden>
+        <h2>Replacement Programs for This Client</h2>
+        <div id="clientReplacementPrograms" class="chip-grid"></div>
+        <h2>Maladaptive Behaviors for This Client</h2>
+        <div id="clientMaladaptiveBehaviors" class="chip-grid"></div>
+        <h2>Intervention Strategies for This Client</h2>
+        <div id="clientInterventionStrategies" class="chip-grid"></div>
+        <h2>Training Topics Covered for the Caregiver</h2>
+        <div id="clientTrainingTopics" class="chip-grid"></div>
+        <div class="row" style="margin-top:12px;">
+          <button id="saveTargetsBtn" class="btn">Save Targets</button>
+        </div>
+        <div id="targetsSaveStatus" class="hint"></div>
+      </div>
+      <div id="targetsSummary" class="hint"></div>
+    </section>
+
+    <div class="tabs">
+      <button class="tab active" data-type="session">BCBA Session Note</button>
+      <button class="tab" data-type="bcaba_session">BCaBA Session Note</button>
+      <button class="tab" data-type="rbt_session">RBT Session Note</button>
+      <button class="tab" data-type="caregiver">Caregiver Training Note</button>
+      <button class="tab" data-type="initial_assessment">Initial Assessment</button>
+      <button class="tab" data-type="reassessment">Reassessment</button>
+    </div>
+
+    <div id="noSelectionMsg" class="hint">Select or create a client to begin.</div>
+
+    <form id="noteForm" hidden>
+      <section class="panel" id="quickClientNameField" hidden>
+        <h2>Client Name</h2>
+        <input type="text" id="quickClientName" placeholder="e.g. Jane Doe">
+        <div class="hint">Quick notes aren't saved to a client record — copy the text before you navigate away.</div>
+      </section>
+
+      <section class="panel">
+        <h2>Session Details</h2>
+        <label>Place of Service
+          <select id="placeOfService" required></select>
+        </label>
+        <input type="text" id="placeOfServiceCustom" placeholder="Enter place of service..." hidden>
+
+        <div class="grid3" id="sessionTimingFields">
+          <label>Date of Service <input type="date" id="sessionDate"></label>
+          <label>Start Time <input type="time" id="startTime"></label>
+          <label>End Time <input type="time" id="endTime"></label>
+        </div>
+        <label id="cptCodeField">CPT Code
+          <select id="cptCode">
+            <option value="97153">97153 – Adaptive Behavior Treatment by Protocol</option>
+            <option value="97155" selected>97155 – Adaptive Behavior Treatment with Protocol Modification</option>
+            <option value="97156">97156 – Family Adaptive Behavior Treatment Guidance</option>
+          </select>
+        </label>
+
+        <div id="participantsSection">
+          <h2>Participants</h2>
+          <div id="participantsList"></div>
+          <button type="button" id="addParticipantBtn" class="btn secondary small">+ Add Participant</button>
+        </div>
+
+        <div class="word-target">
+          <div class="word-target-label">
+            <span>Target Note Length</span>
+            <span id="wordTargetValue" class="word-target-value">750 words</span>
+          </div>
+          <input type="range" id="wordTargetSlider" min="300" max="1500" step="25" value="750">
+          <div class="word-target-scale"><span>300</span><span>900</span><span>1500</span></div>
+        </div>
+      </section>
+
+      <!-- SESSION NOTE FIELDS -->
+      <div id="sessionFields">
+        <section class="panel">
+          <h2>Environmental Changes</h2>
+          <div id="environmentalChanges" class="chip-grid"></div>
+        </section>
+
+        <section class="panel">
+          <h2>Medical Concerns</h2>
+          <div id="medicalConcerns" class="chip-grid"></div>
+        </section>
+
+        <section class="panel">
+          <h2>Replacement Programs Targeted</h2>
+          <div id="replacementPrograms" class="chip-grid"></div>
+          <div id="programScenarioPickers" class="scenario-pickers" hidden></div>
+        </section>
+
+        <section class="panel">
+          <h2>Maladaptive Behaviors Observed</h2>
+          <div id="maladaptiveBehaviors" class="chip-grid"></div>
+        </section>
+
+        <section class="panel">
+          <h2>Antecedents / Triggers Observed</h2>
+          <div id="antecedents" class="chip-grid"></div>
+        </section>
+
+        <section class="panel">
+          <h2>Intervention Strategies Used</h2>
+          <div id="interventionStrategies" class="chip-grid"></div>
+        </section>
+
+        <section class="panel">
+          <h2>Intervention Effectiveness</h2>
+          <div id="interventionEffectiveness" class="chip-grid single-select"></div>
+        </section>
+
+        <section class="panel">
+          <h2>Data Collection Methods</h2>
+          <div id="dataCollectionMethods" class="chip-grid"></div>
+        </section>
+
+        <section class="panel">
+          <h2>Client Engagement</h2>
+          <div id="clientEngagement" class="chip-grid single-select"></div>
+        </section>
+
+        <section class="panel" id="protocolModificationSection">
+          <h2>Protocol Modification (CPT 97155, optional)</h2>
+          <h2>What Was Changed</h2>
+          <div id="protocolModifications" class="chip-grid"></div>
+          <label>Data / observation that prompted the change
+            <textarea id="protocolModData" rows="2" placeholder="e.g. decline in correct responding across the last three trials"></textarea>
+          </label>
+          <label>Client's response to the modification
+            <textarea id="protocolModResponse" rows="2" placeholder="e.g. immediate increase in on-task responding"></textarea>
+          </label>
+        </section>
+
+        <section class="panel" id="bcbaFeedbackSection">
+          <h2 id="bcbaFeedbackHeading">BCBA Direct Observation &amp; Feedback (optional)</h2>
+          <h2>Observation Method</h2>
+          <div id="observationMethod" class="chip-grid single-select"></div>
+          <h2>Session Rating</h2>
+          <div id="sessionRating" class="chip-grid single-select"></div>
+          <h2>Protocol Fidelity</h2>
+          <div id="protocolFidelity" class="chip-grid single-select"></div>
+          <h2>Strengths Observed</h2>
+          <div id="rbtStrengths" class="chip-grid"></div>
+          <h2>Feedback / Direction Provided to RBT</h2>
+          <div id="rbtFeedbackAreas" class="chip-grid"></div>
+          <h2>Additional Feedback (optional)</h2>
+          <textarea id="reviewAdditionalNotes" rows="2" placeholder="Any additional feedback or direction..."></textarea>
+        </section>
+      </div>
+
+      <!-- CAREGIVER NOTE FIELDS -->
+      <div id="caregiverFields" hidden>
+        <section class="panel">
+          <h2>Caregiver</h2>
+          <div class="grid3">
+            <label>Caregiver Name <input type="text" id="caregiverName"></label>
+            <label>Relationship <input type="text" id="caregiverRelationship" placeholder="e.g. Father"></label>
+          </div>
+        </section>
+
+        <section class="panel">
+          <h2>Training Topics Covered</h2>
+          <div id="trainingTopics" class="chip-grid"></div>
+        </section>
+
+        <section class="panel">
+          <h2>Teaching Methods Used</h2>
+          <div id="teachingMethods" class="chip-grid"></div>
+        </section>
+
+        <section class="panel">
+          <h2>Caregiver Competency</h2>
+          <div id="caregiverCompetency" class="chip-grid single-select"></div>
+        </section>
+
+        <section class="panel">
+          <h2>Caregiver Response</h2>
+          <div id="caregiverResponse" class="chip-grid"></div>
+        </section>
+
+        <section class="panel">
+          <h2>Barriers to Implementation</h2>
+          <div id="trainingBarriers" class="chip-grid"></div>
+        </section>
+      </div>
+
+      <!-- INITIAL ASSESSMENT FIELDS -->
+      <div id="initialAssessmentFields" hidden>
+        <section class="panel">
+          <h2>CPT Code</h2>
+          <div class="hint">97151 &ndash; Behavior Identification Assessment</div>
+        </section>
+
+        <section class="panel">
+          <h2>Referral Reason</h2>
+          <div id="referralReason" class="chip-grid single-select"></div>
+        </section>
+
+        <section class="panel">
+          <h2>Assessment Methods Used</h2>
+          <div id="assessmentMethodsInitial" class="chip-grid"></div>
+        </section>
+
+        <section class="panel">
+          <h2>Behaviors of Concern Identified</h2>
+          <div id="initialBehaviors" class="chip-grid"></div>
+        </section>
+
+        <section class="panel">
+          <h2>Skill Acquisition Needs Identified</h2>
+          <div id="initialSkills" class="chip-grid"></div>
+        </section>
+
+        <section class="panel">
+          <h2>Recommended Treatment Intensity</h2>
+          <div id="treatmentIntensity" class="chip-grid single-select"></div>
+        </section>
+
+        <section class="panel">
+          <h2>Recommended Services</h2>
+          <div id="recommendedServices" class="chip-grid"></div>
+        </section>
+      </div>
+
+      <!-- REASSESSMENT FIELDS -->
+      <div id="reassessmentFields" hidden>
+        <section class="panel">
+          <h2>CPT Code</h2>
+          <div class="hint">97151-TS &ndash; Behavior Identification Assessment (Reassessment)</div>
+        </section>
+
+        <section class="panel">
+          <h2>Assessment Methods Used</h2>
+          <div id="assessmentMethodsReassessment" class="chip-grid"></div>
+        </section>
+
+        <section class="panel">
+          <h2>Progress Rating</h2>
+          <div id="progressRating" class="chip-grid single-select"></div>
+        </section>
+
+        <section class="panel">
+          <h2>Treatment Goals Reviewed</h2>
+          <div id="reassessmentSkills" class="chip-grid"></div>
+        </section>
+
+        <section class="panel">
+          <h2>Behaviors Still Being Addressed</h2>
+          <div id="reassessmentBehaviors" class="chip-grid"></div>
+        </section>
+
+        <section class="panel">
+          <h2>Data Collection Methods Used to Monitor Progress</h2>
+          <div id="reassessmentDataMethods" class="chip-grid"></div>
+        </section>
+
+        <section class="panel">
+          <h2>Recommendations</h2>
+          <div id="reassessmentRecommendations" class="chip-grid"></div>
+        </section>
+      </div>
+
+      <section class="panel">
+        <h2>Additional Notes (optional)</h2>
+        <textarea id="additionalNotes" rows="2" placeholder="Anything else to include..."></textarea>
+        <h2>Plan for Next Session (optional, auto-generated if left blank)</h2>
+        <textarea id="planNextSession" rows="2"></textarea>
+      </section>
+
+      <div class="row generate-row">
+        <button type="submit" class="btn">Generate Note</button>
+      </div>
+    </form>
+
+    <section class="panel" id="outputPanel" hidden>
+      <div class="row output-header">
+        <h2>Generated Note</h2>
+        <div class="row">
+          <span id="similarityBadge" class="word-count"></span>
+          <span id="wordCount" class="word-count"></span>
+        </div>
+      </div>
+      <textarea id="outputText" rows="24"></textarea>
+      <div class="row">
+        <button id="regenerateBtn" class="btn secondary">Regenerate</button>
+        <button id="copyBtn" type="button" class="btn secondary">Copy</button>
+        <button id="saveBtn" class="btn">Save Note</button>
+      </div>
+      <div id="saveStatus" class="hint"></div>
+    </section>
+  </main>
+</div>
+<script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>
