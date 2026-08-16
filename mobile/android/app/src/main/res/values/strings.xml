@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Powerful Notes</string>
+    <string name="title_activity_main">Powerful Notes</string>
+    <string name="package_name">com.powerfulnotes.app</string>
+    <string name="custom_url_scheme">com.powerfulnotes.app</string>
+</resources>

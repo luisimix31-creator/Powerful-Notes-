@@ -5,3 +5,17 @@ venv/
 __pycache__/
 *.pyc
 .DS_Store
+
+# Mobile (Capacitor) and desktop (Electron) wrapper build output/deps -- large,
+# regeneratable from source, not meant to live in version control.
+mobile/node_modules/
+mobile/android/.gradle/
+mobile/android/build/
+mobile/android/app/build/
+mobile/android/local.properties
+mobile/android/captures/
+mobile/ios/App/Pods/
+mobile/ios/App/build/
+mobile/ios/App/DerivedData/
+desktop/node_modules/
+desktop/dist/
