@@ -296,7 +296,7 @@ def _get_or_create_stripe_customer(user):
 # Endpoints reachable without an active subscription: auth, the paywall/billing
 # flow itself, and account settings (so a canceled subscriber can still resubscribe).
 PUBLIC_ENDPOINTS = {
-    "signup", "login", "logout", "forgot_password", "reset_password",
+    "landing", "signup", "login", "logout", "forgot_password", "reset_password",
     "subscribe", "billing_checkout", "billing_success", "billing_portal", "billing_webhook",
     "account", "service_worker", "static",
 }
@@ -428,6 +428,13 @@ def billing_webhook():
 # ---------- App ----------
 
 @app.route("/")
+def landing():
+    if current_user.is_authenticated:
+        return redirect(url_for("index"))
+    return render_template("landing.html")
+
+
+@app.route("/app")
 @login_required
 def index():
     return render_template("index.html", practice_name=current_user.practice_name or current_user.email)

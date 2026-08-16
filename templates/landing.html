@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Powerful Notes - Professional ABA Session Notes, Generated in Minutes</title>
+<meta name="description" content="Generate professional, natural-sounding BCBA, BCaBA, and RBT session notes, caregiver training notes, and assessments in minutes. $5.99/month.">
+<link rel="manifest" href="{{ url_for('static', filename='manifest.json') }}">
+<link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}">
+<link rel="apple-touch-icon" href="{{ url_for('static', filename='icons/apple-touch-icon.png') }}">
+<meta name="theme-color" content="#6c5ce7">
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<div class="landing-nav">
+  <span class="logo"><span class="piece">🧩</span> Powerful Notes</span>
+  <div class="row">
+    <a href="{{ url_for('login') }}" class="btn secondary small">Log In</a>
+    <a href="{{ url_for('signup') }}" class="btn small">Sign Up</a>
+  </div>
+</div>
+
+<div class="landing-hero">
+  <h1>Clinical notes that <span class="highlight">sound professional, not templated</span></h1>
+  <p class="subhead">
+    Powerful Notes generates professional, measurable BCBA, BCaBA, and RBT session notes,
+    caregiver training notes, and assessments from your session details — in minutes, not hours.
+  </p>
+  <div class="landing-cta">
+    <a href="{{ url_for('signup') }}" class="btn">Get Started — $5.99/month</a>
+    <a href="{{ url_for('login') }}" class="btn secondary">Log In</a>
+  </div>
+  <div class="landing-note">No trial required. Cancel anytime.</div>
+</div>
+
+<div class="landing-section">
+  <h2>Built for the way you actually document sessions</h2>
+  <div class="feature-grid">
+    <div class="feature-card">
+      <div class="icon">📝</div>
+      <h3>Every note type you need</h3>
+      <p>BCBA and BCaBA session notes, plain RBT session notes, caregiver training notes, initial assessments, and reassessments — all in one place.</p>
+    </div>
+    <div class="feature-card">
+      <div class="icon">🎯</div>
+      <h3>Matched interventions</h3>
+      <p>Pair each maladaptive behavior with the exact intervention used to address it, and see both reflected together in the generated note.</p>
+    </div>
+    <div class="feature-card">
+      <div class="icon">✅</div>
+      <h3>Measurable, professional language</h3>
+      <p>Notes are built from objective, behavior-analytic language — no subjective phrasing — and read as natural, varied prose instead of a template.</p>
+    </div>
+    <div class="feature-card">
+      <div class="icon">👥</div>
+      <h3>Unlimited clients</h3>
+      <p>Keep each client's programs, behaviors, and defaults on file so every new note starts from the right context automatically.</p>
+    </div>
+    <div class="feature-card">
+      <div class="icon">🔒</div>
+      <h3>Your data stays yours</h3>
+      <p>Every account is fully isolated — your clients and notes are never visible to any other Powerful Notes account.</p>
+    </div>
+    <div class="feature-card">
+      <div class="icon">⚡</div>
+      <h3>Minutes, not hours</h3>
+      <p>Fill in session details once and generate a complete, ready-to-file note instantly — then save or download it.</p>
+    </div>
+  </div>
+</div>
+
+<div class="landing-section">
+  <h2>Simple pricing</h2>
+  <div class="pricing-card">
+    <div class="price">$5.99 <span>/ month</span></div>
+    <ul>
+      <li>Unlimited session, assessment, and caregiver notes</li>
+      <li>Unlimited clients</li>
+      <li>All note types included</li>
+      <li>Cancel anytime</li>
+    </ul>
+    <a href="{{ url_for('signup') }}" class="btn" style="width: 100%;">Get Started</a>
+  </div>
+</div>
+
+<div class="landing-footer">
+  &copy; 2026 Powerful Notes. All rights reserved.
+</div>
+
+</body>
+</html>

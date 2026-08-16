@@ -2,7 +2,7 @@
   "name": "Powerful Notes",
   "short_name": "Powerful Notes",
   "description": "BCBA session notes and caregiver training notes, generated from client-specific data.",
-  "start_url": "/",
+  "start_url": "/app",
   "scope": "/",
   "display": "standalone",
   "background_color": "#f6f5ff",
