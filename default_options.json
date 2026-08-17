@@ -1189,6 +1189,70 @@
     {
       "id": "low_stimulation_boredom",
       "label": "Low Stimulation / Boredom"
+    },
+    {
+      "id": "worksheet_written_assignment",
+      "label": "Asked to Complete a Worksheet or Written Assignment (School)"
+    },
+    {
+      "id": "line_up_transition_classes",
+      "label": "Asked to Line Up or Transition Between Classes (School)"
+    },
+    {
+      "id": "share_materials_group_work",
+      "label": "Asked to Share Materials During Group Work (School)"
+    },
+    {
+      "id": "read_aloud_answer_in_class",
+      "label": "Asked to Read Aloud or Answer in Front of the Class (School)"
+    },
+    {
+      "id": "test_or_quiz_administered",
+      "label": "Test or Quiz Administered (School)"
+    },
+    {
+      "id": "extended_seatwork",
+      "label": "Asked to Sit at Desk for Extended Seatwork (School)"
+    },
+    {
+      "id": "recess_ending_return_to_class",
+      "label": "Recess or Preferred Activity Ending to Return to Class (School)"
+    },
+    {
+      "id": "substitute_teacher_change",
+      "label": "Substitute Teacher or Change in Classroom Staff (School)"
+    },
+    {
+      "id": "chores_household_task",
+      "label": "Asked to Complete Chores or a Household Task (Home)"
+    },
+    {
+      "id": "screen_time_removed",
+      "label": "Asked to Turn Off Screen Time or an Electronic Device (Home)"
+    },
+    {
+      "id": "morning_routine_dressing",
+      "label": "Asked to Get Dressed or Complete Morning Routine (Home)"
+    },
+    {
+      "id": "bedtime_routine_initiated",
+      "label": "Bedtime Routine Initiated (Home)"
+    },
+    {
+      "id": "homework_after_school",
+      "label": "Asked to Complete Homework After School (Home)"
+    },
+    {
+      "id": "novel_nonpreferred_food",
+      "label": "Introduction of a Novel or Non-Preferred Food (Home)"
+    },
+    {
+      "id": "clean_up_toys_play_area",
+      "label": "Asked to Clean Up Toys or a Play Area (Home)"
+    },
+    {
+      "id": "sibling_given_attention",
+      "label": "Sibling Given Attention or a Preferred Item (Home)"
     }
   ],
   "environmental_changes": [
