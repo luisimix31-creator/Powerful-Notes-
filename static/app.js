@@ -110,9 +110,9 @@ async function init() {
 
   renderChipGroup("ncReplacementPrograms", OPTIONS.replacement_programs, "replacement_programs", false, newClientSelections, null, null, "replacement_programs", true);
   renderChipGroup("ncMaladaptiveBehaviors", OPTIONS.maladaptive_behaviors, "maladaptive_behaviors", false, newClientSelections, null, null, "maladaptive_behaviors", true);
-  renderChipGroup("ncAntecedents", OPTIONS.antecedents, "antecedents", false, newClientSelections, null, null, "antecedents");
+  renderChipGroup("ncAntecedents", OPTIONS.antecedents, "antecedents", false, newClientSelections, null, null, "antecedents", true);
   renderChipGroup("ncInterventionStrategies", OPTIONS.intervention_strategies, "intervention_strategies", false, newClientSelections, null, null, "intervention_strategies", true);
-  renderChipGroup("ncTrainingTopics", OPTIONS.caregiver_training_topics, "training_topics", false, newClientSelections, null, null, "caregiver_training_topics");
+  renderChipGroup("ncTrainingTopics", OPTIONS.caregiver_training_topics, "training_topics", false, newClientSelections, null, null, "caregiver_training_topics", true);
 
   bindStaticEvents();
 }
@@ -447,9 +447,9 @@ function resetNewClientChips() {
   newClientSelections.training_topics = new Set();
   renderChipGroup("ncReplacementPrograms", OPTIONS.replacement_programs, "replacement_programs", false, newClientSelections, null, null, "replacement_programs", true);
   renderChipGroup("ncMaladaptiveBehaviors", OPTIONS.maladaptive_behaviors, "maladaptive_behaviors", false, newClientSelections, null, null, "maladaptive_behaviors", true);
-  renderChipGroup("ncAntecedents", OPTIONS.antecedents, "antecedents", false, newClientSelections, null, null, "antecedents");
+  renderChipGroup("ncAntecedents", OPTIONS.antecedents, "antecedents", false, newClientSelections, null, null, "antecedents", true);
   renderChipGroup("ncInterventionStrategies", OPTIONS.intervention_strategies, "intervention_strategies", false, newClientSelections, null, null, "intervention_strategies", true);
-  renderChipGroup("ncTrainingTopics", OPTIONS.caregiver_training_topics, "training_topics", false, newClientSelections, null, null, "caregiver_training_topics");
+  renderChipGroup("ncTrainingTopics", OPTIONS.caregiver_training_topics, "training_topics", false, newClientSelections, null, null, "caregiver_training_topics", true);
 }
 
 function bindStaticEvents() {
