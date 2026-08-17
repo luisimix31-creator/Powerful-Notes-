@@ -108,10 +108,10 @@ async function init() {
   renderChipGroup("reassessmentDataMethods", OPTIONS.data_collection_methods, "data_collection_methods", false, selections, null, null, "data_collection_methods");
   renderChipGroup("reassessmentRecommendations", OPTIONS.reassessment_recommendations, "reassessment_recommendations", false, selections, null, null, "reassessment_recommendations");
 
-  renderChipGroup("ncReplacementPrograms", OPTIONS.replacement_programs, "replacement_programs", false, newClientSelections, null, null, "replacement_programs");
-  renderChipGroup("ncMaladaptiveBehaviors", OPTIONS.maladaptive_behaviors, "maladaptive_behaviors", false, newClientSelections, null, null, "maladaptive_behaviors");
+  renderChipGroup("ncReplacementPrograms", OPTIONS.replacement_programs, "replacement_programs", false, newClientSelections, null, null, "replacement_programs", true);
+  renderChipGroup("ncMaladaptiveBehaviors", OPTIONS.maladaptive_behaviors, "maladaptive_behaviors", false, newClientSelections, null, null, "maladaptive_behaviors", true);
   renderChipGroup("ncAntecedents", OPTIONS.antecedents, "antecedents", false, newClientSelections, null, null, "antecedents");
-  renderChipGroup("ncInterventionStrategies", OPTIONS.intervention_strategies, "intervention_strategies", false, newClientSelections, null, null, "intervention_strategies");
+  renderChipGroup("ncInterventionStrategies", OPTIONS.intervention_strategies, "intervention_strategies", false, newClientSelections, null, null, "intervention_strategies", true);
   renderChipGroup("ncTrainingTopics", OPTIONS.caregiver_training_topics, "training_topics", false, newClientSelections, null, null, "caregiver_training_topics");
 
   bindStaticEvents();
@@ -136,7 +136,7 @@ function fillPlaceOfService() {
   });
 }
 
-function renderChipGroup(containerId, items, key, singleSelect, store, preselected, onChange, customCategory) {
+function renderChipGroup(containerId, items, key, singleSelect, store, preselected, onChange, customCategory, enablePasteList) {
   const container = el(containerId);
   container.innerHTML = "";
   items.forEach((item) => {
@@ -202,6 +202,125 @@ function renderChipGroup(containerId, items, key, singleSelect, store, preselect
   if (customCategory) {
     ensureCustomAddRow(containerId, customCategory, key, singleSelect, store, onChange);
   }
+  if (enablePasteList) {
+    ensurePasteListRow(containerId, customCategory, key, singleSelect, store, onChange);
+  }
+}
+
+// Matches pasted/free-typed text against an existing catalog item: exact label match,
+// then match against the label's core text (before any parenthetical or slash), then
+// substring match in either direction. Returns the matched item or null.
+function matchCatalogItem(text, items) {
+  const norm = (s) => s.toLowerCase().trim();
+  const target = norm(text);
+  if (!target) return null;
+
+  let found = items.find((i) => norm(i.label) === target);
+  if (found) return found;
+
+  found = items.find((i) => norm(i.label).split(/[(/]/)[0].trim() === target);
+  if (found) return found;
+
+  found = items.find((i) => {
+    const label = norm(i.label);
+    return label.includes(target) || target.includes(label);
+  });
+  return found || null;
+}
+
+// Auto-injects a "Paste a list" toggle immediately after a chip-grid's custom-add row.
+// Splits pasted text by line (stripping bullet/number prefixes), matches each line
+// against the existing catalog, selects matches, and creates the rest as new custom
+// options — so a BCBA can paste a treatment plan's behavior/program list in one shot
+// instead of clicking each chip individually.
+function ensurePasteListRow(containerId, category, key, singleSelect, store, onChange) {
+  const rowId = `${containerId}PasteRow`;
+  if (el(rowId)) return;
+
+  const anchor = el(`${containerId}CustomRow`) || el(containerId);
+  const row = document.createElement("div");
+  row.id = rowId;
+  row.className = "paste-list-row";
+
+  const toggle = document.createElement("button");
+  toggle.type = "button";
+  toggle.className = "btn secondary small";
+  toggle.textContent = "Paste a list...";
+
+  const box = document.createElement("div");
+  box.className = "paste-list-box";
+  box.hidden = true;
+
+  const textarea = document.createElement("textarea");
+  textarea.rows = 4;
+  textarea.placeholder = "Paste a list, one per line (from a treatment plan, EMR, etc.)...";
+
+  const addBtn = document.createElement("button");
+  addBtn.type = "button";
+  addBtn.className = "btn secondary small";
+  addBtn.textContent = "Add Pasted List";
+
+  const status = document.createElement("div");
+  status.className = "hint";
+
+  toggle.addEventListener("click", () => {
+    box.hidden = !box.hidden;
+    if (!box.hidden) textarea.focus();
+  });
+
+  addBtn.addEventListener("click", async () => {
+    const lines = textarea.value
+      .split(/\r?\n/)
+      .map((l) => l.replace(/^[\s\-*••]+|^\d+[.)]\s*/, "").trim())
+      .filter(Boolean);
+    if (!lines.length) return;
+
+    addBtn.disabled = true;
+    status.textContent = "Adding...";
+
+    let matchedCount = 0;
+    let createdCount = 0;
+    const toCreate = [];
+    for (const line of lines) {
+      const match = matchCatalogItem(line, OPTIONS[category]);
+      if (match) {
+        if (singleSelect) store[key] = match.id;
+        else store[key].add(match.id);
+        matchedCount++;
+      } else {
+        toCreate.push(line);
+      }
+    }
+
+    // Sequential, not parallel: each request reads-modifies-writes the same
+    // options_json, so concurrent requests could overwrite each other's additions.
+    for (const label of toCreate) {
+      const res = await apiFetch("/api/options/custom", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ category, label }),
+      });
+      if (!res.ok) continue;
+      const item = await res.json();
+      OPTIONS[category].push(item);
+      if (singleSelect) store[key] = item.id;
+      else store[key].add(item.id);
+      createdCount++;
+    }
+
+    textarea.value = "";
+    addBtn.disabled = false;
+    status.textContent = `Added ${matchedCount + createdCount} of ${lines.length}: ${matchedCount} matched existing options, ${createdCount} added as new.`;
+    renderChipGroup(containerId, OPTIONS[category], key, singleSelect, store, store[key], onChange, category, true);
+    if (onChange) onChange();
+  });
+
+  box.appendChild(textarea);
+  box.appendChild(addBtn);
+  box.appendChild(status);
+  row.appendChild(toggle);
+  row.appendChild(box);
+  anchor.insertAdjacentElement("afterend", row);
 }
 
 // Auto-injects a "Not listed? Add one manually..." row immediately after a chip-grid
@@ -326,10 +445,10 @@ function resetNewClientChips() {
   newClientSelections.antecedents = new Set();
   newClientSelections.intervention_strategies = new Set();
   newClientSelections.training_topics = new Set();
-  renderChipGroup("ncReplacementPrograms", OPTIONS.replacement_programs, "replacement_programs", false, newClientSelections, null, null, "replacement_programs");
-  renderChipGroup("ncMaladaptiveBehaviors", OPTIONS.maladaptive_behaviors, "maladaptive_behaviors", false, newClientSelections, null, null, "maladaptive_behaviors");
+  renderChipGroup("ncReplacementPrograms", OPTIONS.replacement_programs, "replacement_programs", false, newClientSelections, null, null, "replacement_programs", true);
+  renderChipGroup("ncMaladaptiveBehaviors", OPTIONS.maladaptive_behaviors, "maladaptive_behaviors", false, newClientSelections, null, null, "maladaptive_behaviors", true);
   renderChipGroup("ncAntecedents", OPTIONS.antecedents, "antecedents", false, newClientSelections, null, null, "antecedents");
-  renderChipGroup("ncInterventionStrategies", OPTIONS.intervention_strategies, "intervention_strategies", false, newClientSelections, null, null, "intervention_strategies");
+  renderChipGroup("ncInterventionStrategies", OPTIONS.intervention_strategies, "intervention_strategies", false, newClientSelections, null, null, "intervention_strategies", true);
   renderChipGroup("ncTrainingTopics", OPTIONS.caregiver_training_topics, "training_topics", false, newClientSelections, null, null, "caregiver_training_topics");
 }
 

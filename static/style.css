@@ -202,6 +202,33 @@ textarea {
   flex: 1;
 }
 
+.paste-list-row {
+  margin: 6px 0 4px;
+}
+
+.paste-list-box {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 8px;
+  padding: 12px;
+  background: var(--chip-bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+}
+
+.paste-list-box textarea {
+  width: 100%;
+  resize: vertical;
+  font-family: inherit;
+  font-size: 13px;
+  background: var(--panel);
+}
+
+.paste-list-box .btn {
+  align-self: flex-start;
+}
+
 .scenario-pickers {
   margin-top: 14px;
   padding-top: 12px;
