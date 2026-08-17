@@ -40,15 +40,19 @@
       <li>Cancel anytime from Account Settings</li>
     </ul>
 
-    <form method="POST" action="{{ url_for('billing_checkout') }}">
-      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-      <div class="row generate-row">
-        <button type="submit" class="btn">Subscribe with Card</button>
-      </div>
-    </form>
+    {% if is_native_app %}
+      <div class="hint">To subscribe, please visit <strong>powerfulnotes.com</strong> in a web browser, then come back and log in here once your subscription is active.</div>
+    {% else %}
+      <form method="POST" action="{{ url_for('billing_checkout') }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <div class="row generate-row">
+          <button type="submit" class="btn">Subscribe with Card</button>
+        </div>
+      </form>
 
-    <div class="hint">You'll be taken to Stripe's secure checkout to enter your card.</div>
-    <div class="hint">By subscribing, you agree to the <a href="{{ url_for('terms') }}" target="_blank">Terms of Service</a>.</div>
+      <div class="hint">You'll be taken to Stripe's secure checkout to enter your card.</div>
+      <div class="hint">By subscribing, you agree to the <a href="{{ url_for('terms') }}" target="_blank">Terms of Service</a>.</div>
+    {% endif %}
     <div class="hint">
       <form method="POST" action="{{ url_for('logout') }}" style="display:inline">
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">

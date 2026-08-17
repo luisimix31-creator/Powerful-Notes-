@@ -315,19 +315,34 @@ def _require_active_subscription():
     return redirect(url_for("subscribe"))
 
 
+def _is_native_app_request():
+    # Apple/Google app review policy requires digital subscriptions to be sold
+    # through the platform's own in-app purchase system, not an external payment
+    # flow shown inside the app. The mobile wrapper apps identify themselves via
+    # a custom User-Agent suffix (see mobile/capacitor.config.json) so the web
+    # app can act as a "reader app": new subscriptions can only be started from
+    # a browser, never from inside the iOS/Android app itself.
+    return "PowerfulNotesNativeApp" in request.headers.get("User-Agent", "")
+
+
 @app.route("/subscribe")
 @login_required
 def subscribe():
     if _is_subscribed(current_user):
         return redirect(url_for("index"))
     return render_template(
-        "subscribe.html", status=current_user.subscription_status, stripe_error=request.args.get("stripe_error", "")
+        "subscribe.html",
+        status=current_user.subscription_status,
+        stripe_error=request.args.get("stripe_error", ""),
+        is_native_app=_is_native_app_request(),
     )
 
 
 @app.route("/billing/checkout", methods=["POST"])
 @login_required
 def billing_checkout():
+    if _is_native_app_request():
+        abort(403, description="Subscriptions can only be started from powerfulnotes.com in a web browser.")
     if not STRIPE_PRICE_ID:
         abort(500, description="Billing is not configured yet.")
     try:

@@ -6,6 +6,7 @@
     "url": "https://powerful-notes.onrender.com",
     "cleartext": false
   },
+  "appendUserAgent": "PowerfulNotesNativeApp/1.0",
   "ios": {
     "contentInset": "always"
   },
