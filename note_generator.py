@@ -24,6 +24,10 @@ SESSION_INTRO_TEMPLATES = [
     "During today's {duration}direct ABA therapy session for {name} at {place}, {bcba} actively observed {rbt} and provided real-time guidance to ensure implementation followed the protocol as designed.",
     "{bcba} was actively engaged in observing and guiding {rbt} throughout today's {duration}direct ABA therapy session for {name} at {place}, ensuring adherence to the designed treatment protocol and behavior intervention plan.",
     "Throughout today's {duration}direct ABA therapy session for {name} at {place}, {bcba} actively observed and guided {rbt} to ensure the session was implemented in accordance with the designed protocol plan.",
+    "{name} received a {duration}direct ABA therapy session at {place}, with {rbt} implementing programming under the active observation and guidance of {bcba} in accordance with the current treatment plan.",
+    "{bcba} directly observed {rbt} carry out today's {duration}session for {name} at {place}, confirming that program and behavior protocols were implemented as written throughout.",
+    "Today's {duration}direct ABA therapy session for {name} took place at {place}, with {rbt} delivering programming and {bcba} providing on-site observation and guidance consistent with the treatment plan.",
+    "{bcba} monitored {rbt}'s implementation of today's {duration}direct ABA therapy session for {name} at {place}, confirming that procedures matched the protocol outlined in the current treatment plan.",
 ]
 
 RBT_SESSION_INTRO_TEMPLATES = [
@@ -31,6 +35,10 @@ RBT_SESSION_INTRO_TEMPLATES = [
     "{rbt} conducted a {duration}direct ABA therapy session for {name} at {place}, following the goals and procedures outlined in {name}'s current treatment plan.",
     "{name} was seen for a {duration}direct ABA therapy session at {place}, conducted by {rbt} in accordance with the treatment plan and behavior intervention plan designed by the treating BCBA.",
     "{rbt} provided a {duration}direct ABA therapy session for {name} at {place}, implementing programming as outlined in the current treatment plan.",
+    "{rbt} implemented a {duration}direct ABA therapy session for {name} at {place}, delivering programs and behavior procedures as written in the current treatment plan.",
+    "Session services were provided to {name} for {duration}at {place} by {rbt}, with programming carried out according to the current treatment plan and behavior intervention plan.",
+    "{name} attended a {duration}direct ABA therapy session at {place}; {rbt} ran programming and collected data in line with the current treatment plan.",
+    "{rbt} delivered {duration}direct ABA services to {name} at {place}, addressing the skill acquisition and behavior-reduction goals identified in the current treatment plan.",
 ]
 
 SESSION_PROGRAMS_LEAD = [
@@ -38,6 +46,10 @@ SESSION_PROGRAMS_LEAD = [
     "The session included structured programming across a number of skill acquisition goals.",
     "Skill acquisition programming was a central focus of today's session.",
     "Today's session incorporated targeted instruction across the client's current skill acquisition goals.",
+    "Programming during today's session addressed the following skill acquisition targets.",
+    "Trials were run across several skill acquisition programs during today's session.",
+    "The following skill acquisition targets were addressed through structured trials during today's session.",
+    "Today's session incorporated discrete trials and naturalistic teaching across the client's current programs.",
 ]
 
 SESSION_PROGRAMS_CLOSE = [
@@ -45,6 +57,10 @@ SESSION_PROGRAMS_CLOSE = [
     "Across these areas ({labels}), prompts were faded where appropriate and reinforcement was delivered contingent on correct or approximated responses.",
     "Instruction in {labels} was supported through individualized prompting and a reinforcement schedule matched to the client's current level.",
     "The client's responses across {labels} were reinforced and shaped toward the current mastery criteria for each program.",
+    "Data collected across {labels} will be used to evaluate progress toward each program's current mastery criteria.",
+    "Prompt level and reinforcement delivered across {labels} were adjusted trial to trial based on the client's responding.",
+    "Performance across {labels} was documented on a trial-by-trial basis to track progress toward mastery.",
+    "For each of {labels}, correct and prompted responses were recorded to inform the next steps in programming.",
 ]
 
 SESSION_BEHAVIOR_LEAD = [
@@ -52,12 +68,52 @@ SESSION_BEHAVIOR_LEAD = [
     "Behavioral concerns were observed and addressed throughout the session.",
     "In addition to skill acquisition, the session addressed target behaviors identified on the behavior intervention plan.",
     "The client's behavior was monitored throughout the session, with the following concerns noted.",
+    "Antecedent-behavior data were collected on the following target behaviors during today's session.",
+    "The following target behaviors were observed and documented during today's session.",
+    "Occurrences of the following target behaviors were recorded throughout the session, along with the antecedent conditions and staff response for each.",
+    "Behavior data collected during today's session are summarized below.",
+]
+
+BEHAVIOR_SENTENCE_TEMPLATES_FULL = [
+    "{topography} most often preceded by {antecedents}, was observed and addressed using {interventions}",
+    "following {antecedents}, {topography} was observed and addressed using {interventions}",
+    "{topography} was noted most frequently after {antecedents}; staff responded using {interventions}",
+    "when {antecedents} occurred, {topography} was observed, and {interventions} was implemented in response",
+    "{topography} occurring most often in the context of {antecedents}, was addressed in the moment using {interventions}",
+    "consistent with antecedent-behavior data collected during the session, {topography} typically followed {antecedents} and was managed using {interventions}",
+    "{topography} was documented as occurring most frequently following {antecedents}, with staff intervening using {interventions}",
+]
+
+BEHAVIOR_SENTENCE_TEMPLATES_ANTECEDENT_ONLY = [
+    "{topography} most often preceded by {antecedents}, was observed",
+    "following {antecedents}, {topography} was observed",
+    "{topography} was noted most frequently after {antecedents}",
+    "when {antecedents} occurred, {topography} was observed and documented",
+    "{topography} occurring most often in the context of {antecedents}, was documented accordingly",
+]
+
+BEHAVIOR_SENTENCE_TEMPLATES_INTERVENTION_ONLY = [
+    "{topography} was observed and addressed using {interventions}",
+    "{topography} was addressed in the moment using {interventions}",
+    "{topography} was addressed by staff using {interventions}",
+    "{topography} was managed in real time using {interventions}",
+    "{topography} was documented and responded to using {interventions}",
+]
+
+BEHAVIOR_SENTENCE_TEMPLATES_NEITHER = [
+    "{topography} was observed during the session",
+    "{topography} was observed and documented",
+    "{topography} occurred during the session and was documented accordingly",
+    "{topography} was noted during today's session",
 ]
 
 INTERVENTION_EFFECTIVENESS_TEMPLATES = [
     "This intervention {blurb}.",
     "Overall, the intervention {blurb}.",
     "Across the session, this approach {blurb}.",
+    "Based on today's data, this intervention {blurb}.",
+    "Compared to recent sessions, this intervention {blurb}.",
+    "As documented in today's data, this approach {blurb}.",
 ]
 
 ENVIRONMENTAL_CHANGE_TEMPLATES = [
@@ -102,6 +158,10 @@ SESSION_DATA_TEMPLATES = [
     "{methods_cap} were used to track progress throughout the session. This information was reviewed to assess trends relevant to both skill acquisition and behavior reduction goals.",
     "Progress was tracked using {methods}, and the resulting data were reviewed to determine whether current programming and intervention strategies remain appropriate.",
     "Throughout the session, {methods} were used to document performance, and this information will be incorporated into the client's ongoing progress record.",
+    "{methods_cap} were used to document trial-by-trial and occurrence-based data throughout the session, which will be reviewed to track progress against current mastery criteria.",
+    "Session data were collected using {methods} and will be entered into the client's ongoing data record for trend analysis.",
+    "Performance and behavior data were documented using {methods}, allowing progress to be compared against data from recent sessions.",
+    "{methods_cap} were used consistently throughout the session to support accurate tracking of both program and behavior data.",
 ]
 
 SESSION_SUMMARY_LEAD = [
@@ -109,6 +169,10 @@ SESSION_SUMMARY_LEAD = [
     "In summary, ",
     "Taken together, today's session showed that ",
     "Overall, ",
+    "Based on today's data, ",
+    "Reviewing today's session data, ",
+    "Across the full session, ",
+    "In terms of overall session performance, ",
 ]
 
 SESSION_FILLERS = [
@@ -615,16 +679,18 @@ def _session_body_paragraphs(
                 any_paired_intervention = True
 
             if antecedent_labels and paired_labels:
-                text = (
-                    f"{topography} most often preceded by {_join_natural(antecedent_labels)}, "
-                    f"was observed and addressed using {_join_natural(paired_labels)}"
-                )
+                shape = random.choice(BEHAVIOR_SENTENCE_TEMPLATES_FULL)
             elif antecedent_labels:
-                text = f"{topography} most often preceded by {_join_natural(antecedent_labels)}, was observed and addressed"
+                shape = random.choice(BEHAVIOR_SENTENCE_TEMPLATES_ANTECEDENT_ONLY)
             elif paired_labels:
-                text = f"{topography} was observed and addressed using {_join_natural(paired_labels)}"
+                shape = random.choice(BEHAVIOR_SENTENCE_TEMPLATES_INTERVENTION_ONLY)
             else:
-                text = f"{topography} was observed and addressed"
+                shape = random.choice(BEHAVIOR_SENTENCE_TEMPLATES_NEITHER)
+            text = shape.format(
+                topography=topography,
+                antecedents=_join_natural(antecedent_labels),
+                interventions=_join_natural(paired_labels),
+            )
             sentences.append(_sentence(_connector(i == 0), text))
         parts = [lead] + sentences
         if any_paired_intervention and effectiveness:
