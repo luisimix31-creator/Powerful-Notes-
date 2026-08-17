@@ -666,8 +666,10 @@ function appendScenarioPicker(row, itemId, blurbs, store, labelText, placeholder
   blurbs.forEach((blurb, idx) => {
     const opt = document.createElement("option");
     opt.value = idx;
-    const preview = blurb.length > 90 ? `${blurb.slice(0, 90)}...` : blurb;
-    opt.textContent = `Option ${idx + 1}: ${preview}`;
+    // Full text (no truncation) so the option is readable both in the open
+    // dropdown list and via the preview paragraph below the closed select,
+    // which the closed <select> box itself can't show for longer scenarios.
+    opt.textContent = `Option ${idx + 1}: ${blurb}`;
     select.appendChild(opt);
   });
 
@@ -679,6 +681,19 @@ function appendScenarioPicker(row, itemId, blurbs, store, labelText, placeholder
   const current = store[itemId];
   const isCustom = typeof current === "string";
   select.value = current !== undefined ? (isCustom ? "custom" : String(current)) : "";
+
+  const preview = document.createElement("div");
+  preview.className = "scenario-preview";
+  const updatePreview = () => {
+    const idx = Number(select.value);
+    if (select.value !== "" && select.value !== "custom" && !Number.isNaN(idx) && blurbs[idx]) {
+      preview.textContent = blurbs[idx];
+      preview.hidden = false;
+    } else {
+      preview.hidden = true;
+    }
+  };
+  updatePreview();
 
   const customInput = document.createElement("input");
   customInput.type = "text";
@@ -710,9 +725,11 @@ function appendScenarioPicker(row, itemId, blurbs, store, labelText, placeholder
       customInput.hidden = true;
       store[itemId] = Number(select.value);
     }
+    updatePreview();
   });
 
   field.appendChild(select);
+  field.appendChild(preview);
   field.appendChild(customInput);
   row.appendChild(field);
 }

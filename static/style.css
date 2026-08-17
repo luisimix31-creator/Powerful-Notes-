@@ -285,6 +285,17 @@ textarea {
   background: var(--panel);
 }
 
+.scenario-preview {
+  margin-top: 8px;
+  padding: 10px 12px;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--text);
+}
+
 .scenario-picker-row .chip-grid {
   gap: 6px;
 }
