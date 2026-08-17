@@ -42,6 +42,7 @@ class Client(db.Model):
     rbt_name = db.Column(db.String(255), default="")
     replacement_programs = db.Column(db.JSON, default=list)
     maladaptive_behaviors = db.Column(db.JSON, default=list)
+    antecedents = db.Column(db.JSON, default=list)
     intervention_strategies = db.Column(db.JSON, default=list)
     training_topics = db.Column(db.JSON, default=list)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
@@ -57,6 +58,7 @@ class Client(db.Model):
             "rbt_name": self.rbt_name or "",
             "replacement_programs": self.replacement_programs or [],
             "maladaptive_behaviors": self.maladaptive_behaviors or [],
+            "antecedents": self.antecedents or [],
             "intervention_strategies": self.intervention_strategies or [],
             "training_topics": self.training_topics or [],
             "created_at": self.created_at.isoformat(timespec="seconds") if self.created_at else "",

@@ -48,6 +48,7 @@ const selections = {
 const targetEditSelections = {
   replacement_programs: new Set(),
   maladaptive_behaviors: new Set(),
+  antecedents: new Set(),
   intervention_strategies: new Set(),
   training_topics: new Set(),
 };
@@ -55,6 +56,7 @@ const targetEditSelections = {
 const newClientSelections = {
   replacement_programs: new Set(),
   maladaptive_behaviors: new Set(),
+  antecedents: new Set(),
   intervention_strategies: new Set(),
   training_topics: new Set(),
 };
@@ -108,6 +110,7 @@ async function init() {
 
   renderChipGroup("ncReplacementPrograms", OPTIONS.replacement_programs, "replacement_programs", false, newClientSelections, null, null, "replacement_programs");
   renderChipGroup("ncMaladaptiveBehaviors", OPTIONS.maladaptive_behaviors, "maladaptive_behaviors", false, newClientSelections, null, null, "maladaptive_behaviors");
+  renderChipGroup("ncAntecedents", OPTIONS.antecedents, "antecedents", false, newClientSelections, null, null, "antecedents");
   renderChipGroup("ncInterventionStrategies", OPTIONS.intervention_strategies, "intervention_strategies", false, newClientSelections, null, null, "intervention_strategies");
   renderChipGroup("ncTrainingTopics", OPTIONS.caregiver_training_topics, "training_topics", false, newClientSelections, null, null, "caregiver_training_topics");
 
@@ -164,6 +167,35 @@ function renderChipGroup(containerId, items, key, singleSelect, store, preselect
       }
       if (onChange) onChange();
     });
+
+    if (customCategory && item.id.startsWith("custom_")) {
+      chip.title = "Right-click to delete";
+      chip.addEventListener("contextmenu", async (e) => {
+        e.preventDefault();
+        if (!confirm(`Delete "${item.label}"? This removes it from your options permanently.`)) return;
+
+        const res = await apiFetch("/api/options/custom", {
+          method: "DELETE",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ category: customCategory, id: item.id }),
+        });
+        if (!res.ok) {
+          const err = await res.json();
+          alert(err.error || "Failed to delete option.");
+          return;
+        }
+
+        OPTIONS[customCategory] = OPTIONS[customCategory].filter((i) => i.id !== item.id);
+        if (singleSelect) {
+          if (store[key] === item.id) store[key] = null;
+        } else if (store[key]) {
+          store[key].delete(item.id);
+        }
+        renderChipGroup(containerId, OPTIONS[customCategory], key, singleSelect, store, store[key], onChange, customCategory);
+        if (onChange) onChange();
+      });
+    }
+
     container.appendChild(chip);
   });
 
@@ -194,27 +226,34 @@ function ensureCustomAddRow(containerId, category, key, singleSelect, store, onC
   btn.textContent = "Add";
 
   const submit = async () => {
-    const label = input.value.trim();
-    if (!label) return;
+    // Typing several items at once (comma-separated) adds each as its own chip
+    // instead of one chip with the whole string as its label.
+    const labels = input.value.split(",").map((l) => l.trim()).filter(Boolean);
+    if (!labels.length) return;
 
-    const res = await apiFetch("/api/options/custom", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ category, label }),
-    });
-    if (!res.ok) {
-      const err = await res.json();
-      alert(err.error || "Failed to add custom option.");
-      return;
+    // Sequential, not parallel: each request reads-modifies-writes the same
+    // options_json, so concurrent requests could overwrite each other's additions.
+    for (const label of labels) {
+      const res = await apiFetch("/api/options/custom", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ category, label }),
+      });
+      if (!res.ok) {
+        const err = await res.json();
+        alert(err.error || `Failed to add "${label}".`);
+        continue;
+      }
+      const item = await res.json();
+      OPTIONS[category].push(item);
+      if (singleSelect) {
+        store[key] = item.id;
+      } else {
+        if (!store[key]) store[key] = new Set();
+        store[key].add(item.id);
+      }
     }
-    const item = await res.json();
-    OPTIONS[category].push(item);
-    if (singleSelect) {
-      store[key] = item.id;
-    } else {
-      if (!store[key]) store[key] = new Set();
-      store[key].add(item.id);
-    }
+
     input.value = "";
     renderChipGroup(containerId, OPTIONS[category], key, singleSelect, store, store[key], onChange, category);
     if (onChange) onChange();
@@ -263,6 +302,12 @@ function clientBehaviorItems(client) {
   return OPTIONS.maladaptive_behaviors.filter((b) => ids.includes(b.id));
 }
 
+function clientAntecedentItems(client) {
+  const ids = client.antecedents || [];
+  if (!ids.length) return OPTIONS.antecedents;
+  return OPTIONS.antecedents.filter((a) => ids.includes(a.id));
+}
+
 function clientInterventionItems(client) {
   const ids = client.intervention_strategies || [];
   if (!ids.length) return OPTIONS.intervention_strategies;
@@ -278,10 +323,12 @@ function clientTrainingTopicItems(client) {
 function resetNewClientChips() {
   newClientSelections.replacement_programs = new Set();
   newClientSelections.maladaptive_behaviors = new Set();
+  newClientSelections.antecedents = new Set();
   newClientSelections.intervention_strategies = new Set();
   newClientSelections.training_topics = new Set();
   renderChipGroup("ncReplacementPrograms", OPTIONS.replacement_programs, "replacement_programs", false, newClientSelections, null, null, "replacement_programs");
   renderChipGroup("ncMaladaptiveBehaviors", OPTIONS.maladaptive_behaviors, "maladaptive_behaviors", false, newClientSelections, null, null, "maladaptive_behaviors");
+  renderChipGroup("ncAntecedents", OPTIONS.antecedents, "antecedents", false, newClientSelections, null, null, "antecedents");
   renderChipGroup("ncInterventionStrategies", OPTIONS.intervention_strategies, "intervention_strategies", false, newClientSelections, null, null, "intervention_strategies");
   renderChipGroup("ncTrainingTopics", OPTIONS.caregiver_training_topics, "training_topics", false, newClientSelections, null, null, "caregiver_training_topics");
 }
@@ -417,6 +464,7 @@ async function saveClientForm() {
   if (!isEditing) {
     body.replacement_programs = [...newClientSelections.replacement_programs];
     body.maladaptive_behaviors = [...newClientSelections.maladaptive_behaviors];
+    body.antecedents = [...newClientSelections.antecedents];
     body.intervention_strategies = [...newClientSelections.intervention_strategies];
     body.training_topics = [...newClientSelections.training_topics];
   }
@@ -595,6 +643,7 @@ function renderBehaviorPairingPickers() {
   container.hidden = false;
 
   const interventionCatalog = clientInterventionItems(currentClient() || {});
+  const antecedentCatalog = clientAntecedentItems(currentClient() || {});
 
   behaviors.forEach((b) => {
     const row = document.createElement("div");
@@ -633,7 +682,7 @@ function renderBehaviorPairingPickers() {
     if (!behaviorAntecedents[b.id]) behaviorAntecedents[b.id] = new Set();
     renderChipGroup(
       antecedentContainerId,
-      OPTIONS.antecedents,
+      antecedentCatalog,
       b.id,
       false,
       behaviorAntecedents,
@@ -736,27 +785,31 @@ function applyProviderDefaults(client) {
 function renderTargetsPanel(client, forceOpen) {
   const programIds = client.replacement_programs || [];
   const behaviorIds = client.maladaptive_behaviors || [];
+  const antecedentIds = client.antecedents || [];
   const interventionIds = client.intervention_strategies || [];
   const topicIds = client.training_topics || [];
 
   const summary = el("targetsSummary");
-  if (!programIds.length && !behaviorIds.length && !interventionIds.length && !topicIds.length) {
-    summary.textContent = "No client-specific targets set — all standard programs, behaviors, interventions, and training topics are available. Click Edit to restrict this client's list.";
+  if (!programIds.length && !behaviorIds.length && !antecedentIds.length && !interventionIds.length && !topicIds.length) {
+    summary.textContent = "No client-specific targets set — all standard programs, behaviors, antecedents, interventions, and training topics are available. Click Edit to restrict this client's list.";
   } else {
     const programLabels = clientProgramItems(client).map((p) => p.label).join(", ") || "none";
     const behaviorLabels = clientBehaviorItems(client).map((b) => b.label).join(", ") || "none";
+    const antecedentLabels = clientAntecedentItems(client).map((a) => a.label).join(", ") || "none";
     const interventionLabels = clientInterventionItems(client).map((s) => s.label).join(", ") || "none";
     const topicLabels = clientTrainingTopicItems(client).map((t) => t.label).join(", ") || "none";
-    summary.textContent = `Programs: ${programLabels} | Behaviors: ${behaviorLabels} | Interventions: ${interventionLabels} | Training Topics: ${topicLabels}`;
+    summary.textContent = `Programs: ${programLabels} | Behaviors: ${behaviorLabels} | Antecedents: ${antecedentLabels} | Interventions: ${interventionLabels} | Training Topics: ${topicLabels}`;
   }
 
   el("targetsEditArea").hidden = !forceOpen;
   targetEditSelections.replacement_programs = new Set(programIds);
   targetEditSelections.maladaptive_behaviors = new Set(behaviorIds);
+  targetEditSelections.antecedents = new Set(antecedentIds);
   targetEditSelections.intervention_strategies = new Set(interventionIds);
   targetEditSelections.training_topics = new Set(topicIds);
   renderChipGroup("clientReplacementPrograms", OPTIONS.replacement_programs, "replacement_programs", false, targetEditSelections, new Set(programIds), null, "replacement_programs");
   renderChipGroup("clientMaladaptiveBehaviors", OPTIONS.maladaptive_behaviors, "maladaptive_behaviors", false, targetEditSelections, new Set(behaviorIds), null, "maladaptive_behaviors");
+  renderChipGroup("clientAntecedents", OPTIONS.antecedents, "antecedents", false, targetEditSelections, new Set(antecedentIds), null, "antecedents");
   renderChipGroup("clientInterventionStrategies", OPTIONS.intervention_strategies, "intervention_strategies", false, targetEditSelections, new Set(interventionIds), null, "intervention_strategies");
   renderChipGroup("clientTrainingTopics", OPTIONS.caregiver_training_topics, "training_topics", false, targetEditSelections, new Set(topicIds), null, "caregiver_training_topics");
   el("targetsSaveStatus").textContent = "";
@@ -767,6 +820,7 @@ async function saveClientTargets() {
   const body = {
     replacement_programs: [...targetEditSelections.replacement_programs],
     maladaptive_behaviors: [...targetEditSelections.maladaptive_behaviors],
+    antecedents: [...targetEditSelections.antecedents],
     intervention_strategies: [...targetEditSelections.intervention_strategies],
     training_topics: [...targetEditSelections.training_topics],
   };

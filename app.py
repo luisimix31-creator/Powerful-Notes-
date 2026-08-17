@@ -108,30 +108,32 @@ def _default_options_text():
         return f.read()
 
 
-def _ensure_columns():
+def _ensure_table_columns(table, additions):
     """Add columns introduced after the initial schema, since this app has no
     migration framework. Safe to run every startup: only issues ALTER TABLE for
     columns that don't already exist, on both SQLite and Postgres."""
     inspector = inspect(db.engine)
-    existing = {col["name"] for col in inspector.get_columns("user")}
-    additions = {
-        "stripe_customer_id": "VARCHAR(255)",
-        "stripe_subscription_id": "VARCHAR(255)",
-        "subscription_status": "VARCHAR(30)",
-    }
+    existing = {col["name"] for col in inspector.get_columns(table)}
     missing = {name: col_type for name, col_type in additions.items() if name not in existing}
     if not missing:
-        return
+        return missing
     with db.engine.begin() as conn:
         for name, col_type in missing.items():
-            conn.execute(text(f'ALTER TABLE "user" ADD COLUMN {name} {col_type}'))
-        if "subscription_status" in missing:
-            conn.execute(text('UPDATE "user" SET subscription_status = :status WHERE subscription_status IS NULL'), {"status": "inactive"})
+            conn.execute(text(f'ALTER TABLE "{table}" ADD COLUMN {name} {col_type}'))
+    return missing
 
 
 with app.app_context():
     db.create_all()
-    _ensure_columns()
+    _missing_user_cols = _ensure_table_columns("user", {
+        "stripe_customer_id": "VARCHAR(255)",
+        "stripe_subscription_id": "VARCHAR(255)",
+        "subscription_status": "VARCHAR(30)",
+    })
+    if "subscription_status" in _missing_user_cols:
+        with db.engine.begin() as conn:
+            conn.execute(text('UPDATE "user" SET subscription_status = :status WHERE subscription_status IS NULL'), {"status": "inactive"})
+    _ensure_table_columns("client", {"antecedents": "JSON"})
 
 
 # ---------- Auth ----------
@@ -588,6 +590,30 @@ def api_add_custom_option():
     return jsonify(item), 201
 
 
+@app.route("/api/options/custom", methods=["DELETE"])
+@login_required
+def api_delete_custom_option():
+    body = request.get_json(force=True)
+    category = body.get("category")
+    item_id = body.get("id") or ""
+    if category not in CUSTOM_OPTION_CATEGORIES:
+        return jsonify({"error": f"category must be one of {sorted(CUSTOM_OPTION_CATEGORIES)}."}), 400
+    if not item_id.startswith("custom_"):
+        return jsonify({"error": "Only custom-added options can be deleted."}), 400
+
+    options = json.loads(current_user.options_json)
+    items = options.get(category, [])
+    remaining = [i for i in items if i["id"] != item_id]
+    if len(remaining) == len(items):
+        return jsonify({"error": "Option not found."}), 404
+
+    options[category] = remaining
+    current_user.options_json = json.dumps(options)
+    db.session.commit()
+
+    return jsonify({"ok": True})
+
+
 @app.route("/api/clients", methods=["GET"])
 @login_required
 def api_get_clients():
@@ -613,6 +639,7 @@ def api_create_client():
         rbt_name=body.get("rbt_name", "").strip(),
         replacement_programs=body.get("replacement_programs") or [],
         maladaptive_behaviors=body.get("maladaptive_behaviors") or [],
+        antecedents=body.get("antecedents") or [],
         intervention_strategies=body.get("intervention_strategies") or [],
         training_topics=body.get("training_topics") or [],
     )
@@ -636,7 +663,7 @@ def api_update_client(client_id):
 
     editable_fields = [
         "name", "dob", "diagnosis", "guardian_name", "guardian_relationship", "rbt_name",
-        "replacement_programs", "maladaptive_behaviors", "intervention_strategies", "training_topics",
+        "replacement_programs", "maladaptive_behaviors", "antecedents", "intervention_strategies", "training_topics",
     ]
     for field in editable_fields:
         if field in body:
