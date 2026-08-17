@@ -21,6 +21,7 @@
     },
     "files": ["main.js", "icons/**/*"],
     "artifactName": "${productName}-Setup-${version}-${arch}.${ext}",
+    "afterPack": "afterPack.js",
     "mac": {
       "icon": "icons/icon.icns",
       "category": "public.app-category.medical",
