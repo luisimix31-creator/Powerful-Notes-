@@ -208,23 +208,61 @@ textarea {
   border-top: 1px solid var(--border);
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 14px;
+}
+
+.scenario-picker-row {
+  background: var(--chip-bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px 16px;
+}
+
+.scenario-picker-title {
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--text);
+  margin: 0 0 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border);
+}
+
+.scenario-field {
+  margin-bottom: 12px;
+}
+
+.scenario-field:last-child {
+  margin-bottom: 0;
 }
 
 .scenario-picker-row label {
-  font-size: 12px;
+  display: block;
+  font-size: 11px;
   font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
   color: var(--muted);
-  margin-bottom: 4px;
+  margin-bottom: 6px;
 }
 
 .scenario-picker-row select {
   width: 100%;
+  background: var(--panel);
 }
 
 .scenario-picker-row .scenario-custom-input {
   width: 100%;
   margin-top: 6px;
+  background: var(--panel);
+}
+
+.scenario-picker-row .chip-grid {
+  gap: 6px;
+}
+
+.scenario-picker-row .chip {
+  padding: 6px 12px;
+  font-size: 12.5px;
 }
 
 #participantsSection {

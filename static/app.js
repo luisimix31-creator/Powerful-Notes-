@@ -531,9 +531,12 @@ function renderClientSpecificChips(client) {
 // that only shows for the custom option, backed by `store[itemId]` (undefined = the
 // default option's behavior, a number = that variant's index, a string = custom text).
 function appendScenarioPicker(row, itemId, blurbs, store, labelText, placeholderText, defaultOptionLabel) {
+  const field = document.createElement("div");
+  field.className = "scenario-field";
+
   const label = document.createElement("label");
   label.textContent = labelText;
-  row.appendChild(label);
+  field.appendChild(label);
 
   const select = document.createElement("select");
   const randomOpt = document.createElement("option");
@@ -590,8 +593,9 @@ function appendScenarioPicker(row, itemId, blurbs, store, labelText, placeholder
     }
   });
 
-  row.appendChild(select);
-  row.appendChild(customInput);
+  field.appendChild(select);
+  field.appendChild(customInput);
+  row.appendChild(field);
 }
 
 function renderProgramScenarioPickers() {
@@ -612,9 +616,15 @@ function renderProgramScenarioPickers() {
   programs.forEach((p) => {
     const row = document.createElement("div");
     row.className = "scenario-picker-row";
+
+    const title = document.createElement("div");
+    title.className = "scenario-picker-title";
+    title.textContent = p.label;
+    row.appendChild(title);
+
     appendScenarioPicker(
       row, p.id, p.blurbs, programScenarios,
-      `Scenario for "${p.label}"`,
+      "Scenario",
       "Describe what the RBT did for this program during this session..."
     );
     container.appendChild(row);
@@ -649,34 +659,45 @@ function renderBehaviorPairingPickers() {
     const row = document.createElement("div");
     row.className = "scenario-picker-row";
 
+    const title = document.createElement("div");
+    title.className = "scenario-picker-title";
+    title.textContent = b.label;
+    row.appendChild(title);
+
     if (b.blurbs && b.blurbs.length > 1) {
       appendScenarioPicker(
         row, b.id, b.blurbs, behaviorTopographies,
-        `Topography for "${b.label}"`,
+        "Topography",
         "Describe what this behavior looked like during this session...",
         "Option 1 (default)"
       );
     }
 
+    const antecedentField = document.createElement("div");
+    antecedentField.className = "scenario-field";
     const antecedentLabel = document.createElement("label");
-    antecedentLabel.textContent = `Antecedents/triggers for "${b.label}"`;
-    row.appendChild(antecedentLabel);
+    antecedentLabel.textContent = "Antecedents / Triggers";
+    antecedentField.appendChild(antecedentLabel);
 
     const antecedentContainerId = `behaviorAntecedent_${b.id}`;
     const antecedentContainer = document.createElement("div");
     antecedentContainer.id = antecedentContainerId;
     antecedentContainer.className = "chip-grid";
-    row.appendChild(antecedentContainer);
+    antecedentField.appendChild(antecedentContainer);
+    row.appendChild(antecedentField);
 
+    const interventionField = document.createElement("div");
+    interventionField.className = "scenario-field";
     const interventionLabel = document.createElement("label");
-    interventionLabel.textContent = `Interventions used for "${b.label}"`;
-    row.appendChild(interventionLabel);
+    interventionLabel.textContent = "Interventions Used";
+    interventionField.appendChild(interventionLabel);
 
     const chipContainerId = `behaviorIntervention_${b.id}`;
     const chipContainer = document.createElement("div");
     chipContainer.id = chipContainerId;
     chipContainer.className = "chip-grid";
-    row.appendChild(chipContainer);
+    interventionField.appendChild(chipContainer);
+    row.appendChild(interventionField);
     container.appendChild(row);
 
     if (!behaviorAntecedents[b.id]) behaviorAntecedents[b.id] = new Set();
