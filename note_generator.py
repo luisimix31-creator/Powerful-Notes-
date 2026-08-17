@@ -901,9 +901,12 @@ def _session_header(title, client, data):
     lines.append(f"Place of Service: {data.get('place_of_service', '')}")
     if data.get("cpt_code"):
         lines.append(f"CPT Code: {data['cpt_code']}")
-    provider_line = f"Provider: {data.get('provider_name', '')}"
-    if data.get("provider_credential"):
-        provider_line += f", {data.get('provider_credential')}"
+    provider_name = data.get("provider_name", "").strip()
+    provider_credential = data.get("provider_credential", "").strip()
+    if provider_name:
+        provider_line = f"Provider: {provider_name}" + (f", {provider_credential}" if provider_credential else "")
+    else:
+        provider_line = f"Provider: {f'the {provider_credential}' if provider_credential else 'not specified'}"
     lines.append(provider_line)
     return "\n".join(lines)
 
