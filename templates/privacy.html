@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Privacy Policy - Powerful Notes</title>
+<link rel="manifest" href="{{ url_for('static', filename='manifest.json') }}">
+<link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}">
+<link rel="apple-touch-icon" href="{{ url_for('static', filename='icons/apple-touch-icon.png') }}">
+<meta name="theme-color" content="#6c5ce7">
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<div class="landing-nav">
+  <span class="logo"><span class="piece">🧩</span> Powerful Notes</span>
+  <div class="row">
+    <a href="{{ url_for('landing') }}" class="btn secondary small">Home</a>
+  </div>
+</div>
+
+<div class="legal-page">
+  <h1>Privacy Policy</h1>
+  <p class="legal-updated">Last updated: August 2026</p>
+
+  <p>This Privacy Policy explains what information Powerful Notes ("we," "the Service") collects, how it's used, and how it's protected.</p>
+
+  <h2>1. Information We Collect</h2>
+  <p><strong>Account information:</strong> the email address, password (stored as a secure hash, never in plain text), and practice name you provide when creating an account.</p>
+  <p><strong>Client and session information you enter:</strong> client names, dates of birth, diagnoses, guardian information, program and behavior selections, and generated or saved notes. This information is entered by you and is used solely to generate and store your documentation.</p>
+  <p><strong>Billing information:</strong> subscription payments are processed entirely by Stripe. We store your Stripe customer ID and subscription status, but never your card number or other payment details.</p>
+  <p><strong>Standard technical data:</strong> our hosting provider (Render) automatically logs request data (such as IP address and timestamps) as part of normal server operation.</p>
+
+  <h2>2. How We Use Information</h2>
+  <p>We use the information above only to operate the Service: authenticating your account, generating and storing your notes, processing your subscription, and sending password-reset emails when requested (via Resend). We do not sell your information, and we do not use it for advertising or third-party marketing.</p>
+
+  <h2>3. Data Isolation</h2>
+  <p>Every account's clients and notes are stored separately and are never visible to other Powerful Notes accounts.</p>
+
+  <h2>4. Third-Party Services</h2>
+  <p>We use a small number of third-party services to operate Powerful Notes: Render (hosting and database), Stripe (payment processing), and Resend (transactional email). Each handles the specific data needed to perform its function and is bound by its own privacy practices.</p>
+
+  <h2>5. Data Retention</h2>
+  <p>We retain your account, client, and note data for as long as your account remains active. If you'd like your account and its data deleted, contact us using the information below.</p>
+
+  <h2>6. Your Responsibility for Client Data</h2>
+  <p>You are responsible for ensuring you have appropriate authorization to enter any client information into the Service and for complying with applicable privacy and recordkeeping laws in your jurisdiction.</p>
+
+  <h2>7. Security</h2>
+  <p>Passwords are stored as secure hashes, all traffic is encrypted in transit (HTTPS), and each account's data is isolated from every other account.</p>
+
+  <h2>8. Children's Privacy</h2>
+  <p>Powerful Notes is intended for use by credentialed clinicians and is not directed at children. Client information entered by clinicians (which may include minors receiving services) is handled under the data isolation and security practices described above.</p>
+
+  <h2>9. Changes to This Policy</h2>
+  <p>This policy may be updated from time to time. Continued use of the Service after changes are posted constitutes acceptance of the updated policy.</p>
+
+  <h2>10. Contact</h2>
+  <p>Questions about this policy can be sent to {% if support_email %}<a href="mailto:{{ support_email }}">{{ support_email }}</a>{% else %}the support contact listed in the app{% endif %}.</p>
+</div>
+
+<div class="landing-footer">
+  &copy; 2026 Powerful Notes. All rights reserved. &middot; <a href="{{ url_for('terms') }}">Terms of Service</a> &middot; <a href="{{ url_for('privacy') }}">Privacy Policy</a>
+</div>
+
+</body>
+</html>
