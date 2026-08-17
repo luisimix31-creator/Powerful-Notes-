@@ -398,6 +398,21 @@ textarea {
   padding: 8px 0;
 }
 
+.targets-summary-row {
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: var(--muted);
+}
+
+.targets-summary-row + .targets-summary-row {
+  margin-top: 3px;
+}
+
+.targets-summary-row strong {
+  color: var(--text);
+  font-weight: 700;
+}
+
 .quick-toggle {
   display: flex;
   flex-direction: row;

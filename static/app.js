@@ -939,6 +939,17 @@ function applyProviderDefaults(client) {
   renderParticipants();
 }
 
+// Condenses a long label list to a short, scannable preview instead of dumping
+// every label into one wall of text (a client with no restrictions set shows the
+// full catalog per category, which can run 40+ items).
+function _summarizeList(items, limit = 3) {
+  if (!items.length) return "none";
+  const labels = items.map((i) => i.label);
+  if (labels.length <= limit) return labels.join(", ");
+  const shown = labels.slice(0, limit).join(", ");
+  return `${shown}, +${labels.length - limit} more`;
+}
+
 function renderTargetsPanel(client, forceOpen) {
   const programIds = client.replacement_programs || [];
   const behaviorIds = client.maladaptive_behaviors || [];
@@ -950,12 +961,23 @@ function renderTargetsPanel(client, forceOpen) {
   if (!programIds.length && !behaviorIds.length && !antecedentIds.length && !interventionIds.length && !topicIds.length) {
     summary.textContent = "No client-specific targets set — all standard programs, behaviors, antecedents, interventions, and training topics are available. Click Edit to restrict this client's list.";
   } else {
-    const programLabels = clientProgramItems(client).map((p) => p.label).join(", ") || "none";
-    const behaviorLabels = clientBehaviorItems(client).map((b) => b.label).join(", ") || "none";
-    const antecedentLabels = clientAntecedentItems(client).map((a) => a.label).join(", ") || "none";
-    const interventionLabels = clientInterventionItems(client).map((s) => s.label).join(", ") || "none";
-    const topicLabels = clientTrainingTopicItems(client).map((t) => t.label).join(", ") || "none";
-    summary.textContent = `Programs: ${programLabels} | Behaviors: ${behaviorLabels} | Antecedents: ${antecedentLabels} | Interventions: ${interventionLabels} | Training Topics: ${topicLabels}`;
+    const rows = [
+      ["Programs", clientProgramItems(client)],
+      ["Behaviors", clientBehaviorItems(client)],
+      ["Antecedents", clientAntecedentItems(client)],
+      ["Interventions", clientInterventionItems(client)],
+      ["Training Topics", clientTrainingTopicItems(client)],
+    ];
+    summary.innerHTML = "";
+    rows.forEach(([label, items]) => {
+      const row = document.createElement("div");
+      row.className = "targets-summary-row";
+      const strong = document.createElement("strong");
+      strong.textContent = `${label} (${items.length}):`;
+      row.appendChild(strong);
+      row.appendChild(document.createTextNode(` ${_summarizeList(items)}`));
+      summary.appendChild(row);
+    });
   }
 
   el("targetsEditArea").hidden = !forceOpen;
