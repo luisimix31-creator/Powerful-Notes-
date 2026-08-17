@@ -805,7 +805,9 @@ def _generate_reviewed_session_note(data, options, title, default_reviewer_label
     ]
 
     text, count = _pad_to_range(paragraphs, SESSION_FILLERS, *_target_range(data))
-    attestation = _documentation_attestation(data)
+    attestation = _documentation_attestation(
+        data, name=reviewing_bcba_name, credential=reviewing_bcba_credential
+    )
     if attestation:
         text = f"{text}\n\n{attestation}"
         count = word_count(text)
@@ -977,11 +979,15 @@ def _session_header(title, client, data):
     return "\n".join(lines)
 
 
-def _documentation_attestation(data):
-    name = data.get("provider_name", "").strip()
+def _documentation_attestation(data, name=None, credential=None):
+    """Attributes the note to whichever clinician actually authored it: the RBT for
+    plain RBT session notes, or the reviewing BCBA/BCaBA for BCBA/BCaBA session notes
+    (where data["provider_name"]/["provider_credential"] refer to the RBT who ran the
+    session, not the author of this particular note)."""
+    name = (name if name is not None else data.get("provider_name", "")).strip()
     if not name:
         return ""
-    credential = data.get("provider_credential", "").strip()
+    credential = (credential if credential is not None else data.get("provider_credential", "")).strip()
     who = f"{name}, {credential}" if credential else name
     date = data.get("session_date", "").strip()
     return f"Documentation completed electronically by {who} on {date}." if date else f"Documentation completed electronically by {who}."
