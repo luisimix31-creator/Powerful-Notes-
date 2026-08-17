@@ -269,8 +269,14 @@ function ensurePasteListRow(containerId, category, key, singleSelect, store, onC
   });
 
   addBtn.addEventListener("click", async () => {
+    // Split on newlines AND commas so "tantrum, elopement" on one line adds two
+    // separate behaviors instead of one combined entry. Catalog labels that
+    // legitimately contain commas (e.g. "Aggression (e.g., hitting, kicking,
+    // biting)") don't need to be pasted in full — matchCatalogItem() matches
+    // against the label's core text before any parenthetical, so a short
+    // "Aggression" still matches correctly even after the comma split.
     const lines = textarea.value
-      .split(/\r?\n/)
+      .split(/\r?\n|,/)
       .map((l) => l.replace(/^[\s\-*••]+|^\d+[.)]\s*/, "").trim())
       .filter(Boolean);
     if (!lines.length) return;
