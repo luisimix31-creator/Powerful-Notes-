@@ -64,6 +64,7 @@ const newClientSelections = {
 const el = (id) => document.getElementById(id);
 
 const CSRF_TOKEN = document.querySelector('meta[name="csrf-token"]').content;
+const BCBA_NAME = document.querySelector('meta[name="bcba-name"]').content.trim();
 
 function apiFetch(url, options = {}) {
   const headers = { ...(options.headers || {}) };
@@ -941,16 +942,34 @@ function participantNames(role) {
 }
 
 function applyProviderDefaults(client) {
-  const hasBcbaLike = participants.some((p) => (p.role === "bcba" || p.role === "bcaba") && p.name.trim());
-  if (!hasBcbaLike) {
-    const existingBcba = participants.find((p) => p.role === "bcba");
-    if (existingBcba) {
-      existingBcba.name = "Luis";
-    } else {
-      participants.push({ role: "bcba", name: "Luis" });
+  const bcbaNoteTypes = ["caregiver", "initial_assessment", "reassessment"];
+  const isBcbaNote = bcbaNoteTypes.includes(currentNoteType);
+
+  if (isBcbaNote && BCBA_NAME) {
+    const hasBcbaLike = participants.some((p) => (p.role === "bcba" || p.role === "bcaba") && p.name.trim());
+    if (!hasBcbaLike) {
+      const existingBcba = participants.find((p) => p.role === "bcba");
+      if (existingBcba) {
+        existingBcba.name = BCBA_NAME;
+      } else {
+        participants.push({ role: "bcba", name: BCBA_NAME });
+      }
     }
   }
-  if (client && client.rbt_name) {
+
+  if (isBcbaNote) {
+    if (client && client.guardian_name) {
+      const existingCaregiver = participants.find((p) => p.role === "caregiver");
+      if (existingCaregiver) {
+        existingCaregiver.name = client.guardian_name;
+      } else {
+        participants.push({ role: "caregiver", name: client.guardian_name });
+      }
+    }
+    if (currentNoteType === "caregiver" && client && client.guardian_name && !el("caregiverName").value.trim()) {
+      el("caregiverName").value = client.guardian_name;
+    }
+  } else if (client && client.rbt_name) {
     const existingRbt = participants.find((p) => p.role === "rbt");
     if (existingRbt) {
       existingRbt.name = client.rbt_name;
