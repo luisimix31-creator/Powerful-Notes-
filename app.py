@@ -705,6 +705,10 @@ def api_update_client(client_id):
 @login_required
 def api_delete_client(client_id):
     client = _get_client_or_404(client_id)
+    # SavedNote.client_id has no ON DELETE CASCADE at the database level, so
+    # deleting a client with saved notes would otherwise fail with a foreign
+    # key violation on Postgres.
+    SavedNote.query.filter_by(client_id=client.id, user_id=current_user.id).delete()
     db.session.delete(client)
     db.session.commit()
     return jsonify({"ok": True})

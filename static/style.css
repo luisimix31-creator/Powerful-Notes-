@@ -188,6 +188,9 @@ textarea {
 .btn:active { transform: translateY(0); }
 .btn.secondary:hover { box-shadow: var(--shadow-sm); filter: none; background: var(--accent-soft); }
 
+.btn.secondary.danger { color: #c0392b; }
+.btn.secondary.danger:hover { background: #fdecea; }
+
 .chip-grid {
   display: flex;
   flex-wrap: wrap;

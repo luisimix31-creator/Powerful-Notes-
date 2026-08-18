@@ -516,6 +516,21 @@ function bindStaticEvents() {
     el("newClientPanel").hidden = false;
     el("newClientPanel").scrollIntoView({ behavior: "smooth" });
   });
+  el("deleteClientBtn").addEventListener("click", async () => {
+    const client = currentClient();
+    if (!client) return;
+    if (!confirm(`Delete ${client.name}? This permanently removes this client and all of their saved notes. This cannot be undone.`)) return;
+
+    const res = await apiFetch(`/api/clients/${client.id}`, { method: "DELETE" });
+    if (!res.ok) {
+      const err = await res.json();
+      alert(err.error || "Failed to delete client.");
+      return;
+    }
+    await refreshClients();
+    el("clientSelect").value = "";
+    onClientChange();
+  });
   el("ncCancel").addEventListener("click", () => {
     el("newClientPanel").hidden = true;
     editingClientId = null;
@@ -621,6 +636,7 @@ function onClientChange() {
   el("outputPanel").hidden = true;
   el("clientTargetsPanel").hidden = !client;
   el("editClientBtn").hidden = !client;
+  el("deleteClientBtn").hidden = !client;
 
   selections.replacement_programs = new Set();
   selections.maladaptive_behaviors = new Set();
