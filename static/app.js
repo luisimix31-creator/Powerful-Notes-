@@ -140,9 +140,26 @@ function fillPlaceOfService() {
   });
 }
 
+const CHIP_FILTER_THRESHOLD = 10;
+
 function renderChipGroup(containerId, items, key, singleSelect, store, preselected, onChange, customCategory, enablePasteList) {
   const container = el(containerId);
   container.innerHTML = "";
+
+  if (items.length > CHIP_FILTER_THRESHOLD) {
+    const filterInput = document.createElement("input");
+    filterInput.type = "text";
+    filterInput.className = "chip-filter";
+    filterInput.placeholder = `Filter ${items.length} options...`;
+    filterInput.addEventListener("input", () => {
+      const q = filterInput.value.toLowerCase().trim();
+      container.querySelectorAll(".chip").forEach((chip) => {
+        chip.classList.toggle("chip-hidden", !!q && !chip.textContent.toLowerCase().includes(q));
+      });
+    });
+    container.appendChild(filterInput);
+  }
+
   items.forEach((item) => {
     const chip = document.createElement("div");
     chip.className = "chip";
@@ -712,6 +729,7 @@ function bindStaticEvents() {
     generateNote();
   });
   el("regenerateBtn").addEventListener("click", generateNote);
+  el("floatingGenerateBtn").addEventListener("click", generateNote);
   el("saveBtn").addEventListener("click", saveNote);
   el("copyBtn").addEventListener("click", async () => {
     await navigator.clipboard.writeText(el("outputText").value);
@@ -774,6 +792,7 @@ async function saveClientForm() {
 function buildSectionNav() {
   const nav = el("sectionNav");
   nav.innerHTML = "";
+  el("floatingGenerateBtn").hidden = el("noteForm").hidden;
   if (el("noteForm").hidden) {
     nav.hidden = true;
     return;
