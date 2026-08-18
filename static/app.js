@@ -1069,22 +1069,40 @@ function participantNames(role) {
 }
 
 function applyProviderDefaults(client) {
-  const bcbaNoteTypes = ["caregiver", "initial_assessment", "reassessment"];
-  const isBcbaNote = bcbaNoteTypes.includes(currentNoteType);
+  const bcbaOnlyNoteTypes = ["caregiver", "initial_assessment", "reassessment"];
+  const isBcbaOnlyNote = bcbaOnlyNoteTypes.includes(currentNoteType);
+  // Session notes name the reviewing clinician's role differently depending on
+  // who authored them: a BCBA note reviews under role "bcba", a BCaBA note
+  // reviews under role "bcaba". Plain RBT session notes have no reviewing
+  // clinician field at all, so they get no default here.
+  const reviewingRole =
+    currentNoteType === "session" ? "bcba" :
+    currentNoteType === "bcaba_session" ? "bcaba" :
+    isBcbaOnlyNote ? "bcba" : null;
 
-  if (isBcbaNote && BCBA_NAME) {
-    const hasBcbaLike = participants.some((p) => (p.role === "bcba" || p.role === "bcaba") && p.name.trim());
-    if (!hasBcbaLike) {
-      const existingBcba = participants.find((p) => p.role === "bcba");
-      if (existingBcba) {
-        existingBcba.name = BCBA_NAME;
+  if (reviewingRole && BCBA_NAME) {
+    const alreadyCorrect = participants.some((p) => p.role === reviewingRole && p.name.trim());
+    if (!alreadyCorrect) {
+      // A BCaBA session note only credits a participant with role "bcaba"
+      // specifically (no bcba/bcaba fallback, unlike the other note types), so
+      // retarget a same-name auto-fill left over from switching note-type tabs
+      // instead of leaving a stale entry under the wrong role.
+      const otherRole = reviewingRole === "bcba" ? "bcaba" : "bcba";
+      const staleAutoFill = participants.find((p) => p.role === otherRole && p.name.trim() === BCBA_NAME);
+      if (staleAutoFill) {
+        staleAutoFill.role = reviewingRole;
       } else {
-        participants.push({ role: "bcba", name: BCBA_NAME });
+        const existing = participants.find((p) => p.role === reviewingRole);
+        if (existing) {
+          existing.name = BCBA_NAME;
+        } else {
+          participants.push({ role: reviewingRole, name: BCBA_NAME });
+        }
       }
     }
   }
 
-  if (isBcbaNote) {
+  if (isBcbaOnlyNote) {
     if (client && client.guardian_name) {
       const existingCaregiver = participants.find((p) => p.role === "caregiver");
       if (existingCaregiver) {
