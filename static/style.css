@@ -245,6 +245,44 @@ textarea {
   gap: 9px;
 }
 
+#noteForm section.panel {
+  /* Clears the sticky navbar (~57px) + sticky section-nav (~60px) so a
+     jump-nav click doesn't land the target's heading underneath both bars. */
+  scroll-margin-top: 132px;
+}
+
+.section-nav {
+  position: sticky;
+  top: 61px;
+  z-index: 9;
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 10px 2px;
+  margin-bottom: 18px;
+  background: var(--bg);
+}
+
+.section-nav-link {
+  flex: 0 0 auto;
+  border: 1px solid var(--border);
+  background: var(--panel);
+  color: var(--text);
+  border-radius: 999px;
+  padding: 6px 14px;
+  font-size: 0.82em;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: border-color 0.15s ease, background 0.15s ease, color 0.15s ease;
+}
+
+.section-nav-link:hover {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
 .doc-extract-hint {
   margin: 0 0 10px;
   font-size: 0.9em;

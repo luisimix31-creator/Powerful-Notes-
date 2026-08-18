@@ -142,6 +142,8 @@
       <button class="tab" data-type="reassessment">Reassessment</button>
     </div>
 
+    <nav id="sectionNav" class="section-nav" hidden></nav>
+
     <div id="noSelectionMsg" class="hint">Select or create a client to begin.</div>
 
     <form id="noteForm" hidden>
@@ -190,13 +192,19 @@
       <!-- SESSION NOTE FIELDS -->
       <div id="sessionFields">
         <section class="panel">
-          <h2>Environmental Changes</h2>
-          <div id="environmentalChanges" class="chip-grid"></div>
+          <div class="row output-header">
+            <h2>Environmental Changes</h2>
+            <button type="button" class="btn secondary small panel-toggle" data-toggle="environmentalChanges">Show</button>
+          </div>
+          <div id="environmentalChanges" class="chip-grid" hidden></div>
         </section>
 
         <section class="panel">
-          <h2>Medical Concerns</h2>
-          <div id="medicalConcerns" class="chip-grid"></div>
+          <div class="row output-header">
+            <h2>Medical Concerns</h2>
+            <button type="button" class="btn secondary small panel-toggle" data-toggle="medicalConcerns">Show</button>
+          </div>
+          <div id="medicalConcerns" class="chip-grid" hidden></div>
         </section>
 
         <section class="panel">

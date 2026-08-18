@@ -585,6 +585,14 @@ function setupDropZone(zoneId, inputId, docType) {
 function bindStaticEvents() {
   el("clientSelect").addEventListener("change", onClientChange);
 
+  document.querySelectorAll(".panel-toggle").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const target = el(btn.dataset.toggle);
+      target.hidden = !target.hidden;
+      btn.textContent = target.hidden ? "Show" : "Hide";
+    });
+  });
+
   el("addParticipantBtn").addEventListener("click", () => addParticipantRow("bcba", ""));
 
   el("quickModeToggle").addEventListener("change", () => {
@@ -606,6 +614,7 @@ function bindStaticEvents() {
       selections.maladaptive_behaviors = new Set();
       renderClientSpecificChips({});
       applyProviderDefaults(null);
+      buildSectionNav();
     } else {
       el("notesHistoryPanel").hidden = false;
       onClientChange();
@@ -694,6 +703,7 @@ function bindStaticEvents() {
       el("outputPanel").hidden = true;
       applyProviderDefaults(currentClient());
       renderClientSpecificChips(currentClient());
+      buildSectionNav();
     });
   });
 
@@ -757,6 +767,43 @@ async function saveClientForm() {
   onClientChange();
 }
 
+// Rebuilds the sticky jump-nav from whichever section.panel elements are
+// actually visible in the current note form - the set changes per note type
+// (session vs. caregiver vs. assessment fields), so this reads the live DOM
+// rather than keeping a separate hardcoded list in sync.
+function buildSectionNav() {
+  const nav = el("sectionNav");
+  nav.innerHTML = "";
+  if (el("noteForm").hidden) {
+    nav.hidden = true;
+    return;
+  }
+
+  const sections = [...el("noteForm").querySelectorAll("section.panel")].filter((sec) => {
+    if (sec.hidden) return false;
+    let node = sec.parentElement;
+    while (node && node !== el("noteForm")) {
+      if (node.hidden) return false;
+      node = node.parentElement;
+    }
+    return sec.querySelectorAll("input, select, textarea, .chip-grid").length > 0;
+  });
+
+  sections.forEach((sec, i) => {
+    const h2 = sec.querySelector("h2");
+    if (!h2) return;
+    if (!sec.id) sec.id = `panelAuto${i}`;
+    const link = document.createElement("button");
+    link.type = "button";
+    link.className = "section-nav-link";
+    link.textContent = h2.textContent.replace(/\s*\([^)]*optional[^)]*\)/i, "").trim();
+    link.addEventListener("click", () => sec.scrollIntoView({ behavior: "smooth", block: "start" }));
+    nav.appendChild(link);
+  });
+
+  nav.hidden = sections.length === 0;
+}
+
 function onClientChange() {
   const client = currentClient();
   el("noteForm").hidden = !client;
@@ -777,6 +824,7 @@ function onClientChange() {
   } else {
     el("notesHistory").innerHTML = "Select a client to view saved notes.";
   }
+  buildSectionNav();
 }
 
 function renderClientSpecificChips(client) {
