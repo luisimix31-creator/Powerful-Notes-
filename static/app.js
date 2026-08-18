@@ -17,6 +17,7 @@ let programScenarios = {};
 let behaviorInterventions = {};
 let behaviorAntecedents = {};
 let behaviorTopographies = {};
+let newClientBehaviorTopographies = {};
 
 const selections = {
   replacement_programs: new Set(),
@@ -116,6 +117,8 @@ async function init() {
   renderChipGroup("ncTrainingTopics", OPTIONS.caregiver_training_topics, "training_topics", false, newClientSelections, null, null, "caregiver_training_topics", true);
 
   bindStaticEvents();
+  setupDropZone("dropInitialAssessment", "fileInitialAssessment", "initial_assessment");
+  setupDropZone("dropReassessment", "fileReassessment", "reassessment");
 }
 
 function fillPlaceOfService() {
@@ -459,6 +462,126 @@ function resetNewClientChips() {
   renderChipGroup("ncTrainingTopics", OPTIONS.caregiver_training_topics, "training_topics", false, newClientSelections, null, null, "caregiver_training_topics", true);
 }
 
+function resetDocExtractUI() {
+  newClientBehaviorTopographies = {};
+  const statusEl = el("docExtractStatus");
+  statusEl.hidden = true;
+  statusEl.textContent = "";
+  statusEl.className = "doc-extract-status";
+  ["dropInitialAssessment", "dropReassessment"].forEach((id) => el(id).classList.remove("has-file"));
+}
+
+function applyExtractedData(data) {
+  if (data.name && !el("ncName").value.trim()) el("ncName").value = data.name;
+  if (data.dob && !el("ncDob").value) el("ncDob").value = data.dob;
+  if (data.guardian_name && !el("ncGuardianName").value.trim()) el("ncGuardianName").value = data.guardian_name;
+
+  if (data.maladaptive_behaviors && data.maladaptive_behaviors.length) {
+    data.maladaptive_behaviors.forEach((id) => newClientSelections.maladaptive_behaviors.add(id));
+    renderChipGroup(
+      "ncMaladaptiveBehaviors", OPTIONS.maladaptive_behaviors, "maladaptive_behaviors", false,
+      newClientSelections, new Set(newClientSelections.maladaptive_behaviors), null, "maladaptive_behaviors", true
+    );
+  }
+  if (data.replacement_programs && data.replacement_programs.length) {
+    data.replacement_programs.forEach((id) => newClientSelections.replacement_programs.add(id));
+    renderChipGroup(
+      "ncReplacementPrograms", OPTIONS.replacement_programs, "replacement_programs", false,
+      newClientSelections, new Set(newClientSelections.replacement_programs), null, "replacement_programs", true
+    );
+  }
+  if (data.intervention_strategies && data.intervention_strategies.length) {
+    data.intervention_strategies.forEach((id) => newClientSelections.intervention_strategies.add(id));
+    renderChipGroup(
+      "ncInterventionStrategies", OPTIONS.intervention_strategies, "intervention_strategies", false,
+      newClientSelections, new Set(newClientSelections.intervention_strategies), null, "intervention_strategies", true
+    );
+  }
+  if (data.behavior_topographies) {
+    Object.assign(newClientBehaviorTopographies, data.behavior_topographies);
+  }
+}
+
+async function handleDocumentDrop(dropZoneId, docType, file) {
+  const statusEl = el("docExtractStatus");
+  const dropZone = el(dropZoneId);
+  if (!file) return;
+
+  const ext = file.name.includes(".") ? file.name.split(".").pop().toLowerCase() : "";
+  if (!["pdf", "docx"].includes(ext)) {
+    statusEl.hidden = false;
+    statusEl.className = "doc-extract-status error";
+    statusEl.textContent = "Only PDF and Word (.docx) files are supported.";
+    return;
+  }
+
+  statusEl.hidden = false;
+  statusEl.className = "doc-extract-status";
+  statusEl.textContent = `Reading ${file.name}...`;
+
+  const formData = new FormData();
+  formData.append("file", file);
+  formData.append("doc_type", docType);
+
+  let res, data;
+  try {
+    res = await fetch("/api/extract-client-document", {
+      method: "POST",
+      headers: { "X-CSRFToken": CSRF_TOKEN },
+      body: formData,
+    });
+    data = await res.json();
+  } catch (err) {
+    statusEl.className = "doc-extract-status error";
+    statusEl.textContent = "Upload failed. Please check your connection and try again.";
+    return;
+  }
+
+  if (!res.ok) {
+    statusEl.className = "doc-extract-status error";
+    statusEl.textContent = data.error || "Could not extract information from that file.";
+    return;
+  }
+
+  dropZone.classList.add("has-file");
+  applyExtractedData(data);
+
+  const extras = [];
+  if (data.age) extras.push(`age ${data.age}`);
+  if (data.bcba_name) extras.push(`authoring BCBA "${data.bcba_name}" (no field for this yet, not auto-filled)`);
+  statusEl.className = "doc-extract-status";
+  statusEl.textContent =
+    `Pulled info from ${file.name} - please review the fields below before saving.` +
+    (extras.length ? ` Also found: ${extras.join(", ")}.` : "");
+}
+
+function setupDropZone(zoneId, inputId, docType) {
+  const zone = el(zoneId);
+  const input = el(inputId);
+  zone.addEventListener("click", () => input.click());
+  zone.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      input.click();
+    }
+  });
+  input.addEventListener("change", () => {
+    if (input.files[0]) handleDocumentDrop(zoneId, docType, input.files[0]);
+    input.value = "";
+  });
+  zone.addEventListener("dragover", (e) => {
+    e.preventDefault();
+    zone.classList.add("dragover");
+  });
+  zone.addEventListener("dragleave", () => zone.classList.remove("dragover"));
+  zone.addEventListener("drop", (e) => {
+    e.preventDefault();
+    zone.classList.remove("dragover");
+    const file = e.dataTransfer.files[0];
+    if (file) handleDocumentDrop(zoneId, docType, file);
+  });
+}
+
 function bindStaticEvents() {
   el("clientSelect").addEventListener("change", onClientChange);
 
@@ -498,6 +621,8 @@ function bindStaticEvents() {
     el("clientFormTitle").textContent = "New Client";
     ["ncName", "ncDob", "ncDiagnosis", "ncGuardianName", "ncGuardianRel", "ncRbtName"].forEach((id) => (el(id).value = ""));
     resetNewClientChips();
+    resetDocExtractUI();
+    el("ncDocExtractSection").hidden = false;
     el("newClientTargetsSection").hidden = false;
     el("newClientPanel").hidden = false;
     el("newClientPanel").scrollIntoView({ behavior: "smooth" });
@@ -505,6 +630,7 @@ function bindStaticEvents() {
   el("editClientBtn").addEventListener("click", () => {
     const client = currentClient();
     if (!client) return;
+    el("ncDocExtractSection").hidden = true;
     editingClientId = client.id;
     el("clientFormTitle").textContent = `Edit ${client.name}`;
     el("ncName").value = client.name || "";
@@ -608,6 +734,7 @@ async function saveClientForm() {
     body.antecedents = [...newClientSelections.antecedents];
     body.intervention_strategies = [...newClientSelections.intervention_strategies];
     body.training_topics = [...newClientSelections.training_topics];
+    body.behavior_topographies = { ...newClientBehaviorTopographies };
   }
   const url = isEditing ? `/api/clients/${editingClientId}` : "/api/clients";
   const method = isEditing ? "PATCH" : "POST";

@@ -38,3 +38,5 @@ services:
         sync: false
       - key: OWNER_EMAIL
         sync: false
+      - key: ANTHROPIC_API_KEY
+        sync: false

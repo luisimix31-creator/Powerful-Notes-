@@ -4,6 +4,7 @@ import os
 import re
 from datetime import datetime
 
+import anthropic
 import requests
 import stripe
 from dotenv import load_dotenv
@@ -21,6 +22,7 @@ from flask_wtf import CSRFProtect
 from itsdangerous import BadSignature, SignatureExpired, URLSafeTimedSerializer
 from sqlalchemy import inspect, text
 
+import document_extraction as extraction
 import note_generator as ng
 from models import Client, GeneratedNote, SavedNote, User, db
 
@@ -64,6 +66,9 @@ STRIPE_WEBHOOK_SECRETS = [
 # that generated notes before billing existed never loses access to its own data.
 OWNER_EMAIL = os.environ.get("OWNER_EMAIL", "").strip().lower()
 stripe.api_key = STRIPE_SECRET_KEY
+
+ANTHROPIC_API_KEY = _clean_secret(os.environ.get("ANTHROPIC_API_KEY", ""))
+MAX_DOCUMENT_UPLOAD_BYTES = 15 * 1024 * 1024
 
 def _normalized_database_url():
     url = os.environ.get("DATABASE_URL", f"sqlite:///{os.path.join(BASE_DIR, 'app.db')}")
@@ -162,6 +167,7 @@ with app.app_context():
         with db.engine.begin() as conn:
             conn.execute(text('UPDATE "user" SET subscription_status = :status WHERE subscription_status IS NULL'), {"status": "inactive"})
     _ensure_table_columns("client", {"antecedents": "JSON"})
+    _ensure_table_columns("client", {"behavior_topographies": "JSON"})
 
 
 # ---------- Auth ----------
@@ -671,6 +677,7 @@ def api_create_client():
         antecedents=body.get("antecedents") or [],
         intervention_strategies=body.get("intervention_strategies") or [],
         training_topics=body.get("training_topics") or [],
+        behavior_topographies=body.get("behavior_topographies") or {},
     )
     db.session.add(client)
     db.session.commit()
@@ -693,6 +700,7 @@ def api_update_client(client_id):
     editable_fields = [
         "name", "dob", "diagnosis", "guardian_name", "guardian_relationship", "rbt_name",
         "replacement_programs", "maladaptive_behaviors", "antecedents", "intervention_strategies", "training_topics",
+        "behavior_topographies",
     ]
     for field in editable_fields:
         if field in body:
@@ -713,6 +721,36 @@ def api_delete_client(client_id):
     db.session.delete(client)
     db.session.commit()
     return jsonify({"ok": True})
+
+
+@app.route("/api/extract-client-document", methods=["POST"])
+@login_required
+@limiter.limit("20 per hour")
+def api_extract_client_document():
+    # Overrides the app-wide 1 MB body cap (sized for JSON payloads) for this
+    # one route, since assessment report PDFs/Word docs run larger.
+    request.max_content_length = MAX_DOCUMENT_UPLOAD_BYTES
+
+    doc_type = request.form.get("doc_type")
+    if doc_type not in ("initial_assessment", "reassessment"):
+        return jsonify({"error": "doc_type must be initial_assessment or reassessment."}), 400
+
+    upload = request.files.get("file")
+    if not upload or not upload.filename:
+        return jsonify({"error": "No file was uploaded."}), 400
+
+    file_bytes = upload.read()
+    if not file_bytes:
+        return jsonify({"error": "The uploaded file is empty."}), 400
+
+    try:
+        document_text = extraction.extract_text(upload.filename, file_bytes)
+        options = json.loads(current_user.options_json)
+        result = extraction.extract_client_info(ANTHROPIC_API_KEY, document_text, options, doc_type)
+    except extraction.ExtractionError as exc:
+        return jsonify({"error": str(exc)}), 422
+
+    return jsonify(result)
 
 
 @app.route("/api/generate", methods=["POST"])

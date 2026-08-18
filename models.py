@@ -45,6 +45,7 @@ class Client(db.Model):
     antecedents = db.Column(db.JSON, default=list)
     intervention_strategies = db.Column(db.JSON, default=list)
     training_topics = db.Column(db.JSON, default=list)
+    behavior_topographies = db.Column(db.JSON, default=dict)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
     def to_dict(self):
@@ -61,6 +62,7 @@ class Client(db.Model):
             "antecedents": self.antecedents or [],
             "intervention_strategies": self.intervention_strategies or [],
             "training_topics": self.training_topics or [],
+            "behavior_topographies": self.behavior_topographies or {},
             "created_at": self.created_at.isoformat(timespec="seconds") if self.created_at else "",
         }
 

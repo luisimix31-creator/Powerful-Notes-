@@ -57,6 +57,24 @@
   <main class="main">
     <section class="panel" id="newClientPanel" hidden>
       <h2 id="clientFormTitle">New Client</h2>
+
+      <div id="ncDocExtractSection">
+        <p class="doc-extract-hint">Optional: drop an existing report to auto-fill this form. Always review before saving.</p>
+        <div class="doc-extract-row">
+          <div class="drop-zone" id="dropInitialAssessment" data-doc-type="initial_assessment" tabindex="0">
+            <strong>Initial Assessment</strong>
+            <span class="drop-hint">Drop a PDF or Word file, or click to browse</span>
+            <input type="file" id="fileInitialAssessment" accept=".pdf,.docx" hidden>
+          </div>
+          <div class="drop-zone" id="dropReassessment" data-doc-type="reassessment" tabindex="0">
+            <strong>Reassessment</strong>
+            <span class="drop-hint">Drop a PDF or Word file, or click to browse</span>
+            <input type="file" id="fileReassessment" accept=".pdf,.docx" hidden>
+          </div>
+        </div>
+        <div id="docExtractStatus" class="doc-extract-status" hidden></div>
+      </div>
+
       <div class="grid3">
         <label>Name <input id="ncName" type="text"></label>
         <label>DOB <input id="ncDob" type="date"></label>
