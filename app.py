@@ -82,10 +82,37 @@ app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.config["SESSION_COOKIE_HTTPONLY"] = True
 app.config["SESSION_COOKIE_SAMESITE"] = "Lax"
 app.config["SESSION_COOKIE_SECURE"] = os.environ.get("SESSION_COOKIE_SECURE", "false").lower() == "true"
+# 1 MB is generous for this app's JSON/text payloads; blocks large-body abuse of
+# unauthenticated or lightly-limited endpoints (e.g. signup, login).
+app.config["MAX_CONTENT_LENGTH"] = 1 * 1024 * 1024
 
 db.init_app(app)
 csrf = CSRFProtect(app)
 limiter = Limiter(get_remote_address, app=app, default_limits=[])
+
+
+@app.after_request
+def _set_security_headers(response):
+    # This app has no inline <script> or external script sources, and no iframe
+    # use, so the policy can stay strict without an allowlist to maintain.
+    response.headers["Content-Security-Policy"] = (
+        "default-src 'self'; "
+        "script-src 'self'; "
+        "style-src 'self' 'unsafe-inline'; "
+        "img-src 'self' data:; "
+        "font-src 'self'; "
+        "connect-src 'self'; "
+        "frame-ancestors 'none'; "
+        "base-uri 'self'; "
+        "form-action 'self' https://checkout.stripe.com https://billing.stripe.com"
+    )
+    response.headers["X-Content-Type-Options"] = "nosniff"
+    response.headers["X-Frame-Options"] = "DENY"
+    response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
+    response.headers["Permissions-Policy"] = "camera=(), microphone=(), geolocation=(), payment=(self)"
+    if request.is_secure:
+        response.headers["Strict-Transport-Security"] = "max-age=31536000; includeSubDomains"
+    return response
 
 login_manager = LoginManager(app)
 login_manager.login_view = "login"
@@ -139,6 +166,7 @@ with app.app_context():
 # ---------- Auth ----------
 
 @app.route("/signup", methods=["GET", "POST"])
+@limiter.limit("10 per hour", methods=["POST"])
 def signup():
     if request.method == "GET":
         return render_template("signup.html")
@@ -813,4 +841,8 @@ def api_download_note(note_id):
 
 
 if __name__ == "__main__":
-    app.run(debug=True, port=5057)
+    # Debug mode exposes an interactive in-browser debugger with arbitrary code
+    # execution on unhandled exceptions; it must be explicitly opted into, never
+    # on by default, in case this is ever run against a real database locally.
+    debug = os.environ.get("FLASK_DEBUG", "false").lower() == "true"
+    app.run(debug=debug, port=5057)
