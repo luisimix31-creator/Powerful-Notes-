@@ -98,7 +98,10 @@ body {
 }
 
 .sidebar {
-  background: var(--panel);
+  background:
+    radial-gradient(420px circle at 0% 0%, rgba(108, 92, 231, 0.10) 0%, transparent 60%),
+    radial-gradient(360px circle at 100% 100%, rgba(255, 93, 162, 0.08) 0%, transparent 55%),
+    var(--panel);
   border-right: 1px solid var(--border);
   padding: 24px 22px;
   overflow-y: auto;
@@ -531,12 +534,19 @@ textarea {
   transform: scale(0.96);
 }
 
+@keyframes chipPop {
+  0% { transform: scale(1); }
+  40% { transform: scale(1.12); }
+  100% { transform: scale(1); }
+}
+
 .chip.selected {
   background: var(--accent-gradient);
   color: var(--chip-selected-text);
   border-color: transparent;
   box-shadow: 0 4px 12px rgba(108, 92, 231, 0.3);
   font-weight: 700;
+  animation: chipPop 0.25s ease;
 }
 
 .tabs {
@@ -567,10 +577,16 @@ textarea {
   color: var(--text);
 }
 
+.tab-icon {
+  display: inline-block;
+  margin-right: 6px;
+}
+
 .tab.active {
   background: var(--accent-gradient);
   color: #fff;
   box-shadow: var(--shadow-glow);
+  transform: scale(1.03);
 }
 
 .hint {
