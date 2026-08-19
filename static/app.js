@@ -823,6 +823,56 @@ function buildSectionNav() {
   nav.hidden = sections.length === 0;
 }
 
+// Clears every per-session field so nothing from the previously selected
+// client carries into the newly selected one - feedback ratings, protocol
+// notes, session date/time, caregiver name, and per-behavior topography text
+// all used to silently stick around across a client switch since only the
+// two catalog-selection Sets were ever reset.
+function resetNoteFormState() {
+  Object.keys(selections).forEach((key) => {
+    selections[key] = selections[key] instanceof Set ? new Set() : null;
+  });
+
+  participants = [];
+  programScenarios = {};
+  behaviorInterventions = {};
+  behaviorAntecedents = {};
+  behaviorTopographies = {};
+
+  ["additionalNotes", "planNextSession", "protocolModData", "protocolModResponse", "reviewAdditionalNotes", "caregiverName", "caregiverRelationship"].forEach((id) => {
+    el(id).value = "";
+  });
+  el("sessionDate").value = new Date().toISOString().slice(0, 10);
+  el("startTime").value = "";
+  el("endTime").value = "";
+
+  renderChipGroup("environmentalChanges", OPTIONS.environmental_changes, "environmental_changes", false, selections, null, null, "environmental_changes");
+  renderChipGroup("medicalConcerns", OPTIONS.medical_concerns, "medical_concerns", false, selections, null, null, "medical_concerns");
+  renderChipGroup("dataCollectionMethods", OPTIONS.data_collection_methods, "data_collection_methods", false, selections, null, null, "data_collection_methods");
+  renderChipGroup("interventionEffectiveness", OPTIONS.intervention_effectiveness, "intervention_effectiveness", true, selections, null, null, "intervention_effectiveness");
+  renderChipGroup("protocolModifications", OPTIONS.protocol_modifications, "protocol_modifications", false, selections, null, null, "protocol_modifications");
+  renderChipGroup("clientEngagement", OPTIONS.client_engagement, "client_engagement", true, selections, null, null, "client_engagement");
+  renderChipGroup("observationMethod", OPTIONS.observation_methods, "observation_method", true, selections, null, null, "observation_methods");
+  renderChipGroup("sessionRating", OPTIONS.session_ratings, "session_rating", true, selections, null, null, "session_ratings");
+  renderChipGroup("protocolFidelity", OPTIONS.protocol_fidelity, "protocol_fidelity", true, selections, null, null, "protocol_fidelity");
+  renderChipGroup("rbtStrengths", OPTIONS.rbt_strengths, "rbt_strengths", false, selections, null, null, "rbt_strengths");
+  renderChipGroup("rbtFeedbackAreas", OPTIONS.rbt_feedback_areas, "rbt_feedback_areas", false, selections, null, null, "rbt_feedback_areas");
+
+  renderChipGroup("teachingMethods", OPTIONS.teaching_methods, "teaching_methods", false, selections, null, null, "teaching_methods");
+  renderChipGroup("caregiverCompetency", OPTIONS.caregiver_competency, "caregiver_competency", true, selections, null, null, "caregiver_competency");
+  renderChipGroup("caregiverResponse", OPTIONS.caregiver_response, "caregiver_response", false, selections, null, null, "caregiver_response");
+  renderChipGroup("trainingBarriers", OPTIONS.training_barriers, "training_barriers", false, selections, null, null, "training_barriers");
+
+  renderChipGroup("referralReason", OPTIONS.referral_reasons, "referral_reason", true, selections, null, null, "referral_reasons");
+  renderChipGroup("assessmentMethodsInitial", OPTIONS.assessment_methods, "assessment_methods", false, selections, null, null, "assessment_methods");
+  renderChipGroup("treatmentIntensity", OPTIONS.treatment_intensity, "treatment_intensity", true, selections, null, null, "treatment_intensity");
+  renderChipGroup("recommendedServices", OPTIONS.recommended_services, "recommended_services", false, selections, null, null, "recommended_services");
+  renderChipGroup("assessmentMethodsReassessment", OPTIONS.assessment_methods, "assessment_methods", false, selections, null, null, "assessment_methods");
+  renderChipGroup("progressRating", OPTIONS.progress_ratings, "progress_rating", true, selections, null, null, "progress_ratings");
+  renderChipGroup("reassessmentDataMethods", OPTIONS.data_collection_methods, "data_collection_methods", false, selections, null, null, "data_collection_methods");
+  renderChipGroup("reassessmentRecommendations", OPTIONS.reassessment_recommendations, "reassessment_recommendations", false, selections, null, null, "reassessment_recommendations");
+}
+
 function onClientChange() {
   const client = currentClient();
   el("noteForm").hidden = !client;
@@ -832,8 +882,7 @@ function onClientChange() {
   el("editClientBtn").hidden = !client;
   el("deleteClientBtn").hidden = !client;
 
-  selections.replacement_programs = new Set();
-  selections.maladaptive_behaviors = new Set();
+  resetNoteFormState();
 
   if (client) {
     loadNotesHistory(client.id);
