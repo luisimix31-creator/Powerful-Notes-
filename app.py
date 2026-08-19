@@ -28,7 +28,13 @@ from models import Client, GeneratedNote, SavedNote, User, db
 
 MAX_NOTE_SIMILARITY = 0.69
 MAX_GENERATION_ATTEMPTS = 15
-SIMILARITY_CORPUS_LIMIT = 100
+# Each generation attempt runs a difflib comparison against every corpus entry,
+# and that comparison dominates request latency (~24ms per ~5000-char note
+# pair). Trimmed from 100 after benchmarking showed ~2.4s of pure comparison
+# time per generation call; 40 cuts that to roughly 1s while still comparing
+# against a solid recent window per note type. Validated with the same
+# 300-note similarity simulation used when the similarity algorithm was fixed.
+SIMILARITY_CORPUS_LIMIT = 40
 PASSWORD_RESET_MAX_AGE = 3600  # 1 hour
 
 load_dotenv()
