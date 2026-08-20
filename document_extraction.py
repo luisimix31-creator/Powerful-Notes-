@@ -1,5 +1,6 @@
 import io
 import json
+import os
 import re
 
 import anthropic
@@ -12,6 +13,31 @@ DOB_PATTERN = re.compile(r"^\d{4}-\d{2}-\d{2}$")
 
 class ExtractionError(Exception):
     pass
+
+
+def _demo_extraction_result(options, doc_type):
+    # Local-only stand-in for the real AI call, enabled solely by
+    # EXTRACTION_DEMO_MODE=true in the untracked .env file - lets the drop-zone
+    # UI (progress bar, confirm button, form fill-in) be exercised end to end
+    # before a real ANTHROPIC_API_KEY is set up. Never reachable in production:
+    # the flag isn't in .env.example or render.yaml, and this whole branch is
+    # skipped unless that env var is explicitly "true".
+    behaviors = (options.get("maladaptive_behaviors") or [])[:2]
+    programs = (options.get("replacement_programs") or [])[:2]
+    interventions = (options.get("intervention_strategies") or [])[:1]
+    return {
+        "name": "Demo Client",
+        "dob": "2016-03-14",
+        "age": "10",
+        "guardian_name": "Alicia Demo",
+        "bcba_name": "Demo BCBA, BCBA",
+        "maladaptive_behaviors": [b["id"] for b in behaviors],
+        "behavior_topographies": {
+            b["id"]: f"[DEMO DATA] Sample topography text for {b['label']}." for b in behaviors
+        },
+        "replacement_programs": [p["id"] for p in programs],
+        "intervention_strategies": [i["id"] for i in interventions],
+    }
 
 
 def extract_text(filename, file_bytes):
@@ -95,6 +121,9 @@ DOCUMENT TEXT:
 
 
 def extract_client_info(api_key, document_text, options, doc_type):
+    if os.environ.get("EXTRACTION_DEMO_MODE", "").strip().lower() == "true":
+        return _demo_extraction_result(options, doc_type)
+
     if not api_key:
         raise ExtractionError("AI document extraction is not configured yet.")
 
