@@ -300,6 +300,18 @@ textarea {
   color: #6b6690;
 }
 
+.doc-extract-warning {
+  margin: 0 0 14px;
+  padding: 10px 14px;
+  border: 1.5px solid #f0c36d;
+  border-radius: var(--radius);
+  background: #fff8e6;
+  color: #7a5b00;
+  font-size: 0.86em;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
 .doc-extract-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
