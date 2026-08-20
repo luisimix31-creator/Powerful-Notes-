@@ -304,6 +304,46 @@ textarea {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 14px;
+  margin-bottom: 12px;
+}
+
+.doc-extract-col {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.doc-extract-progress {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.doc-extract-progress-track {
+  flex: 1;
+  height: 8px;
+  border-radius: 999px;
+  background: var(--chip-bg);
+  overflow: hidden;
+}
+
+.doc-extract-progress-fill {
+  height: 100%;
+  width: 0%;
+  border-radius: 999px;
+  background: var(--accent-gradient);
+  transition: width 0.2s ease;
+}
+
+.doc-extract-progress-label {
+  font-size: 0.78em;
+  font-weight: 700;
+  color: var(--muted);
+  min-width: 2.6em;
+  text-align: right;
+}
+
+#applyExtractionBtn {
   margin-bottom: 16px;
 }
 

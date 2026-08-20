@@ -59,20 +59,33 @@
       <h2 id="clientFormTitle">New Client</h2>
 
       <div id="ncDocExtractSection">
-        <p class="doc-extract-hint">Optional: drop an existing report to auto-fill this form. Always review before saving.</p>
+        <p class="doc-extract-hint">Optional: drop an existing report to read it, then confirm to add its info to this profile.</p>
         <div class="doc-extract-row">
-          <div class="drop-zone" id="dropInitialAssessment" data-doc-type="initial_assessment" tabindex="0">
-            <strong>Initial Assessment</strong>
-            <span class="drop-hint">Drop a PDF or Word file, or click to browse</span>
-            <input type="file" id="fileInitialAssessment" accept=".pdf,.docx" hidden>
+          <div class="doc-extract-col">
+            <div class="drop-zone" id="dropInitialAssessment" data-doc-type="initial_assessment" tabindex="0">
+              <strong>Initial Assessment</strong>
+              <span class="drop-hint">Drop a PDF or Word file, or click to browse</span>
+              <input type="file" id="fileInitialAssessment" accept=".pdf,.docx" hidden>
+            </div>
+            <div class="doc-extract-progress" id="progressInitialAssessment" hidden>
+              <div class="doc-extract-progress-track"><div class="doc-extract-progress-fill" id="progressFillInitialAssessment"></div></div>
+              <span class="doc-extract-progress-label" id="progressLabelInitialAssessment">0%</span>
+            </div>
           </div>
-          <div class="drop-zone" id="dropReassessment" data-doc-type="reassessment" tabindex="0">
-            <strong>Reassessment</strong>
-            <span class="drop-hint">Drop a PDF or Word file, or click to browse</span>
-            <input type="file" id="fileReassessment" accept=".pdf,.docx" hidden>
+          <div class="doc-extract-col">
+            <div class="drop-zone" id="dropReassessment" data-doc-type="reassessment" tabindex="0">
+              <strong>Reassessment</strong>
+              <span class="drop-hint">Drop a PDF or Word file, or click to browse</span>
+              <input type="file" id="fileReassessment" accept=".pdf,.docx" hidden>
+            </div>
+            <div class="doc-extract-progress" id="progressReassessment" hidden>
+              <div class="doc-extract-progress-track"><div class="doc-extract-progress-fill" id="progressFillReassessment"></div></div>
+              <span class="doc-extract-progress-label" id="progressLabelReassessment">0%</span>
+            </div>
           </div>
         </div>
         <div id="docExtractStatus" class="doc-extract-status" hidden></div>
+        <button type="button" id="applyExtractionBtn" class="btn" hidden>Add All Info to Client Profile</button>
       </div>
 
       <div class="grid3">

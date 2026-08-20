@@ -479,13 +479,18 @@ function resetNewClientChips() {
   renderChipGroup("ncTrainingTopics", OPTIONS.caregiver_training_topics, "training_topics", false, newClientSelections, null, null, "caregiver_training_topics", true);
 }
 
+let pendingExtractions = {};
+
 function resetDocExtractUI() {
   newClientBehaviorTopographies = {};
+  pendingExtractions = {};
   const statusEl = el("docExtractStatus");
   statusEl.hidden = true;
   statusEl.textContent = "";
   statusEl.className = "doc-extract-status";
+  el("applyExtractionBtn").hidden = true;
   ["dropInitialAssessment", "dropReassessment"].forEach((id) => el(id).classList.remove("has-file"));
+  ["progressInitialAssessment", "progressReassessment"].forEach((id) => (el(id).hidden = true));
 }
 
 function applyExtractedData(data) {
@@ -519,6 +524,44 @@ function applyExtractedData(data) {
   }
 }
 
+function _progressIds(docType) {
+  const suffix = docType === "initial_assessment" ? "InitialAssessment" : "Reassessment";
+  return { wrap: `progress${suffix}`, fill: `progressFill${suffix}`, label: `progressLabel${suffix}` };
+}
+
+// There's no real byte-for-byte progress signal for the slow part of this
+// request (server-side PDF/Word parsing + the AI extraction call), so this
+// eases toward 88% over a few seconds and holds there - finishProgress() below
+// jumps it to 100% the moment the actual response arrives.
+function startFakeProgress(docType) {
+  const { wrap, fill, label } = _progressIds(docType);
+  el(wrap).hidden = false;
+  let pct = 8;
+  el(fill).style.width = pct + "%";
+  el(label).textContent = Math.round(pct) + "%";
+  return setInterval(() => {
+    pct += (88 - pct) * 0.12 + 0.4;
+    if (pct > 88) pct = 88;
+    el(fill).style.width = pct + "%";
+    el(label).textContent = Math.round(pct) + "%";
+  }, 200);
+}
+
+function finishProgress(docType, intervalId) {
+  clearInterval(intervalId);
+  const { fill, label } = _progressIds(docType);
+  el(fill).style.width = "100%";
+  el(label).textContent = "100%";
+}
+
+function hideProgress(docType) {
+  el(_progressIds(docType).wrap).hidden = true;
+}
+
+function refreshApplyExtractionButton() {
+  el("applyExtractionBtn").hidden = Object.keys(pendingExtractions).length === 0;
+}
+
 async function handleDocumentDrop(dropZoneId, docType, file) {
   const statusEl = el("docExtractStatus");
   const dropZone = el(dropZoneId);
@@ -535,6 +578,7 @@ async function handleDocumentDrop(dropZoneId, docType, file) {
   statusEl.hidden = false;
   statusEl.className = "doc-extract-status";
   statusEl.textContent = `Reading ${file.name}...`;
+  const progressInterval = startFakeProgress(docType);
 
   const formData = new FormData();
   formData.append("file", file);
@@ -549,26 +593,32 @@ async function handleDocumentDrop(dropZoneId, docType, file) {
     });
     data = await res.json();
   } catch (err) {
+    clearInterval(progressInterval);
+    hideProgress(docType);
     statusEl.className = "doc-extract-status error";
     statusEl.textContent = "Upload failed. Please check your connection and try again.";
     return;
   }
 
   if (!res.ok) {
+    clearInterval(progressInterval);
+    hideProgress(docType);
     statusEl.className = "doc-extract-status error";
     statusEl.textContent = data.error || "Could not extract information from that file.";
     return;
   }
 
+  finishProgress(docType, progressInterval);
   dropZone.classList.add("has-file");
-  applyExtractedData(data);
+  pendingExtractions[docType] = { data, fileName: file.name };
+  refreshApplyExtractionButton();
 
   const extras = [];
   if (data.age) extras.push(`age ${data.age}`);
   if (data.bcba_name) extras.push(`authoring BCBA "${data.bcba_name}" (no field for this yet, not auto-filled)`);
   statusEl.className = "doc-extract-status";
   statusEl.textContent =
-    `Pulled info from ${file.name} - please review the fields below before saving.` +
+    `Read ${file.name} - click "Add All Info to Client Profile" below to fill in the form, then review before saving.` +
     (extras.length ? ` Also found: ${extras.join(", ")}.` : "");
 }
 
@@ -689,6 +739,15 @@ function bindStaticEvents() {
     editingClientId = null;
   });
   el("ncSave").addEventListener("click", saveClientForm);
+  el("applyExtractionBtn").addEventListener("click", () => {
+    Object.values(pendingExtractions).forEach(({ data }) => applyExtractedData(data));
+    const fileNames = Object.values(pendingExtractions).map((p) => p.fileName);
+    pendingExtractions = {};
+    el("applyExtractionBtn").hidden = true;
+    const statusEl = el("docExtractStatus");
+    statusEl.className = "doc-extract-status";
+    statusEl.textContent = `Added info from ${fileNames.join(" and ")} to the form below - review before saving.`;
+  });
 
   el("targetsToggleBtn").addEventListener("click", () => {
     el("targetsEditArea").hidden = !el("targetsEditArea").hidden;
