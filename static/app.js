@@ -524,6 +524,11 @@ function applyExtractedData(data) {
   }
 }
 
+function _waitOutMinDuration(startedAt, minMs) {
+  const elapsed = performance.now() - startedAt;
+  return elapsed < minMs ? new Promise((resolve) => setTimeout(resolve, minMs - elapsed)) : Promise.resolve();
+}
+
 function _progressIds(docType) {
   const suffix = docType === "initial_assessment" ? "InitialAssessment" : "Reassessment";
   return { wrap: `progress${suffix}`, fill: `progressFill${suffix}`, label: `progressLabel${suffix}` };
@@ -579,6 +584,13 @@ async function handleDocumentDrop(dropZoneId, docType, file) {
   statusEl.className = "doc-extract-status";
   statusEl.textContent = `Reading ${file.name}...`;
   const progressInterval = startFakeProgress(docType);
+  const requestStartedAt = performance.now();
+  // A request that fails fast (e.g. "not configured") or a demo-mode response
+  // can resolve in well under 100ms, too quick for the progress bar to ever
+  // actually paint. Hold it visible for at least this long so it always reads
+  // as a real "processing" state rather than flickering or seeming to do
+  // nothing before the result/error appears.
+  const MIN_VISIBLE_MS = 600;
 
   const formData = new FormData();
   formData.append("file", file);
@@ -593,12 +605,15 @@ async function handleDocumentDrop(dropZoneId, docType, file) {
     });
     data = await res.json();
   } catch (err) {
+    await _waitOutMinDuration(requestStartedAt, MIN_VISIBLE_MS);
     clearInterval(progressInterval);
     hideProgress(docType);
     statusEl.className = "doc-extract-status error";
     statusEl.textContent = "Upload failed. Please check your connection and try again.";
     return;
   }
+
+  await _waitOutMinDuration(requestStartedAt, MIN_VISIBLE_MS);
 
   if (!res.ok) {
     clearInterval(progressInterval);
